@@ -31,8 +31,8 @@ El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un siste
 1. Cada uno de los catálogos del sistema deberá contar con las funcionalidades de alta, bajas y cambios, cuidando siempre la intregridad referencial de los datos.
 2. Permitir la configuración del texto que será enviado en cada email que envíe el sistema.
 3. El usuario administrador podrá realizar la configuración o parametrización del servicio de envío de e-mail (SMTP)
-4. La encuesta: 
-   1. Contar con una fecha y de caducidad.
+4. La encuesta deberá: 
+   1. Contar con una fecha y hora de caducidad.
    2. Mostrar en una o más páginas las preguntas a responder (paginación).
    3. Mostrar al respondiente el porcentaje o información sobre su avance.
    4. Validar que sean respondidas aquellas preguntas que sean obligatorias.
