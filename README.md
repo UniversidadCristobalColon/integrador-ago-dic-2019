@@ -65,7 +65,7 @@ El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un siste
 9. Contar con mecanismos de seguridad que prevengan exposición indeseada de datos sensibles de personas o propios del negocio. Prevenir puertas traseras que permitan la manipulación de la información.
 10. Mantener tiempos de respuesta del sistema menores a 1 segundo (no aplica módulo de consultas)
 
-### Funcionalidades
+## Funcionalidades
 
 1. Módulo de administración de catálogos:
    1. Usuarios del sistema.
