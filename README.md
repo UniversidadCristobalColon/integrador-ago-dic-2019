@@ -6,10 +6,8 @@
 2. El administrador podrá crear evaluaciones para un periodo de tiempo, personal a evaluar y personal evaluador.
 3. El sistema deberá enviar (y reenviar) un e-mail al personal evaluador con las instrucciones para acceder a resolver su encuesta.
 4. El sistema creará un formulario único para cada evaluador/encuesta.
-5. 
-7. 
-7. Consulta del avance o estado de una encuesta o evaluación.
-8. 
+5. Consulta del avance o estado de una encuesta o evaluación.
+6. 
 
 ## Requerimientos no funcionales:
 
@@ -19,7 +17,7 @@
 2. Permitir la configuración del texto que será enviado en cada email que envíe el sistema.
 3. El usuario administrador podrá realizar la configuración o parametrización del servicio de envío de e-mail (SMTP)
 4. La encuesta: 
-   1. Contar con una fecha de caducidad.
+   1. Contar con una fecha y de caducidad.
    2. Mostrar en una o más páginas las preguntas a responder (paginación).
    3. Mostrar al respondiente el porcentaje o información sobre su avance.
    4. Validar que sean respondidas aquellas preguntas que sean obligatorias.
@@ -27,6 +25,7 @@
    6. Permitir reanudar en otro momento al respondiente.
    7. Validar que solo se ha contestada una vez. 
    8. Permitir desactivarla/cancelarla para prevenir sea respondida.
+5. Posibilidad de agregar empleados de manera masiva (importar) a través de un archivo csv
 
 ### De interfaz de usuario
 
@@ -49,8 +48,7 @@
 7. Cada registro o actualización de información deberá ser acompañada del usuario, dirección ip, fecha, hora en la que sucedió el evento.
 8. Manejo de la validez o caducidad de sesiones de usuario de la administración (principalmente).
 9. Contar con mecanismos de seguridad que prevengan exposición indeseada de datos sensibles de personas o propios del negocio. Prevenir puertas traseras que permitan la manipulación de la información.
-10. Mantener tiempos de respuesta del sistema menores a 1 segundo (no aplica en módulo de consultas)
-
+10. Mantener tiempos de respuesta del sistema menores a 1 segundo (no aplica módulo de consultas)
 
 1. Módulo de administración de catálogos:
    1. Usuarios del sistema   
