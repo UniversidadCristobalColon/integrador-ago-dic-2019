@@ -40,7 +40,8 @@ El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un siste
    6. Permitir reanudar en otro momento al respondiente.
    7. Validar que solo se ha contestada una vez. 
    8. Permitir desactivarla/cancelarla para prevenir sea respondida.
-5. Posibilidad de agregar empleados de manera masiva (importar) a través de un archivo csv
+5. Posibilidad de agregar empleados de manera masiva (importar) a través de un archivo csv.
+6. Posibilidad de exportación de datos (resultados, puntajes, etc.)
 
 ### De interfaz de usuario
 
