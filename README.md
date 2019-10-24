@@ -1,15 +1,30 @@
 # Proyecto integrador agosto - diciembre 2019
 
+## Materias
+
+1. Ingeniería de Software II
+2. Programación Web II
+
+![](img/grupo.jpg?raw=true)
+
+## Problema a resolver
+
+El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un sistema de información que permita el registro, análisis y obtención de resultados de las evaluaciones de desempeño 360° que se aplican a la gerencia media, de una manera ágil, sencilla y automatizada, con el objetivo de alcanzar el desarrollo profesional de los colaboradores en la empresa. Se busca que la herramienta proporcione una retroalimentación que acompañada de alternativas permita ayudarle al evaluado a su desarrollo y éxito profesional.
+
 ## Requerimientos funcionales
 
-1. Usuarios autenticados y con el rol definido podrán administrar el sistema.
-2. El administrador podrá crear evaluaciones para un periodo de tiempo, personal a evaluar y personal evaluador.
-3. El sistema deberá enviar (y reenviar) un e-mail al personal evaluador con las instrucciones para acceder a resolver su encuesta.
-4. El sistema creará un formulario único para cada evaluador/encuesta.
-5. Consulta del avance o estado de una encuesta o evaluación.
-6. 
+1. El Personal Encargado (PE) diseña y configura los distintos cuestionarios que se aplicarán. Registra el tipo de pregunta, enunciado y si aplica, las distintas opciones de respuesta. Define la paginación (cantidad de preguntas por página)
+2. El PE crea una evaluación en la cual define el cuestionario, evaluado y el evaluador.
+3. El sistema envía un correo electrónico a todos los personajes definidos en la evaluación con instrucciones sobre cómo contestar el cuestionario.
+4. El evaluador responde las preguntas del cuestionario el cual cuenta con un identificador único y solo permite responderse una vez.
+5. El PE verifica el estado de avance de la evaluación.
+6. El PE reenvía correo electrónico de instrucciones en caso de ser necesario.
+7. El PE determina el cierre de la evaluación e inicia el procesamiento de los resultados.
+8. El sistema realiza los cálculos necesarios para la generación de los distintos informes y estadísticas.
+9. El PE consulta la información estadística global.
+10. El PE imprime o descarga informes detallados sobre un trabajador en particular.
 
-## Requerimientos no funcionales:
+## Requerimientos no funcionales
 
 ### Generales
 
