@@ -65,15 +65,26 @@ El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un siste
 9. Contar con mecanismos de seguridad que prevengan exposición indeseada de datos sensibles de personas o propios del negocio. Prevenir puertas traseras que permitan la manipulación de la información.
 10. Mantener tiempos de respuesta del sistema menores a 1 segundo (no aplica módulo de consultas)
 
+### Funcionalidades
+
 1. Módulo de administración de catálogos:
-   1. Usuarios del sistema   
-   2. Empleados   
-   3. Áreas
-   4. Puestos
-   5. Niveles
-   6. Competencias
-   7. Periodo de evaluación
+   1. Usuarios del sistema.
+   2. Empleados.
+   3. Áreas.
+   4. Puestos.
+   5. Niveles.
+   6. Competencias.
+   7. Periodo de evaluación.
 2. Administración de evaluaciones:
-   1. Banco de preguntas
-   2. Definición de evaluación
+   1. Categorías de preguntas.
+   2. Banco de preguntas y respuestas.
+   3. Diseño de cuestionarios.
+   4. Gestión de evaluaciones.
+   5. Cuestionario en línea.
+3. Informes y estadísticas:
+   1. Resultados de un evaluado.
+   2. Análisis por fortalezas, debilidades y áreas de oportunidad de un evaluado.
+   3. Informe individualizado.
+   4. Histórico comparativo de un evaluado.
+   5. Consulta de respuestas por cuestonario.
    
