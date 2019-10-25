@@ -52,6 +52,7 @@ El área de Recursos Humanos de ICAVE tiene la necesidad de implementar un siste
 5. Mostrar mensajes de retroalmentación claros y concisos.
 6. Mostrar mensajes como "No hay elementos" o "No hay información" en aquellas pantallas que no tengan información registrada.
 7. Procurar la consistencia visual/gráfica en todas las pantallas del sistema, cuidando estilo de texto, tamaño de fuente, iconos, colores, fuentes, márgenes, etc.
+8. Realizar las validaciones de tipo de datos o datos faltantes en aquellos controles o campos de entrada que así lo requieran.
 
 ### De seguridad y rendimiento
 
