@@ -34,9 +34,9 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
         <div class="container-fluid">
 
             <!-- Page Content -->
-            <h1>Blank Page</h1>
+            <h1>Página en blanco</h1>
             <hr>
-            <p>This is a great starting point for new custom pages.</p>
+            <p>Utiliza esta página para crear tus pantallas.</p>
 
         </div>
         <!-- /.container-fluid -->
