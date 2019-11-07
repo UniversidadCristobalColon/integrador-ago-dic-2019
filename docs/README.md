@@ -1,2 +1,2 @@
 ## Diagrama Entidad - Relación
-![Diagrama Entidad-Relación][Diagrama_ER.png]
+![](Diagrama_ER.png?raw=true)
