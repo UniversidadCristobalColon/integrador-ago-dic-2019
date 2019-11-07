@@ -160,6 +160,8 @@ EOD;
 
 function getTopIncludes($ruta = ''){
     $html = <<<EOD
+    <link rel="shortcut icon" type="image/png" href="{$ruta}img/favicon.png"/>
+    
     <!-- Custom fonts for this template-->
     <link href="{$ruta}vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 

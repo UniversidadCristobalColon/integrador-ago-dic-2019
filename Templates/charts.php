@@ -71,10 +71,6 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
                 </div>
             </div>
 
-            <p class="small text-center text-muted my-5">
-                <em>More chart examples coming soon...</em>
-            </p>
-
         </div>
         <!-- /.container-fluid -->
 
