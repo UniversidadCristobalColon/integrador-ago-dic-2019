@@ -36,6 +36,9 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
                     Data Table Example
                 </div>
                 <div class="card-body">
+                    
+                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
