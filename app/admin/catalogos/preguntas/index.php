@@ -37,23 +37,25 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Preguntas
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <input type="button" class="btn btn-primary mb-3" OnClick="location.href='nuevo.php'" value="Nuevo"></input>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Pregunta</th>
+                                <th>Orden</th>
                                 <th>Tipo</th>
-                                <th>Actualizacion</th>
+                                <th>Actualización</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
                                 <td>Pregunta 1</td>
-                                <td>Escala</td>
+                                <td>1</td>
+                                <td>M</td>
                                 <td>07-Nov-2019 20:34</td>
-                                <td>Editar Eliminar</td>
+                                <td><a href="editar.php">Editar</a> <a href="nuevo.php">Eliminar</a></td>
                             </tr>
 
                             </tbody>
