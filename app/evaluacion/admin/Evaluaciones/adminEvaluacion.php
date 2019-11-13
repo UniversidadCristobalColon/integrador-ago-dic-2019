@@ -21,7 +21,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <script>
         $(document).ready(function () {
-            $('F-inicio').datepicker();
+            $('#F-inicio').datepicker();
         })
     </script>
 </head>
