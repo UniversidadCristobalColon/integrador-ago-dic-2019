@@ -54,7 +54,33 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <td>4</td>
                                 <td>1</td>
                                 <td>11-11-19 22:32</td>
-                                <td><a href="editar.php">Editar</a> <a href="nuevo.php">Eliminar</a></td>
+                                <td><a href="editar.php"><i class="fas fa-edit"></i></a>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Respuesta</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Está seguro de que desea eliminar esta respuesta?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    <button type="button" class="btn btn-danger">Si, eliminar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
                             </tr>
                             <tfoot>
                             </tfoot>
