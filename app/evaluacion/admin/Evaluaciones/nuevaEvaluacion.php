@@ -1,8 +1,8 @@
 <?php
-require_once '../config/global.php';
+require_once '../../../../config/global.php';
 
 
-define('RUTA_INCLUDE', '../'); //ajustar a necesidad
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -36,19 +36,22 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
             <!-- Page Content -->
             <h1>Nueva Evaluación</h1>
             <hr>
-            <p>Evaluar a:</p>
-            <select name="Evaluado" id="Evaluado">
-                <option value="">E1</option>
-                <option value="">E2</option>
-                <option value="">E3</option>
-            </select>
-            <p>Evaluan a:</p>
-            <select name="Evaluadores" id="Evaluadores">
-                <option value="">Ev1</option>
-                <option value="">Ev2</option>
-                <option value="">Ev3</option>
-            </select>
-            <button class="btn btn-success">Crear</button>
+            <div >
+                <label>Evaluar a:</label>
+                <select name="Evaluado" id="Evaluado" class="form-control mb-3 col-2">
+                    <option value="">E1</option>
+                    <option value="">E2</option>
+                    <option value="">E3</option>
+                </select>
+                <p>Evaluan a:</p>
+                <select name="Evaluadores" id="Evaluadores" class="form-control mb-3 col-2">
+                    <option value="">Ev1</option>
+                    <option value="">Ev2</option>
+                    <option value="">Ev3</option>
+                </select>
+                <a href="adminEvaluacion.php"><input type="button" class="btn btn-success" value="Continuar"></a>
+            </div>
+
         </div>
         <!-- /.container-fluid -->
 

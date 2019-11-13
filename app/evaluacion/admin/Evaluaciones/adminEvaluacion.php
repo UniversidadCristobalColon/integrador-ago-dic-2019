@@ -23,6 +23,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         $(document).ready(function () {
             $('#F-inicio').datepicker();
         })
+        $(document).ready(function () {
+            $('#F-fin').datepicker();
+        })
     </script>
 </head>
 
@@ -42,62 +45,143 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <h1>Administración de Evaluaciones</h1>
             <hr>
 
-            <label>Cuestionario:</label>
-            <select name="Cuestionario" id="Cuestionario">
-                <option value="1">C1</option>
-                <option value="2">C2</option>
-                <option value="3">C3</option>
-            </select>
-            <br>
+            <div class="form-group">
+                <div class="input-group mb-3 col-5">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="Cuestionario">Cuestionario:</label>
+                    </div>
+                    <select class="custom-select" id="Cuestionario">
+                        <option value="1">C1</option>
+                        <option value="2">C2</option>
+                        <option value="3">C3</option>
+                    </select>
+                </div>
 
-            <label>Puesto:</label>
-            <select name="Puesto" id="Puesto">
-                <option value="1">P1</option>
-                <option value="2">P2</option>
-                <option value="3">P3</option>
-            </select>
-            <br>
+                <div class="input-group mb-3 col-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="Periodo">Periodo:</label>
+                    </div>
+                    <select class="custom-select" id="Periodo">
+                        <option value="1">P1</option>
+                        <option value="2">P2</option>
+                        <option value="3">P3</option>
+                    </select>
+                </div>
 
-            <label>Periodo:</label>
-            <select name="Periodo" id="Periodo">
-                <option value="1">T1</option>
-                <option value="2">T2</option>
-                <option value="3">T3</option>
-            </select>
-            <br>
+                <label>Inicia:</label>
+                <div class="input-group date" id="F-inicio">
+                    <input type="text" class="form-control mb-3 col-2"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                </div>
+                <label>Termina:</label>
+                <div class="input-group date" id="F-fin">
+                    <input type="text" class="form-control mb-3 col-2"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                </div>
 
-            <label>Inicia:</label>
-            <div class="input-group date" id="F-inicio">
-                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <p>Personal a evaluar</p>
+
+                <!-- modal -->
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Agregar
+                </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Lista de personal</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 1">
+                                    <label class="form-check-label" for="Personal 1">
+                                        Persona 1
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 2">
+                                    <label class="form-check-label" for="Personal 2">
+                                        Persona 2
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 3">
+                                    <label class="form-check-label" for="Personal 3">
+                                        Persona 3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- modal -->
+                <br><br>
+
+                <p>Personal evaluador</p>
+
+                <!-- modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Agregar
+                </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Lista de personal</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 1">
+                                    <label class="form-check-label" for="Personal 1">
+                                        Persona 1
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 2">
+                                    <label class="form-check-label" for="Personal 2">
+                                        Persona 2
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="Personal 3">
+                                    <label class="form-check-label" for="Personal 3">
+                                        Persona 3
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- modal -->
+
+                <br><br>
+                <p>Progreso:</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>
+                <br>
+
+                <button class="btn btn-success mb-3">Envio / Reenvio</button>
+
+                <button class="btn btn-info mb-3">Cálculo de promedio</button>
             </div>
-            <label>Termina:</label>
-            <input id="datepicker" width="276" value="02/04/2018"/>
-            <br>
 
-            <label>Personal a evaluar:</label>
-            <select name="Evaluar" id="Evaluar">
-                <option value="1">E1</option>
-                <option value="2">E2</option>
-                <option value="3">E3</option>
-            </select>
-            <br>
-
-            <label>Personal evaluador:</label>
-            <select name="Evaluador" id="Evaluador">
-                <option value="1">Ev1</option>
-                <option value="2">Ev2</option>
-                <option value="3">Ev3</option>
-            </select>
-            <br>
-
-            <label>Nivel de avance:</label>
-            <label>50%</label>
-            <br>
-
-            <button class="btn btn-success">Envio / Reenvio</button>
-            <br><br>
-
-            <button class="btn btn-primary">Cálculo de promedio</button>
         </div>
         <!-- /.container-fluid -->
 
