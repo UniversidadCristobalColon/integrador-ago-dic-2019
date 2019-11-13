@@ -53,6 +53,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tr>
                             </thead>
 
+                            <tfoot>
+                            <tr>
+
+                            </tr>
+                            </tfoot>
+
                             <tbody>
                             <tr>
                                 <td>Tiger Nixon</td>

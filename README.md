@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/UniversidadCristobalColon/integrador-ago-dic-2019.svg?branch=master)](https://travis-ci.org/UniversidadCristobalColon/integrador-ago-dic-2019)
 # Proyecto integrador agosto - diciembre 2019
 
 ## Materias
