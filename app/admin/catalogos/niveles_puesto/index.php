@@ -34,7 +34,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Puestos
+                    Catálogo: Nivel de puestos
                 </div>
 
                  <div class="card-body">
@@ -44,12 +44,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th class="text-center">Puesto</th>
-                                <th class="text-center">Creación</th>
                                 <th class="text-center">Nivel de puesto</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">Actualización</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                             </thead>
+
                             <!--
                             <tfoot>
                             <tr>
@@ -62,21 +63,23 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tr>
                             </tfoot>
                             -->
+
                             <tbody>
                             <tr>
 
-                                    <td class="text-center">Puesto 1</td>
-                                    <td class="text-center">07/11/2019 20:33:00</td>
-                                    <td class="text-center">Recursos Humanos</td>
-                                    <td class="text-center">
-                                        <i class="fas fa-edit btn btn-primary" title="Modificar registro"></i> &ensp;
-                                        <i class="far fa-trash-alt btn btn-danger" title="Eliminar registro"></i>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                <td class="text-center">Puesto 1</td>
+                                <td class="text-center">07/11/2019 20:33:00</td>
+                                <td class="text-center">Recursos Humanos</td>
+                                <td class="text-center">
+                                    <i class="fas fa-edit btn btn-primary" title="Modificar registro"></i> &ensp;
+                                    <i class="far fa-trash-alt btn btn-danger" title="Eliminar registro"></i>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
 
@@ -99,7 +102,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
-
 </body>
 
 </html>
