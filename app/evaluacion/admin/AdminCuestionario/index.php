@@ -34,33 +34,34 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Cuestionarios
+                    Catálogo: Competencias
                 </div>
+
+
                 <div class="card-body">
-                   <a href="editar.php"> <button type="button" class="btn btn-primary mb-3">Crear Cuestionario</button></a>
+
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Descripción</th>
+                                <th>Competencia</th>
+                                <th>Última Actualización</th>
+                                <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
                             <tr>
-                                <td>Cuestionario 1</td>
+                                <td>Competencia 1</td>
+                                <td>07/11/2019 20:33:00</td>
+                                <td>Editar | Eliminar</td>
+
                             </tr>
-
-
-
 
                             </tbody>
                         </table>
-
-
-
                     </div>
-
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>

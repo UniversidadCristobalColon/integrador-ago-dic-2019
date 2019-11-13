@@ -5,7 +5,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,32 +33,40 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Cuestionarios
+                    Editor de Cuestionario
                 </div>
                 <div class="card-body">
-                   <a href="editar.php"> <button type="button" class="btn btn-primary mb-3">Crear Cuestionario</button></a>
+                    <!-- Menu para definir mi cuestionario -->
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Nombre</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nuevo Cuestionario">
+                        </div>
+                        <!-- en este boton debe ir mi modal -->
+                        <button type="button" class="btn btn-primary mb-3">Agregar Preguntas</button>
+                        <!-- ****************************** -->
+                        <button type="button" class="btn btn-primary mb-3">Borrar Cuestionario</button>
+                    </form>
+                    <!-- **********************************************-->
+                    <!-- Tabla donde muestro mis preguntas -->
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Descripción</th>
-                            </tr>
-                            </thead>
+                                <th>Pregunta</th>
 
+                            </tr>
+                            </thead>                            
                             <tbody>
                             <tr>
-                                <td>Cuestionario 1</td>
+                                <td>Pregunta 1</td>
+
                             </tr>
-
-
-
 
                             </tbody>
                         </table>
-
-
-
                     </div>
+                    <!-- ******************************************************** -->
 
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
@@ -84,6 +91,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+
+<!-- Div para mi ventana MODAL -->
+
+
+
+<!-- ****************************** -->
 </body>
 
 </html>
