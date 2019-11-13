@@ -42,9 +42,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Pregunta</th>
-                                <th>Tipo</th>
-                                <th>Actualizacion</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Correo electónico</th>
+                                <th>Teléfono</th>
+                                <th>Departamento</th>
+                                <th>Puesto</th>
+                                <th>Rol</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
@@ -53,7 +58,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <td>Pregunta 1</td>
                                 <td>Escala</td>
                                 <td>07-Nov-2019 20:34</td>
-                                <td>Editar Eliminar</td>
+                                <td>
+                                    <i class="far fa-edit"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </td>
                             </tr>
 
                             </tbody>
