@@ -19,6 +19,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <script>
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            locale: 'es-es',
+        });
+    </script>
 </head>
 
 <body id="page-top">
@@ -62,9 +68,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <br>
 
             <label>Inicia:</label>
-            <p>Aqui ira el calendario cuando sepa hacer lo de poner un calendario si es que puedo</p> /*Aqui quiero ver si puedo poner la libreria de calendario*/
+            <input id="datepicker" width="276" value="02/04/2018"/>
             <label>Termina:</label>
-            <p>Aqui ira el calendario cuando sepa hacer lo de poner un calendario si es que puedo</p>
+            <input id="datepicker" width="276" value="02/04/2018"/>
+            <br>
 
             <label>Personal a evaluar:</label>
             <select name="Evaluar" id="Evaluar">
@@ -83,7 +90,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <br>
 
             <label>Nivel de avance:</label>
-            <p>50%</p> /*Profe aqui quiero que esto este a lado pero no se pone al lado*/
+            <label>50%</label>
+            <br>
 
             <button class="btn btn-success">Envio / Reenvio</button>
             <br><br>
