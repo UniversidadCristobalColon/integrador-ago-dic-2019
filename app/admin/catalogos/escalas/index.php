@@ -37,6 +37,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Escalas
                 </div>
                 <div class="card-body">
+
                     <button class="btn btn-primary mb-3">Nuevo</button>
 
                     <div class="table-responsive">
@@ -44,22 +45,60 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th>nivel1_etiqueta</th>
+                                <th>nivel1_descripcion</th>
+                                <th>nivel1_inferior</th>
+                                <th>nivel1_superior</th>
+                                <th>nivel2_etiqueta</th>
+                                <th>nivel2_descripcion</th>
+                                <th>nivel2_inferior</th>
+                                <th>nivel2_superior</th>
+                                <th>nivel3_etiqueta</th>
+                                <th>nivel3_descripcion</th>
+                                <th>nivel3_inferior</th>
+                                <th>nivel3_superior</th>
+                                <th>nivel4_etiqueta</th>
+                                <th>nivel4_descripcion</th>
+                                <th>nivel4_inferior</th>
+                                <th>nivel4_superior</th>
+                                <th>nivel5_etiqueta</th>
+                                <th>nivel5_descripcion</th>
+                                <th>nivel5_inferior</th>
+                                <th>nivel5_superior</th>
+                                <th>creación</th>
+                                <th>actualización</th>
+                                <th>creacion_ip</th>
+                                <th>actualizacion_ip</th>
+                                <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
                             <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
-                                <td>61</td>
-                                <td>2011/04/25</td>
+                                <td>A</td>
+                                <td>B</td>
+                                <td>C</td>
+                                <td>D</td>
+                                <td>E</td>
+                                <td>F</td>
+                                <td>G</td>
+                                <td>H</td>
+                                <td>I</td>
+                                <td>J</td>
+                                <td>K</td>
+                                <td>L</td>
+                                <td>M</td>
+                                <td>N</td>
+                                <td>Ñ</td>
+                                <td>O</td>
+                                <td>P</td>
+                                <td>Q</td>
+                                <td>R</td>
+                                <td>S</td>
+                                <td>2019/11/01</td>
+                                <td>2019/11/02</td>
+                                <td>127.0.0.0</td>
+                                <td>127.0.0.0</td>
                                 <td>Editar Eliminar</td>
                             </tr>
                             </tbody>
