@@ -172,14 +172,15 @@ function getTopIncludes($ruta = ''){
     <link href="{$ruta}css/sb-admin.css" rel="stylesheet" type="text/css">
 
     <link href="{$ruta}css/estilos.css" rel="stylesheet" type="text/css">
+
+    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>
 EOD;
     echo $html;
 }
 
 function getBottomIncudes($ruta = ''){
     $html = <<<EOD
-    <!-- Bootstrap core JavaScript-->
-    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript-->    
     <script src="{$ruta}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     
     <!-- Core plugin JavaScript-->
