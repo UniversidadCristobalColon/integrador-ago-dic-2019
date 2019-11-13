@@ -1,4 +1,8 @@
 <?php
+
+session_start();
+$email = $_SESSION['usuario'];
+
 require_once '../../../../config/global.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
