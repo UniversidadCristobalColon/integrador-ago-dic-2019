@@ -8,7 +8,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <html lang="es">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,9 +15,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="author" content="">
 
     <title><?php echo PAGE_TITLE ?></title>
-
-
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <script src="../../../../vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="../../../../vendor/datepicker/css/bootstrap-datepicker.standalone.min.css">
+
+    <script>
+        $(document).ready(function () {
+            $('F-inicio').datepicker();
+        })
+    </script>
 </head>
 
 <body id="page-top">
@@ -62,9 +67,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <br>
 
             <label>Inicia:</label>
-            <p>Aqui ira el calendario cuando sepa hacer lo de poner un calendario si es que puedo</p> /*Aqui quiero ver si puedo poner la libreria de calendario*/
+            <div class="input-group date" id="F-inicio">
+                <input type="text" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            </div>
             <label>Termina:</label>
-            <p>Aqui ira el calendario cuando sepa hacer lo de poner un calendario si es que puedo</p>
+            <input id="datepicker" width="276" value="02/04/2018"/>
+            <br>
 
             <label>Personal a evaluar:</label>
             <select name="Evaluar" id="Evaluar">
@@ -83,7 +91,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <br>
 
             <label>Nivel de avance:</label>
-            <p>50%</p> /*Profe aqui quiero que esto este a lado pero no se pone al lado*/
+            <label>50%</label>
+            <br>
 
             <button class="btn btn-success">Envio / Reenvio</button>
             <br><br>
