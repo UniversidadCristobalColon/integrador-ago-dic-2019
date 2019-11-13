@@ -1,6 +1,5 @@
 <?php
 require_once '../../../../config/global.php';
-
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -34,7 +33,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Preguntas
+                    Catálogo: Respuestas
                 </div>
                 <div class="card-body">
                     <input type="button" class="btn btn-primary mb-3" OnClick="location.href='nuevo.php'" value="Nuevo"></input>
@@ -42,22 +41,24 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Pregunta</th>
+                                <th>Respuestas</th>
+                                <th>Puntos</th>
                                 <th>Orden</th>
-                                <th>Tipo</th>
-                                <th>Actualización</th>
+                                <th>Creación</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
-                            <tbody>
+
                             <tr>
-                                <td>Pregunta 1</td>
+                                <td>Respuesta 1</td>
+                                <td>4</td>
                                 <td>1</td>
-                                <td>M</td>
-                                <td>07-Nov-2019 20:34</td>
+                                <td>11-11-19 22:32</td>
                                 <td><a href="editar.php">Editar</a> <a href="nuevo.php">Eliminar</a></td>
                             </tr>
-
+                            <tfoot>
+                            </tfoot>
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
