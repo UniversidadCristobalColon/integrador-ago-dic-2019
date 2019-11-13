@@ -1,5 +1,16 @@
 <?php
 require_once '../../../../config/global.php';
+require_once '../../../../config/db.php';
+
+    $select = "select * from cuestionarios";
+    $resultado = mysqli_query($conexion, $select);
+
+    if($resultado){
+        echo 'Si hay conexion';
+    }else{
+        echo 'No hay conexion' ;
+    }
+
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
@@ -43,24 +54,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <thead>
                             <tr>
                                 <th>Cuestionarios</th>
-                                <th>Descripción</th>
+                                <th>Creación</th>
                                 <th>Última actualización</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Cuestionario para Jefes 2019</td>
-                                <td>Jefes operativos</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
-                            <tr>
-                                <td>Cuestionario para Gerentes 2019</td>
-                                <td>Gerentes administrativos</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
+                            <?php
+                            $numero=0;
+                            while($row = mysqli_fetch_row($resultado))
+                            {
+                                echo "<tr> <td>" . $row["cuestionario"] . "</td>";
+                                echo "<td>" . $row["creacion"] . "</td>";
+                                echo "<td>" . $row["actualizacion"] . "</td></tr>";
+                                $numero++;
+                            }
+                            ?>
                             </tbody>
                         </table>
                     </div>
