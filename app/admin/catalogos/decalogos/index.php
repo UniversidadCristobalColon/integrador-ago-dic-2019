@@ -1,8 +1,4 @@
 <?php
-
-session_start();
-$email = $_SESSION['usuario'];
-
 require_once '../../../../config/global.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
@@ -38,31 +34,34 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Competencias
+                    Catálogo: Decálogos
                 </div>
                 <div class="card-body">
+
                     <button class="btn btn-primary mb-3">Nuevo</button>
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Competencia</th>
-                                <th>Última actualización</th>
+                                <th>descripcion</th>
+                                <th>creacion</th>
+                                <th>actualizacion</th>
+                                <th>id_escala</th>
                                 <th></th>
                             </tr>
                             </thead>
+
                             <tbody>
                             <tr>
-                                <td>Competencia 1</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
-                            <tr>
-                                <td>Competencia 2</td>
-                                <td>07/11/2019 20:33:00</td>
+                                <td>A</td>
+                                <td>2019/11/01</td>
+                                <td>2019/11/02</td>
+                                <td>D</td>
                                 <td>Editar Eliminar</td>
                             </tr>
                             </tbody>
+
                         </table>
                     </div>
                 </div>

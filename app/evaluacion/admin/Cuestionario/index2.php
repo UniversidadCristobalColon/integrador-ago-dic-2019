@@ -1,8 +1,4 @@
 <?php
-
-session_start();
-$email = $_SESSION['usuario'];
-
 require_once '../../../../config/global.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
@@ -38,7 +34,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Competencias
+                    Catálogo: Cuestionarios
                 </div>
                 <div class="card-body">
                     <button class="btn btn-primary mb-3">Nuevo</button>
@@ -46,19 +42,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Competencia</th>
+                                <th>Cuestionarios</th>
+                                <th>Descripción</th>
                                 <th>Última actualización</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Competencia 1</td>
+                                <td>Cuestionario para Jefes 2019</td>
+                                <td>Jefes operativos</td>
                                 <td>07/11/2019 20:33:00</td>
                                 <td>Editar Eliminar</td>
                             </tr>
                             <tr>
-                                <td>Competencia 2</td>
+                                <td>Cuestionario para Gerentes 2019</td>
+                                <td>Gerentes administrativos</td>
                                 <td>07/11/2019 20:33:00</td>
                                 <td>Editar Eliminar</td>
                             </tr>
@@ -66,16 +65,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+
             </div>
-
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
-        <!-- /.container-fluid -->
-
-        <?php getFooter() ?>
 
     </div>
-    <!-- /.content-wrapper -->
+    <!-- /.container-fluid -->
+
+    <?php getFooter() ?>
+
+</div>
+<!-- /.content-wrapper -->
 
 </div>
 <!-- /#wrapper -->

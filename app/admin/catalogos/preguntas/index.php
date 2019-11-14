@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-require '../../../../config/db.php';
+
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -42,7 +42,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>No.</th>
                                 <th>Preguntas</th>
                                 <th>Orden</th>
                                 <th>Tipo</th>
@@ -51,36 +50,16 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tr>
                             </thead>
                             <tbody>
-                            <?php
-                            $sql = "select id, pregunta, orden, tipo, actualizacion from preguntas order by id";
-                            $stmt = $conexion->prepare($sql);
-                            $stmt->execute();
-                            $stmt->bind_result($id,$pregunta,$orden,$tipo,$actualizacion);
-                            $fila = 1;
-                            while ($stmt->fetch()){
-                                echo "<tr>";
-                            echo "<td>$fila</td>";
-                                echo "<td>$pregunta</td>";
-                                echo"<td>$orden</td>";
-                                if($tipo=='M'){
-                                    $tipoC ="Opción Múltiple";
-                                }else {
-                                    $tipoC ="Abierta";
-                                }
-                                echo"<td>$tipoC</td>";
-                                echo"<td>$actualizacion</td>";
-                                ?>
-                               <td><a href="editar.php"><i class="fas fa-edit"></i></a>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                <?php
-                                echo "</tr>";
-                                $fila++;
-                            }
-
-                            ?>
+                            <tr>
+                                <td>Pregunta 1</td>
+                                <td>1</td>
+                                <td>M</td>
+                                <td>07-Nov-2019 20:34</td>
+                                <td><a href="editar.php"><i class="fas fa-edit"></i></a>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -97,7 +76,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <button type="button" class="btn btn-danger" id="eliminarBoton">Si, eliminar</button>
+                                                    <button type="button" class="btn btn-danger">Si, eliminar</button>
                                                 </div>
                                             </div>
                                         </div>
