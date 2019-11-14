@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+include '../../../../config/db.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
@@ -34,23 +34,56 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         <div class="container-fluid">
 
             <!-- Page Content -->
-            <h1>Nueva Evaluación</h1>
-            <hr>
-            <div >
-                <label>Evaluar a:</label>
-                <select name="Evaluado" id="Evaluado" class="form-control mb-3 col-2">
-                    <option value="">E1</option>
-                    <option value="">E2</option>
-                    <option value="">E3</option>
-                </select>
-                <p>Evaluan a:</p>
-                <select name="Evaluadores" id="Evaluadores" class="form-control mb-3 col-2">
-                    <option value="">Ev1</option>
-                    <option value="">Ev2</option>
-                    <option value="">Ev3</option>
-                </select>
-                <a href="adminEvaluacion.php"><input type="button" class="btn btn-success" value="Continuar"></a>
-            </div>
+            <form action="guardar.php" method="post">
+                <h1>Nueva Evaluación</h1>
+                <hr>
+                <div class="form-group">
+                    <label for="Evaluar">Evaluar a:</label>
+                    <select class="form-control" id="Evaluar">
+                        <option></option>
+                        <?php
+                        $sql = "select * from niveles_puesto";
+                        $resultado = mysqli_query($conexion,$sql);
+                        if($resultado){
+                            while($fila = mysqli_fetch_assoc($resultado)){
+                                echo "<option value = '$fila[id]'>$fila[nivel_puesto]</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+
+                    <label for="Evaluan">Quienes van a evaluar:</label>
+                    <select class="form-control mb-3" id="Evaluan">
+                        <option></option>
+                        <?php
+                        $sql = "select * from niveles_puesto";
+                        $resultado = mysqli_query($conexion,$sql);
+                        if($resultado){
+                            while($fila = mysqli_fetch_assoc($resultado)){
+                                echo "<option value = '$fila[id]'>$fila[nivel_puesto]</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+
+                    <label for="Cuestionario">Cuestionario:</label>
+                    <select class="form-control mb-3" id="Cuestionario">
+                        <option></option>
+                        <?php
+                        $sql = "select * from cuestionarios";
+                        $resultado = mysqli_query($conexion,$sql);
+                        if($resultado){
+                            while($fila = mysqli_fetch_assoc($resultado)){
+                                echo "<option value = '$fila[id]'>$fila[cuestionario]</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+
+                    <button type="submit" class="btn btn-success btn-block">Continuar</button>
+                </div>
+            </form>
+
 
         </div>
         <!-- /.container-fluid -->

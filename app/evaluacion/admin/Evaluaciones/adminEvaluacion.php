@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+include '../../../../config/db.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
@@ -46,44 +46,43 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <hr>
 
             <div class="form-group">
-                <div class="input-group mb-3 col-5">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="Cuestionario">Cuestionario:</label>
+
+                <label for="Periodo">Periodo:</label>
+                <select class="form-control" id="Periodo">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+
+                <div class="input-group mb-3 mt-3 col-3">
+                    <div class="row">
+                        <div class="col">
+                            <label>Inicia:</label>
+                            <div class="input-group date" id="F-inicio">
+                                <input type="text" class="form-control mb-3"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>Termina:</label>
+                            <div class="input-group date" id="F-fin">
+                                <input type="text" class="form-control mb-3"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                            </div>
+                        </div>
                     </div>
-                    <select class="custom-select" id="Cuestionario">
-                        <option value="1">C1</option>
-                        <option value="2">C2</option>
-                        <option value="3">C3</option>
-                    </select>
                 </div>
 
                 <div class="input-group mb-3 col-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="Periodo">Periodo:</label>
-                    </div>
-                    <select class="custom-select" id="Periodo">
-                        <option value="1">P1</option>
-                        <option value="2">P2</option>
-                        <option value="3">P3</option>
-                    </select>
+                    <p>Personal a evaluar</p>
+
+                    <!-- modal -->
+
+                    <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#exampleModal">
+                        Agregar
+                    </button>
                 </div>
 
-                <label>Inicia:</label>
-                <div class="input-group date" id="F-inicio">
-                    <input type="text" class="form-control mb-3 col-2"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                </div>
-                <label>Termina:</label>
-                <div class="input-group date" id="F-fin">
-                    <input type="text" class="form-control mb-3 col-2"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                </div>
-
-                <p>Personal a evaluar</p>
-
-                <!-- modal -->
-
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Agregar
-                </button>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -115,22 +114,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary">Guardar cambios</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- modal -->
-                <br><br>
-
-                <p>Personal evaluador</p>
+                <div class="input-group mb-3 col-3">
+                    <p>Personal evaluador</p>
 
                 <!-- modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Agregar
-                </button>
+                    <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#exampleModal">
+                        Agregar
+                    </button>
+                </div>
+
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -162,18 +161,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary">Guerdar</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- modal -->
 
-                <br><br>
                 <p>Progreso:</p>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    <div class="progress-bar" role="progressbar" style="width: 18%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">18%</div>
                 </div>
                 <br>
 
