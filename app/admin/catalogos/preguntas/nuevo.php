@@ -14,7 +14,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="author" content="">
 
     <title><?php echo PAGE_TITLE ?></title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="nuevo.js" type="text/javascript"></script>
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
 </head>
 
@@ -42,7 +46,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <form>
                             <div class="form-group">
                                 <label for="pregunta">Pregunta</label>
-                                <input type="pregunta" class="form-control" id="pregunta1">
+                                <input type="pregunta" class="form-control" id="pregunta">
                             </div>
                             <div class="form-group">
                                 <label for="orden">Orden</label>
@@ -56,17 +60,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </div>
                             <div class="form-group">
                                 <label for="tipo">Tipo de pregunta</label>
-                                <select class="form-control" id="tipopreg">
-                                    <option>M</option>
-                                    <option>A</option>
+                                <select class="form-control" id="tipo">
+                                    <option>Opción Múlltiple</option>
+                                    <option>Abierta</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="example">Example textarea</label>
-                                <textarea class="form-control" id="example" rows="3"></textarea>
-                            </div>
+
                             <div>
-                                <input type="button" class="btn btn-primary mb-3" OnClick="location.href='index.php'" value="Guardar"></input>
+                                <input type="button" class="btn btn-primary mb-3" id="nuevo" value="Guardar"></input>
                                 <input type="button" class="btn btn-secondary mb-3" OnClick="location.href='index.php'" value="Cancelar"></input>
                             </div>
                         </form>

@@ -57,13 +57,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <div class="form-group">
                                 <label for="tipo">Tipo de pregunta</label>
                                 <select class="form-control" id="tipopreg">
-                                    <option>M</option>
-                                    <option>A</option>
+                                    <option>Opción Múlltiple</option>
+                                    <option>Abierta</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="example">Example textarea</label>
-                                <textarea class="form-control" id="example" rows="3"></textarea>
                             </div>
                             <div>
                                 <input type="button" class="btn btn-primary mb-3" OnClick="location.href='index.php'" value="Actualizar"></input>
