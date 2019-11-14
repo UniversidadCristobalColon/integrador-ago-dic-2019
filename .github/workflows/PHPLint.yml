@@ -1,8 +1,12 @@
-workflow "PHP Linting" {
-  resolves = ["Execute"]
-  on = "pull_request"
-}
+name: CI
 
-action "Execute" {
-  uses = "michaelw90/PHP-Lint@master"
-}
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: PHP Lint
+      uses: michaelw90/PHP-Lint@1.0.0
