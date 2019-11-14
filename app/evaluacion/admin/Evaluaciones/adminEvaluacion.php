@@ -47,15 +47,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
             <div class="form-group">
 
-                <label for="Periodo">Periodo:</label>
-                <select class="form-control" id="Periodo">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-
                 <div class="input-group mb-3 mt-3 col-3">
                     <div class="row">
                         <div class="col">

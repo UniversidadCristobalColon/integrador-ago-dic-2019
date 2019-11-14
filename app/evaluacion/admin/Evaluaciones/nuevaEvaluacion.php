@@ -39,7 +39,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <hr>
                 <div class="form-group">
                     <label for="Evaluar">Evaluar a:</label>
-                    <select class="form-control" id="Evaluar">
+                    <select class="form-control" id="Evaluar" name="Evaluar">
                         <option></option>
                         <?php
                         $sql = "select * from niveles_puesto";
@@ -53,7 +53,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     </select>
 
                     <label for="Evaluan">Quienes van a evaluar:</label>
-                    <select class="form-control mb-3" id="Evaluan">
+                    <select class="form-control mb-3" id="Evaluan" name="Evaluan">
                         <option></option>
                         <?php
                         $sql = "select * from niveles_puesto";
@@ -67,7 +67,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     </select>
 
                     <label for="Cuestionario">Cuestionario:</label>
-                    <select class="form-control mb-3" id="Cuestionario">
+                    <select class="form-control mb-3" id="Cuestionario" name="Cuestionario">
                         <option></option>
                         <?php
                         $sql = "select * from cuestionarios";
@@ -75,6 +75,20 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
                                 echo "<option value = '$fila[id]'>$fila[cuestionario]</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+
+                    <label for="Periodo">Periodo:</label>
+                    <select class="form-control mb-3" id="Periodo" name="Periodo">
+                        <option></option>
+                        <?php
+                        $sql = "select * from periodos";
+                        $resultado = mysqli_query($conexion,$sql);
+                        if($resultado){
+                            while($fila = mysqli_fetch_assoc($resultado)){
+                                echo "<option value = '$fila[id]'>$fila[periodo]</option>";
                             }
                         }
                         ?>

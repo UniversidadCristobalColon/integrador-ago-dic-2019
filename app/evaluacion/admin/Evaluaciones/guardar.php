@@ -5,17 +5,26 @@
     $Evaluar = $_POST["Evaluar"];
     $Evaluan = $_POST["Evaluan"];
     $Cuestionario = $_POST["Cuestionario"];
+    $Periodo = $_POST["Periodo"];
     $ip =  $_SERVER['REMOTE_ADDR'];
 
     $insert = "insert into evaluaciones(
-                        id:cuestionario,
+                        id_cuestionario,
                         id_nivel_puesto_evaluador,
+                        id_periodo,
+                        inicio,
+                        fin,
+                        limite,
                         creacion,
                         creacion_ip) values (
                         '$Cuestionario',
                         '$Evaluar',
+                        '$Periodo',
                         NOW(),
-                        '$ip',
+                        NOW(),
+                        NULL,
+                        NOW(),
+                        '$ip'
                         )";
 
     $resultado = mysqli_query($conexion, $insert);
