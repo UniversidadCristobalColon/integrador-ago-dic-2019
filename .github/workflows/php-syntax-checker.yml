@@ -11,4 +11,4 @@ jobs:
     - name: PHP Syntax Checker (Lint)
       uses: StephaneBour/actions-php-lint@7.2
       with:
-        dir: './app'
+        dir: '../*'
