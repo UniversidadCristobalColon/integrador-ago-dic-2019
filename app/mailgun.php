@@ -1,34 +1,49 @@
 <?php
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
+function enviarCorreo($para, $asunto, $mensaje){
+	$filtro = filter_var($para, FILTER_VALIDATE_EMAIL);
+	if($filtro){
 require '../vendor/PHPMailer/Exception.php';
 require '../vendor/PHPMailer/PHPMailer.php';
 require '../vendor/PHPMailer/SMTP.php';
+require '../config/db.php';
+
+
+$sql = "SELECT host, port, username, password, email_name FROM email_conf";
+$result = $conexion->query($sql);
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+    	$host = $row['host'];
+    	$port = $row['port'];
+    	$username = $row['username'];
+    	$password = $row['password'];
+    	$mailName = $row['email_name'];
+    }
+}
 
 $mail = new PHPMailer;
-
 $mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = 'smtp.mailgun.org';                     // Specify main and backup SMTP servers
+$mail->Host = $host;                     // Specify main and backup SMTP servers
+$mail->Port = $port;
 $mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = 'postmaster@sandboxf3371239bc584456a287d274073a0b3f.mailgun.org';   // SMTP username
-$mail->Port = 587;
-$mail->Password = '4424dc68cb38e2ed51647ddce1e262ee-1df6ec32-305b58a9';                           // SMTP password
+$mail->Username = $username;   // SMTP username
+$mail->Password = $password ;                           // SMTP password
 $mail->SMTPSecure = 'tls';                            // Enable encryption, only 'tls' is accepted
-
-$mail->From = 'postmaster@sandboxf3371239bc584456a287d274073a0b3f.mailgun.org';
-$mail->FromName = 'Mailer';
-$mail->addAddress('foo1024bar@outlook.com');                 // Add a recipient
+$mail->From = $username;
+$mail->FromName =$mailName;
+$mail->addAddress($para);                 // Add a recipient
 
 $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-
-$mail->Subject = 'Hello';
-$mail->Body    = 'Testing some Mailgun awesomness';
+$mail->Subject = $asunto;
+$mail->Body = $mensaje;
 
 if(!$mail->send()) {
     echo 'Message could not be sent.';
     echo 'Mailer Error: ' . $mail->ErrorInfo;
 } else {
     echo 'Message has been sent';
+}
+}
 }
