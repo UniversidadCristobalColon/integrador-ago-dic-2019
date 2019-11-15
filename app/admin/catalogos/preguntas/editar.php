@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-require '../../../../config/db.php';
+
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -34,80 +34,38 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Preguntas
+                    Editar pregunta
                 </div>
                 <div class="card-body">
-                    <input type="button" class="btn btn-primary mb-3" OnClick="location.href='nuevo.php'" value="Nuevo"></input>
+
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Preguntas</th>
-                                <th>Orden</th>
-                                <th>Tipo</th>
-                                <th>Actualización</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            $sql = "select id, pregunta, orden, tipo, actualizacion from preguntas order by id";
-                            $stmt = $conexion->prepare($sql);
-                            $stmt->execute();
-                            $stmt->bind_result($id,$pregunta,$orden,$tipo,$actualizacion);
-                            $fila = 1;
-                            while ($stmt->fetch()){
-                            echo "<tr>";
-                            echo "<td>$fila</td>";
-                            echo "<td>$pregunta</td>";
-                            echo"<td>$orden</td>";
-                            if($tipo=='M'){
-                                $tipoC ="Opción Múltiple";
-                            }else {
-                                $tipoC ="Abierta";
-                            }
-                            echo"<td>$tipoC</td>";
-                            echo"<td>$actualizacion</td>";
-                            ?>
-                            <td><a href="editar.php"><i class="fas fa-edit"></i></a>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalLong">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                <?php
-                                echo "</tr>";
-                                $fila++;
-                                }
-
-                                ?>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Pregunta</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ¿Está seguro de que desea eliminar esta pregunta?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-danger">Si, eliminar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
+                        <form>
+                            <div class="form-group">
+                                <label for="pregunta">Pregunta</label>
+                                <input type="pregunta" class="form-control" id="pregunta1">
+                            </div>
+                            <div class="form-group">
+                                <label for="orden">Orden</label>
+                                <select class="form-control" id="orden">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo">Tipo de pregunta</label>
+                                <select class="form-control" id="tipopreg">
+                                    <option>Opción Múlltiple</option>
+                                    <option>Abierta</option>
+                                </select>
+                            </div>
+                            <div>
+                                <input type="button" class="btn btn-primary mb-3" OnClick="location.href='index.php'" value="Actualizar"></input>
+                                <input type="button" class="btn btn-secondary mb-3" OnClick="location.href='index.php'" value="Cancelar"></input>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
