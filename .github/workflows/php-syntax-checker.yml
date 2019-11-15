@@ -11,4 +11,4 @@ jobs:
     - name: PHP Syntax Checker (Lint)
       uses: StephaneBour/actions-php-lint@7.2
       with:
-        dir: '/home/runner/work/integrador-ago-dic-2019/integrador-ago-dic-2019/app/'
+        dir: '/home/runner/work/integrador-ago-dic-2019/app/'
