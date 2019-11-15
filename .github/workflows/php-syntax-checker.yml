@@ -1,6 +1,6 @@
 name: PHP Syntax Checker
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -10,3 +10,5 @@ jobs:
     steps:
     - name: PHP Syntax Checker (Lint)
       uses: StephaneBour/actions-php-lint@7.2
+      with:
+        dir: '../../app'
