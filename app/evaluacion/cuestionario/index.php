@@ -1,22 +1,8 @@
 <?php
+require_once '../../../../config/global.php';
+require_once '../../../../config/db.php';
 
-/*
-TODO:
-    - Mostrar a quien se está evaluando.
-    - Contar con una fecha y hora de caducidad.
-    - Mostrar en una o más páginas las preguntas a responder (paginación).
-    - Mostrar al evaluador el porcentaje o información sobre su avance.
-    - Validar que sean respondidas aquellas preguntas que sean obligatorias.
-    - Guardar las respuestas que el evaluador ha registrado.
-    - Permitir reanudar en otro momento al evaluador.
-    - Validar que solo se ha contestada una vez.
-    - Permitir desactivarla/cancelarla para prevenir sea respondida.
-*/
-
-
-require_once '../../../config/global.php';
-
-define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -35,82 +21,69 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 
 <body id="page-top">
 
-<?php //getNavbar() ?>
+<?php getNavbar() ?>
 
 <div id="wrapper">
 
-    <?php //getSidebar() ?>
+    <?php getSidebar() ?>
 
     <div id="content-wrapper">
 
         <div class="container-fluid">
-            <div class="container">
-                
-                <!-- DIV CARD -->
-                <div class="card mb-3">
-                    <!-- DIV CARD-HEADER -->
-                    <div class="card-header">
-                        <i class="fas fa-tasks"></i>
-                        Evaluación 360
-                        <hr>
-                        <!-- ROW -->
-                        <small>
-                            <b class="mr-1">Porcentaje completado:</b>
-                            <!-- PROGRESS BAR -->
-                            <div class="progress mx-auto" style="display: inline-flex; width: 100%;">
-                                    <div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">35%</div>
-                            </div>
-                        </small>
-                        <!-- ROW -->
-                    </div>
-                    <!-- DIV CARD-HEADER -->
 
-                    <!-- DIV CARD-BODY -->
-                    <div class="card-body">
-    
-                        <!-- DIV TEXT -->
-                        <div class="px-1 text-justify">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis.</p>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde aliquid, dolorum quod natus fugiat nostrum amet earum a velit ratione ab iure temporibus quibusdam hic mollitia excepturi. Magnam, distinctio vero.</p>
-
-                            <p>
-                                <b>Evaluando a: </b>Roberto López López
-                            </p>
-                            <p>
-                                <b>Fecha de cierre: </b>27/Noviembre/2019 16:00 hrs.
-                            </p>
-                        </div>
-                        <!-- DIV TEXT -->                        
-                    </div>
-                    <!-- DIV CARD-BODY -->
-                    
-                    <!-- DIV CARD-FOOTER -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-secondary btn-block">
-                                    Reanudar evaluación
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-primary btn-block">
-                                    Comenzar evaluación
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- DIV CARD-FOOTER -->
+            <!-- DataTables Example -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Catalogo de competencias
                 </div>
-                <!-- DIV CARD-BODY -->
+                <div class="card-body">
+                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <div class="table-responsive">
+                        <?php
+                        $sql = "SELECT cuestionario, creacion, actualizacion FROM cuestionarios ";
+                        $resultado = $conexion -> query($sql);
+                        if($resultado)    {
+                        ?>
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Cuestionario</th>
+                                <th>Creación</th>
+                                <th>Actualización</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+
+                            </tfoot>
+                            <tbody>
+                            <?php
+                            }
+                            while($row = $resultado -> fetch_assoc()) { //con esto es para recorrer toda la tabla de mysql
+                                ?>
+                                <tr>
+                                    <td><?php echo utf8_encode($row['cuestionario']) ?></td>
+                                    <td><?php echo utf8_encode($row['creacion']) ?></td>
+                                    <td><?php echo utf8_encode($row['actualizacion']) ?></td>
+                                    <td><?php echo 'Editar'.'Eliminar' ?></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-            <!-- DIV CARD -->
-            
 
         </div>
         <!-- /.container-fluid -->
-        
-        <?php //getFooter() ?>
-        
+
+        <?php getFooter() ?>
+
     </div>
     <!-- /.content-wrapper -->
 
