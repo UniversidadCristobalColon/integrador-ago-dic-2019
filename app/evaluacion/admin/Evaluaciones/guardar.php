@@ -5,6 +5,7 @@
     $Evaluar = $_POST["Evaluar"];
     $Evaluan = $_POST["Evaluan"];
     $Cuestionario = $_POST["Cuestionario"];
+    $Descripcion = $_POST["Descripcion"];
     $Periodo = $_POST["Periodo"];
     $ip =  $_SERVER['REMOTE_ADDR'];
 
@@ -15,6 +16,7 @@
                         inicio,
                         fin,
                         limite,
+                        descripcion,
                         creacion,
                         creacion_ip) values (
                         '$Cuestionario',
@@ -23,6 +25,7 @@
                         NOW(),
                         NOW(),
                         NULL,
+                        '$Descripcion',
                         NOW(),
                         '$ip'
                         )";
@@ -35,7 +38,7 @@
             $resultado = mysqli_query($conexion, $insert);
         }*/
 
-        header('location: adminEvaluacion.php');
+        header('location: adminEvaluacion.php?id_evaluado='.$Evaluar.'& id_evaluador='.$Evaluan);
 
     } else {
         echo 'No se guardo' . mysqli_error($conexion);

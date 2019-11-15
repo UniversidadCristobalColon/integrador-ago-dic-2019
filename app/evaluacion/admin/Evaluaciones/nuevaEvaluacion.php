@@ -38,8 +38,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <h1>Nueva Evaluación</h1>
                 <hr>
                 <div class="form-group">
-                    <label for="Evaluar">Evaluar a:</label>
-                    <select class="form-control" id="Evaluar" name="Evaluar">
+                    <label for="Descripcion">Descripcion:</label>
+                    <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion">
+
+                    <label for="Evaluar">Evaluar a:</label>  <!-- Evaluado -->
+                    <select class="form-control mb-3" id="Evaluar" name="Evaluar">
                         <option></option>
                         <?php
                         $sql = "select * from niveles_puesto";
@@ -52,7 +55,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         ?>
                     </select>
 
-                    <label for="Evaluan">Quienes van a evaluar:</label>
+                    <label for="Evaluan">Evaluadores:</label> <!-- Evaluadores -->
                     <select class="form-control mb-3" id="Evaluan" name="Evaluan">
                         <option></option>
                         <?php
