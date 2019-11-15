@@ -16,6 +16,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <title><?php echo PAGE_TITLE ?></title>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
+
 </head>
 
 <body id="page-top">
@@ -41,23 +42,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     <div class="table-responsive">
                         <form>
                             <div class="form-group">
+                                <label for="orden">Decálogo</label>
+                                <select class="form-control" id="orden">
+                                    <option></option>
+                                    <option>Liderazgo 2019</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="orden">Aseveración</label>
+                                <select class="form-control" id="orden">
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="pregunta">Pregunta</label>
                                 <input type="pregunta" class="form-control" id="pregunta1">
                             </div>
                             <div class="form-group">
-                                <label for="orden">Orden</label>
-                                <select class="form-control" id="orden">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="tipo">Tipo de pregunta</label>
                                 <select class="form-control" id="tipopreg">
-                                    <option>Opción Múlltiple</option>
+                                    <option>Opción Múltiple</option>
                                     <option>Abierta</option>
                                 </select>
                             </div>

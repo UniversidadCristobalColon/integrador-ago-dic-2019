@@ -16,6 +16,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <title><?php echo PAGE_TITLE ?></title>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
+
 </head>
 
 <body id="page-top">
@@ -44,8 +45,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <tr>
                                 <th>No.</th>
                                 <th>Preguntas</th>
-                                <th>Orden</th>
+                                <th>Decálogo</th>
                                 <th>Tipo</th>
+                                <th>Aseveración</th>
                                 <th>Actualización</th>
                                 <th>Acciones</th>
                             </tr>
@@ -56,18 +58,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             $stmt = $conexion->prepare($sql);
                             $stmt->execute();
                             $stmt->bind_result($id,$pregunta,$orden,$tipo,$actualizacion);
+                            //$sql2= "select aseveracion from decalogos_aseveraciones where id ='$id'";
+                            //$sql3 = "SELECT decalogo FROM decalogos WHERE id = $id;
                             $fila = 1;
                             while ($stmt->fetch()){
                             echo "<tr>";
                             echo "<td>$fila</td>";
                             echo "<td>$pregunta</td>";
-                            echo"<td>$orden</td>";
+                            echo"<td>Liderazgo 2019</td>";
                             if($tipo=='M'){
                                 $tipoC ="Opción Múltiple";
                             }else {
                                 $tipoC ="Abierta";
                             }
                             echo"<td>$tipoC</td>";
+                            echo "<td>Decalogo aseveracion</td>";
                             echo"<td>$actualizacion</td>";
                             ?>
                             <td><a href="editar.php"><i class="fas fa-edit"></i></a>
@@ -112,10 +117,24 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
+        <?php
+        function getUserIpAddr(){
+            if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+                //ip from share internet
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                //ip pass from proxy
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }else{
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+            return $ip;
+        }
 
+        echo 'User IP - '.getUserIpAddr();
+        ?>
         <?php getFooter() ?>
 
     </div>

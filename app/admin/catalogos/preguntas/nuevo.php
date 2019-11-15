@@ -45,18 +45,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     <div class="table-responsive">
                         <form>
                             <div class="form-group">
-                                <label for="pregunta">Pregunta</label>
-                                <input type="pregunta" class="form-control" id="pregunta">
+                                <label for="orden">Decálogo</label>
+                                <select class="form-control" id="orden">
+                                    <option></option>
+                                    <option>Liderazgo 2019</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label for="orden">Orden</label>
+                                <label for="orden">Aseveración</label>
                                 <select class="form-control" id="orden">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option></option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pregunta">Pregunta</label>
+                                <input type="text" class="form-control" id="pregunta">
                             </div>
                             <div class="form-group">
                                 <label for="tipo">Tipo de pregunta</label>
