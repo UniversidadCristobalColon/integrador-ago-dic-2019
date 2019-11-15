@@ -1,3 +1,9 @@
+<?php 
+
+$email = @$_GET['email'];
+$token = @$_GET['token'];
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,21 +31,26 @@
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Recuperar contraseña</div>
         <div class="card-body">
-            <div class="text-center mb-4">
-                <h4>¿Olvidó su contraseña?</h4>
-                <p>Se enviará un correo electrónico con instrucciones para recuperar el acceso a su cuenta.</p>
-            </div>
-            <form method="post" action="token.php">
+            <form method="post" action="password.php">
+                <input type="email" value="<?php echo $email ?>" name="usuario" hidden>
+                <input type="text" value="<?php echo $token ?>" name="token" hidden>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required="required" autofocus="autofocus" name="email">
-                        <label for="inputEmail">Correo electrónico</label>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Password"
+                               required="required" name="pass">
+                        <label for="inputPassword">Password</label>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Recuperar">
+                <div class="form-group">
+                    <div class="form-label-group">
+                        <input type="password" id="inputPassword1" class="form-control" placeholder="Password"
+                               required="required" name="pass1">
+                        <label for="inputPassword1">Confirm Password</label>
+                    </div>
+                </div>
+                <input type="submit" value="Cambiar Contraseña" class="btn btn-primary btn-block">
             </form>
             <div class="text-center">
-                <a class="d-block small mt-3" href="index.php">Página de inicio</a>
             </div>
         </div>
     </div>

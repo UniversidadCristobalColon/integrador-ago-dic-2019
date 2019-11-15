@@ -1,3 +1,11 @@
+<?php
+
+session_start();
+if(isset($_SESSION['usuario'])){
+    header("location: ./admin/catalogos/competencias/index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,23 +33,22 @@
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Bienvenido</div>
         <div class="card-body">
-            <form>
+            <form method="post" action="login.php">
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="email" id="inputEmail" class="form-control" placeholder="Email address"
-                               required="required" autofocus="autofocus">
+                               required="required" autofocus="autofocus" name="email">
                         <label for="inputEmail">Email address</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password"
-                               required="required">
+                               required="required" name="pass">
                         <label for="inputPassword">Password</label>
                     </div>
                 </div>
-
-                <a class="btn btn-primary btn-block" href="index.php">Ingresar</a>
+                <input type="submit" value="Ingresar" class="btn btn-primary btn-block">
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="recuperar.php">¿Olvidó su contraseña?</a>
