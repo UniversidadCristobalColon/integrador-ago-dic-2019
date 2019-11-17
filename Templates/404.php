@@ -32,7 +32,7 @@ require_once '../config/global.php';
 
 <div id="wrapper">
 
-    <?php getSidebar() ?>
+<?php getSidebar() ?>
 
     <div id="content-wrapper">
 
