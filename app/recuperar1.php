@@ -1,6 +1,6 @@
 <?php 
 
-$email = @$_POST['email'];
+$email = @$_GET['email'];
 
 ?>
 <!DOCTYPE html>

@@ -29,7 +29,7 @@
                 <h4>¿Olvidó su contraseña?</h4>
                 <p>Se enviará un correo electrónico con instrucciones para recuperar el acceso a su cuenta.</p>
             </div>
-            <form method="post" action="recuperar1.php">
+            <form method="post" action="token.php">
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required="required" autofocus="autofocus" name="email">

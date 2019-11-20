@@ -28,7 +28,11 @@ if(isset($_SESSION['usuario'])){
 </head>
 
 <body class="bg-dark">
-
+<?php 
+    if(isset($_GET['error'])) {
+        echo '<div class="alert alert-danger">'.$_GET['error'].'</div>';
+    }
+?>
 <div class="container">
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Bienvenido</div>
