@@ -1,8 +1,8 @@
 <?php
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
-$Evaluado = $_GET['id_evaluado'];
-$Evaluador = $_GET['id_evaluador'];
+$Depa = $_GET['id_departamento'];
+$Nombre = $_GET['id_nombre'];
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -27,6 +27,30 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         $(document).ready(function () {
             $('#F-fin').datepicker();
         })
+
+        function generarTabla(){
+            let $tr = $("<tr></tr>");
+            //$tr.attr("bgcolor", "FFFDC1");
+            $tr.css("background-color", "#FFFDC1");
+            let $th;
+            let i = 0;
+            while (i++ < 3){
+                $th = $(`<th>columna ${i}</th>`);
+                $tr.append($th);
+            }
+            return $tr;
+        }
+
+        function agregarTabla(id_contenedor, id_tabla){
+            const $tabla = $("<table></table>");
+            $tabla.attr("id", id_tabla);
+            $tabla.append(generarTabla());
+            $("#" + id_contenedor).html($tabla);
+        }
+        $('document').ready(() => {
+            $("#Tabla").click(() => agregarTabla("contenedor", "id-tabla"));
+        })
+
     </script>
 </head>
 
@@ -43,7 +67,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         <div class="container-fluid">
 
             <!-- Page Content -->
-            <h1>Administración de Evaluaciones</h1>
+            <h1><?php echo $Nombre?></h1>
             <hr>
             <form action="actualizar.php" method="post">
                 <button class="btn btn-success mb-3" type="submit">Guardar</button>
@@ -75,17 +99,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                         <!-- modal -->
 
-                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modalEvaluado">
                             Agregar
                         </button>
                     </div>
 
 
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="modalEvaluado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Lista de personal</h5>
+                                    <h5 class="modal-title" id="modal">Lista de personal</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -93,76 +117,29 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <div class="modal-body">
                                     <div class="form-check">
                                         <?php
-                                        $sql = "select * from empleados";
+                                        $sql = "SELECT * from empleados where id_departamento =".$Depa;
                                         $resultado = mysqli_query($conexion,$sql);
                                         if($resultado){
                                             while($fila = mysqli_fetch_assoc($resultado)){
                                                 echo "<div class='form-check'>
-                                            <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
-                                            <label class='form-check-label' for='$fila[id]'>
-                                            $fila[nombre] $fila[apellidos]
-                                            </label>
-                                            </div>";
+                                                <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                <label class='form-check-label' for='$fila[id]'>
+                                                $fila[nombre] $fila[apellidos]
+                                                </label>
+                                                </div>";
                                             }
                                         }
                                         ?>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-primary">Guardar cambios</button>
+                                            <button type="button" class="btn btn-primary" id="Tabla">Guardar cambios</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="input-group mb-3 col-3">
-                        <p>Personal evaluador</p>
-
-                        <!-- modal -->
-                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#exampleModal">
-                            Agregar
-                        </button>
-                    </div>
-
-
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Lista de personal</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="Personal 1">
-                                        <label class="form-check-label" for="Personal 1">
-                                            Persona 1
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="Personal 2">
-                                        <label class="form-check-label" for="Personal 2">
-                                            Persona 2
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="Personal 3">
-                                        <label class="form-check-label" for="Personal 3">
-                                            Persona 3
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" class="btn btn-primary">Guerdar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- modal -->
+                    <div id="contenedor"></div>
 
                     <p>Progreso:</p>
                     <div class="progress">

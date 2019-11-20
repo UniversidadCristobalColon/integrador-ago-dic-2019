@@ -2,8 +2,7 @@
     require_once '../../../../config/global.php';
     include '../../../../config/db.php';
 
-    $Evaluar = $_POST["Evaluar"];
-    $Evaluan = $_POST["Evaluan"];
+    $Depa = $_POST["Departamento"];
     $Cuestionario = $_POST["Cuestionario"];
     $Descripcion = $_POST["Descripcion"];
     $Periodo = $_POST["Periodo"];
@@ -20,7 +19,7 @@
                         creacion,
                         creacion_ip) values (
                         '$Cuestionario',
-                        '$Evaluar',
+                        '$Depa',
                         '$Periodo',
                         NOW(),
                         NOW(),
@@ -38,7 +37,7 @@
             $resultado = mysqli_query($conexion, $insert);
         }*/
 
-        header('location: adminEvaluacion.php?id_evaluado='.$Evaluar.'& id_evaluador='.$Evaluan);
+        header('location: adminEvaluacion.php?id_departamento='.$Depa.'&id_nombre='.$Descripcion);
 
     } else {
         echo 'No se guardo' . mysqli_error($conexion);

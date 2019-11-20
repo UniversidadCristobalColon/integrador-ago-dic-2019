@@ -38,32 +38,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <h1>Nueva Evaluación</h1>
                 <hr>
                 <div class="form-group">
-                    <label for="Descripcion">Descripcion:</label>
+                    <label for="Descripcion">Nombre de la evaluación:</label>
                     <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion">
 
-                    <label for="Evaluar">Evaluar a:</label>  <!-- Evaluado -->
-                    <select class="form-control mb-3" id="Evaluar" name="Evaluar">
+                    <label for="Evaluar">Departamento:</label>  <!-- Evaluado -->
+                    <select class="form-control mb-3" id="Departamento" name="Departamento">
                         <option></option>
                         <?php
-                        $sql = "select * from niveles_puesto";
+                        $sql = "select * from departamentos";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
-                                echo "<option value = '$fila[id]'>$fila[nivel_puesto]</option>";
-                            }
-                        }
-                        ?>
-                    </select>
-
-                    <label for="Evaluan">Evaluadores:</label> <!-- Evaluadores -->
-                    <select class="form-control mb-3" id="Evaluan" name="Evaluan">
-                        <option></option>
-                        <?php
-                        $sql = "select * from niveles_puesto";
-                        $resultado = mysqli_query($conexion,$sql);
-                        if($resultado){
-                            while($fila = mysqli_fetch_assoc($resultado)){
-                                echo "<option value = '$fila[id]'>$fila[nivel_puesto]</option>";
+                                echo "<option value = '$fila[id]'>$fila[departamento]</option>";
                             }
                         }
                         ?>
