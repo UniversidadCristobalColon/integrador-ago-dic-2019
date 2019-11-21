@@ -1,49 +1,50 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-function enviarCorreo($para, $asunto, $mensaje){
-	$filtro = filter_var($para, FILTER_VALIDATE_EMAIL);
-	if($filtro){
-require '../vendor/PHPMailer/Exception.php';
-require '../vendor/PHPMailer/PHPMailer.php';
-require '../vendor/PHPMailer/SMTP.php';
-require '../config/db.php';
 
+function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
-$sql = "SELECT host, port, username, password, email_name FROM email_conf";
-$result = $conexion->query($sql);
+    require '../config/db.php';
 
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-    	$host = $row['host'];
-    	$port = $row['port'];
-    	$username = $row['username'];
-    	$password = $row['password'];
-    	$mailName = $row['email_name'];
+    require '../vendor/PHPMailer/Exception.php';
+    require '../vendor/PHPMailer/PHPMailer.php';
+    require '../vendor/PHPMailer/SMTP.php';
+
+    $sql = 'SELECT host, port, username, password, email_name 
+            FROM email_conf
+            WHERE id = 2';
+
+    $res = $conexion->query($sql);
+
+    if($res) {
+        $assoc = $res->fetch_assoc();
+
+        $mail = new PHPMailer;
+        $mail->isSMTP();                       // Set mailer to use SMTP
+        $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
+        $mail->Port = $assoc['port'];
+        $mail->SMTPAuth = true;                // Enable SMTP authentication
+        $mail->Username = $assoc['username'];  // SMTP username
+        $mail->Password = $assoc['password'];  // SMTP password
+        $mail->SMTPSecure = 'tls';             // Enable encryption, only 'tls' is accepted
+        $mail->From = $assoc['username'];
+        $mail->FromName = utf8_decode($assoc['email_name']);
+        $mail->addAddress($para);              // Add a recipient
+
+        $mail->WordWrap = 50;                  // Set word wrap to 50 characters
+        $mail->Subject = $asunto;
+        $mail->Body = $mensaje;
+
+        if(!$mail->send()) {
+            echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            //echo 'Message has been sent';
+            header('location: '.$redirect);
+        }
     }
+    
 }
 
-$mail = new PHPMailer;
-$mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = $host;                     // Specify main and backup SMTP servers
-$mail->Port = $port;
-$mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = $username;   // SMTP username
-$mail->Password = $password ;                           // SMTP password
-$mail->SMTPSecure = 'tls';                            // Enable encryption, only 'tls' is accepted
-$mail->From = $username;
-$mail->FromName =$mailName;
-$mail->addAddress($para);                 // Add a recipient
-
-$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-$mail->Subject = $asunto;
-$mail->Body = $mensaje;
-
-if(!$mail->send()) {
-    echo 'Message could not be sent.';
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
-} else {
-    echo 'Message has been sent';
-}
-}
-}
+?>

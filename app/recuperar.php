@@ -20,7 +20,11 @@
 </head>
 
 <body class="bg-dark">
-
+<?php 
+    if(isset($_GET['email'])) {
+        echo '<div class="alert alert-success">Se ha enviado un correo a'.$_GET['email'].'.</div>';
+    }
+?>
 <div class="container">
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Recuperar contraseña</div>
@@ -29,7 +33,7 @@
                 <h4>¿Olvidó su contraseña?</h4>
                 <p>Se enviará un correo electrónico con instrucciones para recuperar el acceso a su cuenta.</p>
             </div>
-            <form method="post" action="recuperar1.php">
+            <form method="post" action="token.php">
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required="required" autofocus="autofocus" name="email">
