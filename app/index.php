@@ -3,6 +3,9 @@
 session_start();
 if(isset($_SESSION['usuario'])) {
     header("location: ./admin/catalogos/competencias/index.php");
+} elseif(isset($_COOKIE[session_name()])) {
+	setcookie(session_name(), '', time()-3600, '/');
+    session_destroy();
 }
 
 ?>
