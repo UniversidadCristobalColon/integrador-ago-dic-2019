@@ -1,6 +1,7 @@
 <?php 
 
 $email = @$_GET['email'];
+$token = @$_GET['token'];
 
 ?>
 <!DOCTYPE html>
@@ -25,13 +26,18 @@ $email = @$_GET['email'];
 </head>
 
 <body class="bg-dark">
-
+<?php 
+    if(isset($_GET['error'])) {
+        echo '<div class="alert alert-danger">'.$_GET['error'].'</div>';
+    }
+?>
 <div class="container">
     <div class="card card-login mx-auto mt-5">
-        <div class="card-header">Recuperar contraseña</div>
+        <div class="card-header">Nueva contraseña</div>
         <div class="card-body">
             <form method="post" action="password.php">
                 <input type="email" value="<?php echo $email ?>" name="usuario" hidden>
+                <input type="text" value="<?php echo $token ?>" name="token" hidden>
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password"
