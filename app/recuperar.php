@@ -22,7 +22,7 @@
 <body class="bg-dark">
 <?php 
     if(isset($_GET['email'])) {
-        echo '<div class="alert alert-success">Se ha enviado un correo a'.$_GET['email'].'.</div>';
+        echo '<div class="alert alert-success">Se ha enviado un correo a '.$_GET['email'].'.</div>';
     }
 ?>
 <div class="container">
