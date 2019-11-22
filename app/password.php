@@ -1,11 +1,14 @@
 <?php
 
+
+
 $email          = @$_POST['usuario'];
 $token          = @$_POST['token'];
 $contrasena     = @$_POST['pass'];
 $contrasena1    = @$_POST['pass1'];
 
 require '../config/db.php';
+require '../config/config.php';
 
 /*
 $sql =  "SELECT EXISTS(SELECT * 
@@ -66,39 +69,53 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
     $stmt->close();
     if($res) {
         if($exists) {
-            if($contrasena != '' && $contrasena == $contrasena1) {
-                if($stmt = $conexion->prepare('UPDATE usuarios 
-                                                SET passwd      = md5(?),
-                                                actualizacion   = NOW()
-                                                WHERE usuario   = ?')){
-                    $stmt->bind_param('ss', $contrasena, $email);
-                    echo $res = $stmt->execute();
-                    $stmt->close();
-                    if($res) {
-                        if($stmt = $conexion->prepare('UPDATE password_resets  
-                                                        SET status = 0
-                                                        WHERE id   = (SELECT id 
-                                                                        FROM usuarios 
-                                                                        WHERE usuario = ?)')) {
-                            $stmt->bind_param('s', $email);
-                            $res = $stmt->execute();
-                            $stmt->close();
-                            if($res) {
-                                $conexion->close();
-                                header('location: logout.php');
+            if(strlen($contrasena)) {
+                if($contrasena != '' && $contrasena == $contrasena1) {
+                    if($stmt = $conexion->prepare('UPDATE usuarios 
+                                                    SET passwd      = ?,
+                                                    actualizacion   = NOW()
+                                                    WHERE usuario   = ?')){
+                        $stmt->bind_param('ss', 
+                                            password_hash($contrasena, 
+                                                            PASSWORD_BCRYPT, 
+                                                            $options), 
+                                            $email);
+                        echo $res = $stmt->execute();
+                        $stmt->close();
+                        if($res) {
+                            if($stmt = $conexion->prepare('UPDATE password_resets  
+                                                            SET status = 0
+                                                            WHERE id   = (SELECT id 
+                                                                            FROM usuarios 
+                                                                            WHERE usuario = ?)')) {
+                                $stmt->bind_param('s', $email);
+                                $res = $stmt->execute();
+                                $stmt->close();
+                                if($res) {
+                                    $conexion->close();
+                                    header('location: index.php?'
+                                           .'alert=1');
+                                }
                             }
                         }
                     }
+                } else {
+                    $conexion->close();
+                    header('location: ./cambiar.php?email='
+                           .$email.'&token='
+                           .$token.'&error=3');
                 }
             } else {
                 $conexion->close();
                 header('location: ./cambiar.php?email='
-                               .$email.'&token='
-                                .$token.'&error=Error contraseñas no coinciden.');
+                       .$email.'&token='
+                       .$token
+                       .'&error=4'
+                       );
             }
         } else {
             $conexion->close();
-            header('location: ./index.php?error=Error token invalido.');
+            header('location: ./index.php?error=5');
         }
     }
     $conexion->close();
