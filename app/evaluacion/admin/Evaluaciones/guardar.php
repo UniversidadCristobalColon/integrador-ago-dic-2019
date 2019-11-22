@@ -3,10 +3,17 @@
     include '../../../../config/db.php';
 
     $Depa = $_POST["Departamento"];
+    $Inicio = convertirFecha($_POST["Inicio"]);
+    $Fin = convertirFecha($_POST["Fin"]);
     $Cuestionario = $_POST["Cuestionario"];
     $Descripcion = $_POST["Descripcion"];
     $Periodo = $_POST["Periodo"];
     $ip =  $_SERVER['REMOTE_ADDR'];
+
+    function convertirFecha($fecha){
+        $outs = explode('/',$fecha);
+        return "$outs[2]-$outs[0]-$outs[1]";
+    }
 
     $insert = "insert into evaluaciones(
                         id_cuestionario,
@@ -21,8 +28,8 @@
                         '$Cuestionario',
                         '$Depa',
                         '$Periodo',
-                        NOW(),
-                        NOW(),
+                        '$Inicio',
+                        '$Fin',
                         NULL,
                         '$Descripcion',
                         NOW(),
@@ -36,7 +43,6 @@
             $insert = "insert into intereces (id_aspirante, id_carrera) values ($id_aspirante, $id_carrera)";
             $resultado = mysqli_query($conexion, $insert);
         }*/
-
         header('location: adminEvaluacion.php?id_departamento='.$Depa.'&id_nombre='.$Descripcion);
 
     } else {

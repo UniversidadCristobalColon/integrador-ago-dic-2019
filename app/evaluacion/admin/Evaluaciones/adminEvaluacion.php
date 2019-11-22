@@ -109,36 +109,178 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modal">Lista de personal</h5>
+                                    <h5 class="modal-title" id="modal">Personal a evaluar</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-check">
-                                        <?php
-                                        $sql = "SELECT * from empleados where id_departamento =".$Depa;
-                                        $resultado = mysqli_query($conexion,$sql);
-                                        if($resultado){
-                                            while($fila = mysqli_fetch_assoc($resultado)){
-                                                echo "<div class='form-check'>
-                                                <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
-                                                <label class='form-check-label' for='$fila[id]'>
-                                                $fila[nombre] $fila[apellidos]
-                                                </label>
-                                                </div>";
+                                        <select class="form-control mb-3">
+                                            <option selected disabled>Seleccione al trabajador</option>
+                                            <?php
+                                            $sql = "SELECT empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                    LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                    LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                    LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                    WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                            $resultado = mysqli_query($conexion,$sql);
+                                            /*if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<div class='form-check'>
+                                                    <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                    <label class='form-check-label' for='$fila[id]'>
+                                                    $fila[nombre] $fila[apellidos]
+                                                    </label>
+                                                    </div>";
+                                                }
+                                            }*/
+                                            if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                }
                                             }
-                                        }
-                                        ?>
+                                            ?>
+                                        </select>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-primary" id="Tabla">Guardar cambios</button>
+                                            <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modalSiguiente" data-dismiss="modal">Continuar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="modal fade" id="modalSiguiente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modal">Personal a evaluar</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-check">
+                                        <p>Superior</p>
+                                        <select class="form-control mb-3">
+                                            <option selected disabled>Seleccione al trabajador</option>
+                                            <?php
+                                            $sql = "SELECT empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                    LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                    LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                    LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                    WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                            $resultado = mysqli_query($conexion,$sql);
+                                            /*if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<div class='form-check'>
+                                                    <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                    <label class='form-check-label' for='$fila[id]'>
+                                                    $fila[nombre] $fila[apellidos]
+                                                    </label>
+                                                    </div>";
+                                                }
+                                            }*/
+                                            if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                        <p>Par 1</p>
+                                        <select class="form-control mb-3">
+                                            <option selected disabled>Seleccione al trabajador</option>
+                                            <?php
+                                            $sql = "SELECT empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                    LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                    LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                    LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                    WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                            $resultado = mysqli_query($conexion,$sql);
+                                            /*if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<div class='form-check'>
+                                                    <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                    <label class='form-check-label' for='$fila[id]'>
+                                                    $fila[nombre] $fila[apellidos]
+                                                    </label>
+                                                    </div>";
+                                                }
+                                            }*/
+                                            if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                        <p>Par 2</p>
+                                        <select class="form-control mb-3">
+                                            <option selected disabled>Seleccione al trabajador</option>
+                                            <?php
+                                            $sql = "SELECT empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                    LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                    LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                    LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                    WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                            $resultado = mysqli_query($conexion,$sql);
+                                            /*if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<div class='form-check'>
+                                                    <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                    <label class='form-check-label' for='$fila[id]'>
+                                                    $fila[nombre] $fila[apellidos]
+                                                    </label>
+                                                    </div>";
+                                                }
+                                            }*/
+                                            if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                        <p>Cliente</p>
+                                        <select class="form-control mb-3">
+                                            <option selected disabled>Seleccione al trabajador</option>
+                                            <?php
+                                            $sql = "SELECT empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                    LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                    LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                    LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                    WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                            $resultado = mysqli_query($conexion,$sql);
+                                            /*if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<div class='form-check'>
+                                                    <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
+                                                    <label class='form-check-label' for='$fila[id]'>
+                                                    $fila[nombre] $fila[apellidos]
+                                                    </label>
+                                                    </div>";
+                                                }
+                                            }*/
+                                            if($resultado){
+                                                while($fila = mysqli_fetch_assoc($resultado)){
+                                                    echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modalSiguiente">Continuar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="contenedor"></div>
 
                     <p>Progreso:</p>
