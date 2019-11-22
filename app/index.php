@@ -1,12 +1,13 @@
 <?php
 
 session_start();
+
 if(isset($_SESSION['usuario'])) {
     header("location: ./admin/catalogos/competencias/index.php");
-} elseif(isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time()-3600, '/');
-    session_destroy();
 }
+
+setcookie(session_name(), '', time()-3600, '/');
+session_destroy();
 
 ?>
 <!DOCTYPE html>
@@ -32,8 +33,20 @@ if(isset($_SESSION['usuario'])) {
 
 <body class="bg-dark">
 <?php 
+    $errores[1] = 'No existe la cuenta de usuario.';
+    $errores[2] = 'Usuario o contraseña incorrecto.';
+    $errores[3] = 'Error contraseñas no coinciden.';
+    $errores[4] = 'Error contraseña sobrepasa el limite de caracteres.';
+    $errores[5] = 'Error token invalido.';
+
+    $alertas[1] = 'Se ha cambiado la contraseña.';
+    //index
+
     if(isset($_GET['error'])) {
-        echo '<div class="alert alert-danger">'.$_GET['error'].'</div>';
+        echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+    }
+    if(isset($_GET['alert'])) {
+        echo '<div class="alert alert-success">'.$alertas[$_GET['alert']].'</div>';
     }
 ?>
 <div class="container">

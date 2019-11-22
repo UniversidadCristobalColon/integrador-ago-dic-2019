@@ -1,7 +1,7 @@
 <?php
 
 $email = @$_POST['email'];
-$token = bin2hex(random_bytes(32));
+$token = md5(uniqid($email.time(), true));
 
 require '../config/db.php';
 
@@ -50,7 +50,7 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
             '/proyecto/app/recuperar.php?email='.$email
         );
     } else {
-        header('location: /proyecto/app?error=Error.');
+        header('location: /proyecto/app?error=1');
     }
 }
 ?>

@@ -33,14 +33,15 @@
                 <h4>¿Olvidó su contraseña?</h4>
                 <p>Se enviará un correo electrónico con instrucciones para recuperar el acceso a su cuenta.</p>
             </div>
-            <form method="post" action="token.php">
+            <form method="post" action="token.php" 
+                onsubmit="document.getElementById('submit').disabled = true;">
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required="required" autofocus="autofocus" name="email">
                         <label for="inputEmail">Correo electrónico</label>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Recuperar">
+                <input type="submit" class="btn btn-primary btn-block" value="Recuperar" id="submit">
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="index.php">Página de inicio</a>
