@@ -1,10 +1,11 @@
 <?php
-require_once '../config/global.php';
+require_once '../../../../config/global.php';
 
-define('RUTA_INCLUDE', '../'); //ajustar a necesidad
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,14 +34,14 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Data Table Example
+                    Catálogo: Escalas
                 </div>
                 <div class="card-body">
-                    
                     <button class="btn btn-primary mb-3">Nuevo</button>
-                    
+
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -50,7 +51,8 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
                                 <th>Start date</th>
                                 <th>Salary</th>
                             </tr>
-                            </thead>                            
+                            </thead>
+
                             <tbody>
                             <tr>
                                 <td>Tiger Nixon</td>
@@ -58,27 +60,10 @@ define('RUTA_INCLUDE', '../'); //ajustar a necesidad
                                 <td>Edinburgh</td>
                                 <td>61</td>
                                 <td>2011/04/25</td>
-                                <td>$320,800</td>
+                                <td>Editar Eliminar</td>
                             </tr>
-                            <tr>
-                                <td>Garrett Winters</td>
-                                <td>Accountant</td>
-                                <td>Tokyo</td>
-                                <td>63</td>
-                                <td>2011/07/25</td>
-                                <td>$170,750</td>
-                            </tr>
-                            <tfoot>
-                            <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                            </tr>
-                            </tfoot>
                             </tbody>
+
                         </table>
                     </div>
                 </div>

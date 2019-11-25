@@ -34,7 +34,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catalogo de competencias
+                    Catálogo: Competencias
                 </div>
                 <div class="card-body">
                     <button class="btn btn-primary mb-3">Nuevo</button>
@@ -42,18 +42,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Competencias</th>
-                                <th>hora</th>
-                                <th> </th>
+                                <th>Competencia</th>
+                                <th>Última actualización</th>
+                                <th></th>
                             </tr>
                             </thead>
-                            <tfoot>
-
-                            </tfoot>
-                            <tbody><tr>
-                                <th>Competencia</th>
-                                <th>07/11/19 8:53</th>
-                                <th>Editar Eliminar</th>
+                            <tbody>
+                            <tr>
+                                <td>Competencia 1</td>
+                                <td>07/11/2019 20:33:00</td>
+                                <td>Editar Eliminar</td>
+                            </tr>
+                            <tr>
+                                <td>Competencia 2</td>
+                                <td>07/11/2019 20:33:00</td>
+                                <td>Editar Eliminar</td>
                             </tr>
                             </tbody>
                         </table>
