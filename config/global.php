@@ -147,7 +147,7 @@ function getModalLogout($ruta = ''){
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="{$ruta}login.php">Logout</a>
+                <a class="btn btn-primary" href="{$ruta}logout.php">Logout</a>
             </div>
         </div>
     </div>
@@ -172,14 +172,15 @@ function getTopIncludes($ruta = ''){
     <link href="{$ruta}css/sb-admin.css" rel="stylesheet" type="text/css">
 
     <link href="{$ruta}css/estilos.css" rel="stylesheet" type="text/css">
+
+    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>
 EOD;
     echo $html;
 }
 
 function getBottomIncudes($ruta = ''){
     $html = <<<EOD
-    <!-- Bootstrap core JavaScript-->
-    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript-->    
     <script src="{$ruta}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     
     <!-- Core plugin JavaScript-->
