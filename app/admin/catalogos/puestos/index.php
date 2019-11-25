@@ -1,7 +1,7 @@
 <?php
-require_once '../../../../../../../../../../../../../config/global.php';
+require_once '../../../../config/global.php';
 
-define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a necesidad
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -38,17 +38,19 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
                 </div>
 
                  <div class="card-body">
-                     <button class="btn btn-primary mb-3">Nuevo</button>
+                     <button class="btn btn-primary mb-3" title="Agrega un nuevo registro">Nuevo</button>
 
                      <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Puesto</th>
-                                <th>Ultima Actualización</th>
-                                <th></th>
+                                <th class="text-center">Puesto</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">Nivel de puesto</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                             </thead>
+                            <!--
                             <tfoot>
                             <tr>
                                 <th>Name</th>
@@ -59,16 +61,22 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
                                 <th>Salary</th>
                             </tr>
                             </tfoot>
+                            -->
                             <tbody>
                             <tr>
-                                <td>Puesto 1</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
+
+                                    <td class="text-center">Puesto 1</td>
+                                    <td class="text-center">07/11/2019 20:33:00</td>
+                                    <td class="text-center">Recursos Humanos</td>
+                                    <td class="text-center">
+                                        <i class="fas fa-edit btn btn-primary" title="Modificar registro"></i> &ensp;
+                                        <i class="far fa-trash-alt btn btn-danger" title="Eliminar registro"></i>
+                                    </td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
 
@@ -91,6 +99,7 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+
 </body>
 
 </html>
