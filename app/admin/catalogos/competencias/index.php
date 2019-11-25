@@ -1,4 +1,7 @@
 <?php
+session_start();
+$email = $_SESSION['usuario'];
+
 require_once '../../../../config/global.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
@@ -19,9 +22,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 </head>
 
 <body id="page-top">
-
-<?php getNavbar() ?>
-
+<?php 
+    getModalLogout('../../../');
+    getNavbar();
+?>
 <div id="wrapper">
 
     <?php getSidebar() ?>
@@ -34,7 +38,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Preguntas
+                    Catálogo: Competencias
                 </div>
                 <div class="card-body">
                     <button class="btn btn-primary mb-3">Nuevo</button>
@@ -42,28 +46,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Correo electónico</th>
-                                <th>Teléfono</th>
-                                <th>Departamento</th>
-                                <th>Puesto</th>
-                                <th>Rol</th>
-                                <th>Acciones</th>
+                                <th>Competencia</th>
+                                <th>Última actualización</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Pregunta 1</td>
-                                <td>Escala</td>
-                                <td>07-Nov-2019 20:34</td>
-                                <td>
-                                    <i class="far fa-edit"></i>
-                                    <i class="far fa-trash-alt"></i>
-                                </td>
+                                <td>Competencia 1</td>
+                                <td>07/11/2019 20:33:00</td>
+                                <td>Editar Eliminar</td>
                             </tr>
-
+                            <tr>
+                                <td>Competencia 2</td>
+                                <td>07/11/2019 20:33:00</td>
+                                <td>Editar Eliminar</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

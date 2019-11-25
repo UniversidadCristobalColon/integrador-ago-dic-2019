@@ -1,3 +1,15 @@
+<?php
+
+session_start();
+
+if(isset($_SESSION['usuario'])) {
+    header("location: ./admin/catalogos/competencias/index.php");
+}
+
+setcookie(session_name(), '', time()-3600, '/');
+session_destroy();
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,28 +32,43 @@
 </head>
 
 <body class="bg-dark">
+<?php 
+    $errores[1] = 'No existe la cuenta de usuario.';
+    $errores[2] = 'Usuario o contraseña incorrecto.';
+    $errores[3] = 'Error contraseñas no coinciden.';
+    $errores[4] = 'Error contraseña sobrepasa el limite de caracteres.';
+    $errores[5] = 'Error token invalido.';
 
+    $alertas[1] = 'Se ha cambiado la contraseña.';
+    //index
+
+    if(isset($_GET['error'])) {
+        echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+    }
+    if(isset($_GET['alert'])) {
+        echo '<div class="alert alert-success">'.$alertas[$_GET['alert']].'</div>';
+    }
+?>
 <div class="container">
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Bienvenido</div>
         <div class="card-body">
-            <form>
+            <form method="post" action="login.php">
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="email" id="inputEmail" class="form-control" placeholder="Email address"
-                               required="required" autofocus="autofocus">
+                               required="required" autofocus="autofocus" name="email">
                         <label for="inputEmail">Email address</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-label-group">
                         <input type="password" id="inputPassword" class="form-control" placeholder="Password"
-                               required="required">
+                               required="required" name="pass">
                         <label for="inputPassword">Password</label>
                     </div>
                 </div>
-
-                <a class="btn btn-primary btn-block" href="index.php">Ingresar</a>
+                <input type="submit" value="Ingresar" class="btn btn-primary btn-block">
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="recuperar.php">¿Olvidó su contraseña?</a>
