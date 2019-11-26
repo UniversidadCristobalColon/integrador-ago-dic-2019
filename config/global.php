@@ -59,6 +59,8 @@ EOD;
 }
 
 function getNavbar($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
@@ -115,8 +117,7 @@ function getNavbar($ruta = ''){
                 <i class="fas fa-user-circle fa-fw"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Settings</a>
-                <a class="dropdown-item" href="#">Activity Log</a>
+                <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/mailConfig.php">Configurar envío e-mail</a>                
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
             </div>
@@ -194,6 +195,8 @@ EOD;
 }
 
 function getBottomIncudes($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
     <!-- Bootstrap core JavaScript-->    
     <script src="{$ruta}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -213,7 +216,9 @@ function getBottomIncudes($ruta = ''){
     <script src="{$ruta}js/demo/chart-bar-demo.js"></script>
     <script src="{$ruta}js/demo/chart-pie-demo.js"></script>
 
-
+    <script>
+        var dir_base = '$dir_base';
+    </script>
     <script src="{$ruta}js/demo/datatables-demo.js"></script>
 EOD;
 
