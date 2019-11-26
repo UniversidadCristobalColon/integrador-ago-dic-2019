@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+require '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <title><?php echo PAGE_TITLE ?></title>
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <?php getTopIncludes(RUTA_INCLUDE) ?>
 </head>
 
 <body id="page-top">
@@ -38,28 +38,60 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </div>
                 <div class="card-body">
 
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <div class="row ml-auto mb-3">
+
+                        <button onclick="location.href='nuevo.php'" type="button" class="btn btn-primary">
+                            Nuevo
+                        </button>
+
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
                             <thead>
                             <tr>
-                                <th>descripcion</th>
-                                <th>creacion</th>
-                                <th>actualizacion</th>
-                                <th>id_escala</th>
+                                <th>Decálogo</th>
+                                <th>Creación</th>
+                                <th>Actualización</th>
+                                <th hidden>id_escala</th>
                                 <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td>A</td>
-                                <td>2019/11/01</td>
-                                <td>2019/11/02</td>
-                                <td>D</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
+
+                            <?php
+                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala FROM decalogos";
+                            $resultado = mysqli_query($conexion, $sql);
+                            ?>
+                            <?php if ($resultado): ?>
+                                <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                                    <tr>
+                                        <td><?php echo $fila['decalogo'] ?></td>
+                                        <td><?php echo $fila['creacion'] ?></td>
+                                        <td><?php echo $fila['actualizacion'] ?></td>
+                                        <td hidden><?php echo $fila['id_escala'] ?></td>
+                                        <td class="text-center">
+                                            <form name="f-el-ed" action="elim-edit.php" method="post">
+                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
+                                                        type="submit"
+                                                        name="b-elim" value="<?php echo $fila['id'] ?>">
+                                                    <i style="cursor:pointer" class="fas fa-trash"></i>
+                                                </button>
+                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
+                                                        type="submit"
+                                                        name="b-edit" value="<?php echo $fila['id'] ?>">
+                                                    <i style="cursor:pointer" class="fas fa-edit"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else:
+                                echo "ERROR";
+                            endif; ?>
+
                             </tbody>
 
                         </table>
@@ -67,26 +99,19 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
-
         <?php getFooter() ?>
-
     </div>
     <!-- /.content-wrapper -->
-
 </div>
 <!-- /#wrapper -->
-
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
 <?php getModalLogout() ?>
-
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
+<?php getBottomIncudes(RUTA_INCLUDE) ?>
 </body>
 
 </html>
