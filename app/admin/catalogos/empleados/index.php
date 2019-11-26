@@ -1,6 +1,5 @@
 <?php
 require_once '../../../../config/global.php';
-require_once '../../../../config/db.php';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
@@ -13,7 +12,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title><?php echo PAGE_TITLE ?></title>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
@@ -35,43 +33,34 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catalogo de competencias
+                    Catálogo: Empleados
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <button class="btn btn-primary mb-3" onclick="create()">Nuevo</button>
                     <div class="table-responsive">
-                        <?php
-                        $sql = "SELECT cuestionario, creacion, actualizacion FROM cuestionarios ";
-                        $resultado = $conexion -> query($sql);
-                        if($resultado)    {
-                        ?>
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Cuestionario</th>
-                                <th>Creación</th>
-                                <th>Actualización</th>
-                                <th></th>
+                                <th class="text-center">Usuario</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Creado en</th>
+                                <th class="text-center">Actualizado en</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                             </thead>
-                            <tfoot>
-
-                            </tfoot>
                             <tbody>
-                            <?php
-                            }
-                            while($row = $resultado -> fetch_assoc()) { //con esto es para recorrer toda la tabla de mysql
-                                ?>
-                                <tr>
-                                    <td><?php echo utf8_encode($row['cuestionario']) ?></td>
-                                    <td><?php echo utf8_encode($row['creacion']) ?></td>
-                                    <td><?php echo utf8_encode($row['actualizacion']) ?></td>
-                                    <td><?php echo 'Editar'.'Eliminar' ?></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
 
+                            <!--
+                            <tr>
+                                <td>Pregunta 1</td>
+                                <td>Escala</td>
+                                <td>07-Nov-2019 20:34</td>
+                                <td>
+                                    <i class="far fa-edit"></i>
+                                    <i class="far fa-trash-alt"></i>
+                                </td>
+                            </tr>
+                            -->
                             </tbody>
                         </table>
                     </div>
@@ -98,6 +87,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript" src="create.js"></script>
 </body>
 
 </html>

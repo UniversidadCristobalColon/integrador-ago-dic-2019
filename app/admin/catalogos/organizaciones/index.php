@@ -1,5 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
+require_once '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -36,7 +37,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Organizaciones
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Agregar</button>
 
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -46,22 +47,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Organización</th>
                                 <th>Creación</th>
                                 <th>Actualización</th>
+                                <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td>Organización 1</td>
-                                <td>12-11-2019</td>
-                                <td>12-11-2019</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
-                            <tr>
-                                <td>Organización 2</td>
-                                <td>12-11-2019</td>
-                                <td>12-11-2019</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
+                           
+                            <?php foreach ($conexion->query('SELECT * from organizaciones') as $row){  ?> 
+<tr>
+	<td><?php echo $row['organizacion'] ?></td>
+    <td><?php echo $row['creacion'] ?></td>
+    <td><?php echo $row['actualizacion'] ?></td>
+    <td class="text-center"><a href="editar.php" style="color: black;"><i class="fas fa-edit fa-lg"></i></a> <a href="eliminar.php" style="color: black;"><i class="fas fa-trash fa-lg"></i></a></td>
+ </tr>
+<?php
+}
+?>
                             </tbody>
 
                         </table>

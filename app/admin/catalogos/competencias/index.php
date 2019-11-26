@@ -1,6 +1,6 @@
 <?php
-
 include '../../../../config/db.php';
+
 session_start();
 require_once '../../../../config/global.php';
 ob_start();
@@ -22,12 +22,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 </head>
 
 <body id="page-top">
-
 <?php 
     getModalLogout('../../../');
     getNavbar();
 ?>
-
 <div id="wrapper">
 
     <?php getSidebar() ?>
