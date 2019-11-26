@@ -40,7 +40,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <div class="row ml-auto mb-3">
 
-                        <button onclick="location.href='nuevo.php'"    type="button" class="btn btn-primary">
+                        <button onclick="location.href='nuevo.php'" type="button" class="btn btn-primary">
                             Nuevo
                         </button>
 
@@ -62,45 +62,35 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <tbody>
 
                             <?php
-                            $sql = "SELECT decalogo, creacion, actualizacion, id_escala FROM decalogos";
+                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala FROM decalogos";
                             $resultado = mysqli_query($conexion, $sql);
-                            if ($resultado) {
-                                while ($fila = mysqli_fetch_assoc($resultado)) {
-                                    echo "<tr>";
-                                    echo "<td>$fila[decalogo]</td>";
-                                    echo "<td>$fila[creacion]</td>";
-                                    echo "<td>$fila[actualizacion]</td>";
-                                    echo "<td hidden>$fila[id_escala]</td>";
-                                    echo "<td class='text-center'>";
-                                    echo "<a href='blank'>";
-                                    echo "<i class='fas fa-edit'></i>";
-                                    echo "</a>";
-                                    echo "<a href='eliminar.php'>";
-                                    echo "<i class='fa fa-trash'></i>";
-                                    echo "</a>";
-                                    echo "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "ERROR";
-                            }
                             ?>
-
-                            <!-- Ayuda simple para visualizar la tabla -->
-                            <!--<tr>
-                                <td>A</td>
-                                <td>2019/11/01</td>
-                                <td>2019/11/02</td>
-                                <td>D</td>
-                                <td>
-                                    <a href="#page-top" class="fas fa-edit"></a>
-                                    <form name="form-elim" action="eliminar.php" method="post">
-                                        <input type="submit" value="Borrar">
-                                        <i class="fa fa-trash"></i>
-                                    </form>
-                                </td>
-                            </tr>-->
-                            <!-- Ayuda simple para visualizar la tabla -->
+                            <?php if ($resultado): ?>
+                                <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                                    <tr>
+                                        <td><?php echo $fila['decalogo'] ?></td>
+                                        <td><?php echo $fila['creacion'] ?></td>
+                                        <td><?php echo $fila['actualizacion'] ?></td>
+                                        <td hidden><?php echo $fila['id_escala'] ?></td>
+                                        <td class="text-center">
+                                            <form name="f-el-ed" action="elim-edit.php" method="post">
+                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
+                                                        type="submit"
+                                                        name="b-elim" value="<?php echo $fila['id'] ?>">
+                                                    <i style="cursor:pointer" class="fas fa-trash"></i>
+                                                </button>
+                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
+                                                        type="submit"
+                                                        name="b-edit" value="<?php echo $fila['id'] ?>">
+                                                    <i style="cursor:pointer" class="fas fa-edit"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else:
+                                echo "ERROR";
+                            endif; ?>
 
                             </tbody>
 
