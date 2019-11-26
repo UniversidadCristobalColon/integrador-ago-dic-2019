@@ -1,9 +1,9 @@
 <?php
+include '../../../../config/db.php';
+
 session_start();
-$email = $_SESSION['usuario'];
-
 require_once '../../../../config/global.php';
-
+ob_start();
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -33,7 +33,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <div id="content-wrapper">
 
         <div class="container-fluid">
-
             <!-- DataTables Example -->
             <div class="card mb-3">
                 <div class="card-header">
@@ -41,34 +40,47 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Competencias
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <button class="btn btn-primary mb-3" OnClick="location.href='nuevo.php'" value="Nuevo">Nuevo</button>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Competencia</th>
+                                <th>Creación</th>
                                 <th>Última actualización</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Competencia 1</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
-                            <tr>
-                                <td>Competencia 2</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
+                                <?php
+                                    $sql = 'select * from competencias where estado = "1"';
+                                    $result = mysqli_query($conexion,$sql) or die('Consulta fallida: ' . mysqli_error());
+
+                                    while ($row = mysqli_fetch_array($result)){
+                                        echo "<tr>
+                                        <td>$row[competencia]</td>
+                                        <td>$row[creacion]</td>
+                                        <td>$row[actualizacion]</td>
+                                        <td><button class='btn' onclick='eliminar($row[id]);'><i class=\"fas fa-trash-alt\"></i></button>
+                                        <button class='btn' onclick='actualizar($row[id]);'><i class=\"fas fa-edit\"></i></button></td>
+                                        </tr>";
+                                    }
+                                ob_end_flush();
+                                ?>
                             </tbody>
                         </table>
                     </div>
+                    <script type="text/javascript">
+                        function eliminar(id){
+                            location.href="eliminar.php?id="+id;
+                        }
+                        function actualizar(id,com){
+                            location.href="agregar_editar.php?id="+id;
+                        }
+                    </script>
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
 
