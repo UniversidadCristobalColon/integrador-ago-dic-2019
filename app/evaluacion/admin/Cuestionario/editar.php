@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+include '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -59,67 +59,34 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        <div class="container-fluid">
 
-                                        <table>
+                                                    <?php
+                                                    $sql = "select pregunta from preguntas";
+                                                    $resultado = mysqli_query($conexion, $sql);
+                                                    if ($resultado){
+                                                        while ($fila = mysqli_fetch_assoc($resultado)){
+                                                            echo "
+                                                           <table>
+                                                            <tr><td> $fila[pregunta] </td>
+                                                             <td>
+                                                            
+                                                                <div class=\"form-check form-check-inline ml-3\">
+                                                             <input class=\"form-check-input\" type=\"checkbox\" id=\"inlineCheckbox1\" value=\"option1\">
+                                                              <label class=\"form-check-label\" for=\"inlineCheckbox1\">Seleccionar</label>
+                                                                </div>
+                                                            
+                                                            </td></tr>
+                                                           </table>
+                                                ";
+                                                        }
+                                                    }
 
-                                            <tr>
-                                                <td>Pregunta 1</td>
+                                                    ?>
 
-                                                <td>
-                                                    <div class="form-check form-check-inline ml-5">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                        <label class="form-check-label" for="inlineCheckbox1">Seleccionar</label>
-                                                    </div>
-                                                </td>
 
-                                                <td>
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control mt-3 ml-3" id="exampleFormControlInput1" placeholder="Posición">
-                                                    </div>
+                                        </div>
 
-                                                </td>
-
-                                            </tr>
-
-                                            <tr>
-                                                <td>Pregunta 2</td>
-
-                                                <td>
-                                                    <div class="form-check form-check-inline ml-5">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                        <label class="form-check-label" for="inlineCheckbox1">Seleccionar</label>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control mt-3 ml-3" id="exampleFormControlInput1" placeholder="Posición">
-                                                    </div>
-
-                                                </td>
-
-                                            </tr>
-
-                                            <tr>
-                                                <td>Pregunta 3</td>
-
-                                                <td>
-                                                    <div class="form-check form-check-inline ml-5">
-                                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                                        <label class="form-check-label" for="inlineCheckbox1">Seleccionar</label>
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control mt-3 ml-3" id="exampleFormControlInput1" placeholder="Posición">
-                                                    </div>
-
-                                                </td>
-
-                                            </tr>
-
-                                        </table>
 
 
                                     </div>
@@ -131,7 +98,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </div>
                         </div>
                         <!-- ****************************** -->
-                        <button type="button" class="btn btn-primary mb-3">Borrar Cuestionario</button>
+                        <button type="button" class="btn btn-primary mb-3">Guardar Cuestionario</button>
+
+                        <button type="button" class="btn btn-primary mb-3 btn-danger">Borrar Cuestionario</button>
                     </form>
                     <!-- **********************************************-->
                     <!-- Tabla donde muestro mis preguntas -->
@@ -140,12 +109,20 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <thead>
                             <tr>
                                 <th>Pregunta</th>
+                                <th>Opciones</th>
 
                             </tr>
                             </thead>                            
                             <tbody>
                             <tr>
                                 <td>Pregunta 1</td>
+                                <td>
+                                    <a href="#"><i class="fas fa-edit"></i></a>
+                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalEliminarPreguntaCuestionario">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+
+                                </td>
 
                             </tr>
 
@@ -178,8 +155,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
 
-<!-- Div para mi ventana MODAL -->
-
+<!-- Div para mi ventana MODAL de eliminar pregunta del cuestionario -->
+<div class="modal fade" id="modalEliminarPreguntaCuestionario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Pregunta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro de que desea eliminar esta pregunta?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger">Si, eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- ****************************** -->
