@@ -55,13 +55,13 @@ if($res){
 */
 
 if($stmt = $conexion->prepare('SELECT EXISTS(SELECT * 
-                                FROM password_resets 
-                                WHERE id = (SELECT id 
-                                            FROM usuarios 
-                                            WHERE usuario = ?)
-                                AND token = ?
-                                AND expira > NOW()
-                                AND status = 1)')) {
+                                             FROM password_resets 
+                                             WHERE id = (SELECT id 
+                                                         FROM usuarios 
+                                                         WHERE usuario = ?)
+                                             AND token = ?
+                                             AND expira > NOW()
+                                             AND status = 1)')) {
     $stmt->bind_param('ss', $email, $token);
     $res = $stmt->execute();
     $stmt->bind_result($exists);

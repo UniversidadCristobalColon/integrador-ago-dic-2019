@@ -27,8 +27,12 @@ $token = @$_GET['token'];
 
 <body class="bg-dark">
 <?php 
+    $errores[3] = 'Error contraseñas no coinciden.';
+    
     if(isset($_GET['error'])) {
-        echo '<div class="alert alert-danger">'.$_GET['error'].'</div>';
+        if(isset($errores[$_GET['error']])) {
+            echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+        }
     }
 ?>
 <div class="container">
