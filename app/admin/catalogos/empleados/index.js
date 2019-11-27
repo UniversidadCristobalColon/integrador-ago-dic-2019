@@ -269,9 +269,9 @@ for(let i = 0; i < users.length; i ++){
     let actions = document.createElement("td");
     actions.setAttribute("class", "text-center");
     let edit = document.createElement("i");
-    edit.setAttribute("class", "far fa-edit text-center mx-auto btn-warning btn");
+    edit.setAttribute("class", "far fa-edit text-center mx-auto");
     let remove = document.createElement("i");
-    remove.setAttribute("class", "far fa-trash-alt text-center mx-auto btn-danger btn");
+    remove.setAttribute("class", "far fa-trash-alt text-center mx-auto");
     actions.appendChild(edit);
     actions.appendChild(remove);
 
@@ -283,5 +283,5 @@ for(let i = 0; i < users.length; i ++){
     row.appendChild(actions);
 
 
-    usersDummy.appendChild(row);
+    //usersDummy.appendChild(row);
 }
