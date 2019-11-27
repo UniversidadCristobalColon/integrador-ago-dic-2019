@@ -9,7 +9,6 @@ $email      = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
                             PASSWORD_BCRYPT, 
                             $options);
-require '../config/db.php';
 
 /*
 $sql =  "SELECT passwd
@@ -32,27 +31,37 @@ if($res) {
 }
 */
 
-if($stmt = $conexion->prepare('SELECT passwd
-                                FROM usuarios
-                                WHERE usuario = ?')) {
-    $stmt->bind_param('s', $email);
-    $res = $stmt->execute();
-    $stmt->bind_result($passwd);
-    $stmt->fetch();
-    $stmt->close();
-    $conexion->close();
-    if($res) {
-        if($password == $passwd) {
-            session_start();
-            session_regenerate_id(true);
-            $_SESSION['usuario'] = $email;
-            //echo 'Bienvenido '.$email.'.';
-            header("location: ./admin/catalogos/competencias/index.php");
-        } else {
-            //echo 'Usuario o contraseña incorrecta.';
-            header("location: ./index.php?error=2");
+function login($email, $password, $redirect, $error) {
+    require '../config/db.php';
+    if($stmt = $conexion->prepare('SELECT passwd
+                                    FROM usuarios
+                                    WHERE usuario = ?')) {
+        $stmt->bind_param('s', $email);
+        $res = $stmt->execute();
+        $stmt->bind_result($passwd);
+        $stmt->fetch();
+        $stmt->close();
+        $conexion->close();
+        if($res) {
+            if($password == $passwd) {
+                session_start();
+                session_regenerate_id(true);
+                $_SESSION['usuario'] = $email;
+                //echo 'Bienvenido '.$email.'.';
+                header('location: '.$redirect);
+            } else {
+                //echo 'Usuario o contraseña incorrecta.';
+                header('location: '.$error);
+            }
         }
     }
+}
+
+if(isset($_POST['email'])) {
+    login($email, 
+          $password, 
+          './admin/catalogos/competencias/index.php',
+          './index.php?error=2');
 }
 
 ?>

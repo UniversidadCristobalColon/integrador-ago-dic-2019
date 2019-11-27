@@ -35,18 +35,24 @@ session_destroy();
 <?php 
     $errores[1] = 'No existe la cuenta de usuario.';
     $errores[2] = 'Usuario o contraseña incorrecto.';
-    $errores[3] = 'Error contraseñas no coinciden.';
-    $errores[4] = 'Error contraseña sobrepasa el limite de caracteres.';
+    
+    $errores[4] = 'Error contraseña sobrepasa el límite de caracteres.';
     $errores[5] = 'Error token invalido.';
 
     $alertas[1] = 'Se ha cambiado la contraseña.';
-    //index
+    $alertas[2] = 'Se a cambiado el correo a correo@correo.com para cambiar su contrasena consulte al administrador del sistema para validar su nuevo correo.';
+
 
     if(isset($_GET['error'])) {
-        echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+        if(isset($errores[$_GET['error']])) {
+            echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+        }
     }
+
     if(isset($_GET['alert'])) {
-        echo '<div class="alert alert-success">'.$alertas[$_GET['alert']].'</div>';
+        if(isset($alertas[$_GET['alert']])) {
+            echo '<div class="alert alert-success">'.$alertas[$_GET['alert']].'</div>';
+        }
     }
 ?>
 <div class="container">
@@ -56,16 +62,16 @@ session_destroy();
             <form method="post" action="login.php">
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address"
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico"
                                required="required" autofocus="autofocus" name="email">
-                        <label for="inputEmail">Email address</label>
+                        <label for="inputEmail">Correo electrónico</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Password"
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña"
                                required="required" name="pass">
-                        <label for="inputPassword">Password</label>
+                        <label for="inputPassword">Contraseña</label>
                     </div>
                 </div>
                 <input type="submit" value="Ingresar" class="btn btn-primary btn-block">
