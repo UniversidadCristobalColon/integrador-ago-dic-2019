@@ -12,6 +12,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script src=""></script>
     <title><?php echo PAGE_TITLE ?></title>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
@@ -38,7 +39,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <div class="card-body">
                     <button class="btn btn-primary mb-3">Nuevo</button>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-striped table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Usuario</th>
@@ -52,6 +53,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Actualizado en</th>
                                 <th>Acciones</th>
                             </tr>
+                            
                             </thead>
                             <tbody>
 
@@ -96,3 +98,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 </body>
 
 </html>
+
+
+<style>
+.table-responsive {
+max-width: 100%;
+margin: 0 auto;
+}
+#dataTable th, td {
+white-space: nowrap;
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+</style>

@@ -1,3 +1,11 @@
+$(document).ready(function () {
+    $('#dtHorizontalVerticalExample').DataTable({
+    "scrollX": true,
+    "scrollY": 200,
+    });
+    $('.dataTables_length').addClass('bs-select');
+    });
+
 var users = [{"username":"apodbury0","first_name":"Alethea","middle_name":"Tanswill","last_name":"Podbury","email":"apodbury0@wiley.com","phone":"802-352-0243","department":"Legal","job":"Engineer IV","role":"Administrador"},
     {"username":"wallix1","first_name":"Weidar","middle_name":"Stiller","last_name":"Allix","email":"wallix1@twitpic.com","phone":"664-664-6184","department":"Marketing","job":"Environmental Tech","role":"Auxiliar"},
     {"username":"imaunder2","first_name":"Issi","middle_name":"Shovlar","last_name":"Maunder","email":"imaunder2@marriott.com","phone":"457-565-6381","department":"Business Development","job":"Programmer III","role":"Administrador"},
@@ -123,10 +131,10 @@ for(let i = 0; i < users.length; i ++){
     let actions = document.createElement("td");
     actions.setAttribute("class", "text-center");
     let edit = document.createElement("i");
-        edit.setAttribute("class", "far fa-edit text-center mx-auto btn-warning btn");
+        edit.setAttribute("class", "far fa-edit text-center mx-auto");
         console.log(edit);
     let remove = document.createElement("i");
-        remove.setAttribute("class", "far fa-trash-alt text-center mx-auto btn-danger btn");
+        remove.setAttribute("class", "far fa-trash-alt text-center mx-auto");
     actions.appendChild(edit);
     actions.appendChild(remove);
 
