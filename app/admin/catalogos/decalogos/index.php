@@ -62,7 +62,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <tbody>
 
                             <?php
-                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala FROM decalogos";
+                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala FROM decalogos WHERE status='A'";
                             $resultado = mysqli_query($conexion, $sql);
                             ?>
                             <?php if ($resultado): ?>
