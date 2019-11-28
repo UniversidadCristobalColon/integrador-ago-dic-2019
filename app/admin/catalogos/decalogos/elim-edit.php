@@ -1,22 +1,59 @@
 <?php
-ob_start();
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 require_once RUTA_INCLUDE . 'config/global.php';
 require '../../../../config/db.php';
 
-if (isset($_POST['b-elim'])) {
-    $id_elem = $_POST['b-elim'];
-} elseif (isset($_POST['b-edit'])) {
-    $id_elem = $_POST['b-edit'];
-}
-$sql_id_nom = "SELECT decalogo FROM decalogos WHERE id = '$id_elem';";
-$id_nom = mysqli_query($conexion, $sql_id_nom);
-if ($id_nom) {
-    $fila = mysqli_fetch_assoc($id_nom);
-    $nom_deca = $fila['decalogo'];
-}
-?>
+if (isset($_POST['bguard'])) {
+    if ($_POST['bguard'] == 'Eliminar') {
+        $id_bor = $_POST['idbor'];
 
+        $sql_elim = "UPDATE decalogos SET status='B' WHERE id='$id_bor';";
+        $resultado = mysqli_query($conexion, $sql_elim);
+        if ($resultado) {
+            header("location: index.php");
+        } else {
+            echo "Error: " . $sql_elim . "<br>" . mysqli_error($conexion);
+        }
+
+    } elseif ($_POST['bguard'] == 'Guardar') {
+        $id_edit = $_POST['idedit'];
+        $new_deca = $_POST['e_deca'];
+        $new_esc = $_POST['select_e'];
+
+        $sql_now = "SELECT now()";
+        $resultado = mysqli_query($conexion, $sql_now);
+        if ($resultado) {
+            $fila = mysqli_fetch_assoc($resultado);
+            $datet = $fila['now()'];
+        } else {
+            echo "Error: " . $sql_now . "<br>" . mysqli_error($conexion);
+        }
+
+        $sql_upd = "UPDATE decalogos
+                SET decalogo='$new_deca', actualizacion='$datet', id_escala='$new_esc'
+                WHERE id='$id_edit';";
+        $resultado = mysqli_query($conexion, $sql_upd);/*ojo*/
+        if ($resultado) {
+            header("location: index.php");
+        } else {
+            echo "Error: " . $sql_now . "<br>" . mysqli_error($conexion);
+        }
+    }
+} else {
+    if (isset($_POST['b-elim'])) {
+        $id_elem = $_POST['b-elim'];
+    } elseif (isset($_POST['b-edit'])) {
+        $id_elem = $_POST['b-edit'];
+    }
+    $sql_id_nom = "SELECT decalogo FROM decalogos WHERE id = '$id_elem';";
+    $id_nom = mysqli_query($conexion, $sql_id_nom);
+    if ($id_nom) {
+        $fila = mysqli_fetch_assoc($id_nom);
+        $nom_deca = $fila['decalogo'];
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -69,14 +106,38 @@ if ($id_nom) {
                             <div class="form-group">
                                 <?php if (isset($_POST['b-elim'])): ?>
                                     <label>Decálogo a eliminar:</label>
-                                    <input class="form-control" type="text" placeholder="<?php echo $nom_deca ?>"
+                                    <input type="hidden" value="<?php echo $id_elem ?>"
+                                           name="idbor"><!--/*id del elemento a borrar*/-->
+                                    <input class="form-control" type="text" value="<?php echo $nom_deca ?>"
                                            readonly>
                                 <?php elseif (isset($_POST['b-edit'])): ?>
                                     <label>Decálogo a editar:</label>
+                                    <input type="hidden" value="<?php echo $id_elem ?>"
+                                           name="idedit"><!--/*id del elemento a editar*/-->
                                     <input class="form-control" type="text" placeholder="<?php echo $nom_deca ?>"
-                                           value="<?php echo $nom_deca ?>">
+                                           value="<?php echo $nom_deca ?>" name="e_deca">
                                 <?php endif; ?>
                             </div>
+
+                            <?php if (isset($_POST['b-edit'])): ?>
+                                <div class="form-group">
+                                    <label>id_escala</label>
+                                    <select class="form-control" id="orden" name="select_e">
+                                        <option disabled selected>Elige una escala para el decálogo</option>
+                                        <?php
+                                        $sql_id = "SELECT id FROM escalas;";
+                                        $resultado = mysqli_query($conexion, $sql_id);
+                                        if ($resultado) {
+                                            while ($fila = mysqli_fetch_assoc($resultado)) {
+                                                echo "<option>$fila[id]</option>";
+                                            }
+                                        } else {
+                                            echo "Error: " . $sql . "<br>" . mysqli_error($conexion);
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            <?php endif; ?>
 
                             <div class="form-group">
                                 <?php if (isset($_POST['b-elim'])): ?>
