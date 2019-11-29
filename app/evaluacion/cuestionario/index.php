@@ -14,117 +14,108 @@ TODO:
 */
 
 
-require_once '../../../config/global.php';
+    require_once '../../../config/global.php';
+    require_once "../../../config/db.php";
 
-define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
-?>
-<!DOCTYPE html>
-<html lang="es">
+    define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title><?php echo PAGE_TITLE ?></title>
-
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
-</head>
-
-<body id="page-top">
-
-<?php //getNavbar() ?>
-
-<div id="wrapper">
-
-    <?php //getSidebar() ?>
-
-    <div id="content-wrapper">
-
-        <div class="container-fluid">
-            <div class="container">
-                
-                <!-- DIV CARD -->
-                <div class="card mb-3">
-                    <!-- DIV CARD-HEADER -->
-                    <div class="card-header">
-                        <i class="fas fa-tasks"></i>
-                        Evaluación 360
-                        <hr>
-                        <!-- ROW -->
-                        <small>
-                            <b class="mr-1">Porcentaje completado:</b>
-                            <!-- PROGRESS BAR -->
-                            <div class="progress mx-auto" style="display: inline-flex; width: 100%;">
-                                    <div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">35%</div>
-                            </div>
-                        </small>
-                        <!-- ROW -->
-                    </div>
-                    <!-- DIV CARD-HEADER -->
-
-                    <!-- DIV CARD-BODY -->
-                    <div class="card-body">
-    
-                        <!-- DIV TEXT -->
-                        <div class="px-1 text-justify">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis.</p>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde aliquid, dolorum quod natus fugiat nostrum amet earum a velit ratione ab iure temporibus quibusdam hic mollitia excepturi. Magnam, distinctio vero.</p>
-
-                            <p>
-                                <b>Evaluando a: </b>Roberto López López
-                            </p>
-                            <p>
-                                <b>Fecha de cierre: </b>27/Noviembre/2019 16:00 hrs.
-                            </p>
-                        </div>
-                        <!-- DIV TEXT -->                        
-                    </div>
-                    <!-- DIV CARD-BODY -->
-                    
-                    <!-- DIV CARD-FOOTER -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-secondary btn-block">
-                                    Reanudar evaluación
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-primary btn-block">
-                                    Comenzar evaluación
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- DIV CARD-FOOTER -->
-                </div>
-                <!-- DIV CARD-BODY -->
-            </div>
-            <!-- DIV CARD -->
-            
-
-        </div>
-        <!-- /.container-fluid -->
+    $errores = '';
+    if ( $_SERVER['REQUEST_METHOD']  ==  'GET' ) {
+        if ( isset($_GET['id']) ) {
+            $hash_evaluacion = $_GET['id'];
+        }
         
-        <?php //getFooter() ?>
-        
-    </div>
-    <!-- /.content-wrapper -->
+        if ( isset( $hash_evaluacion ) && $hash_evaluacion !== '' ) {
+            //SELECT ESTADO APLICACIÓN (EVALUACIÓN)
+            $sql = 'SELECT estado FROM aplicaciones
+            WHERE aplicaciones.hash = "'.$hash_evaluacion.'"';
+            $query_result = $conexion->query( $sql );
+            if ( $query_result->num_rows > 0 ) {
+                while ( $row = $query_result->fetch_assoc() ) {
+                    if ( $row['estado'] == 'C' ) {
+                        $errores .= 'Este cuestionario se encuentra cerrado. <br>';
+                    }
+                }
+            }
 
-</div>
-<!-- /#wrapper -->
+            $aplicacion_estado = $conexion->query( $sql );
+            $aplicacion_estado = $aplicacion_estado->fetch_assoc();
+            $aplicacion_estado = $aplicacion_estado['estado'];
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+            //GET ID EVALUACIÓN
+            $sql = $conexion->query(
+                'SELECT id AS ID_APLICACION FROM aplicaciones WHERE hash = "'.$hash_evaluacion.'"'
+            );
+            $sql = $sql->fetch_assoc();
+            $id_evaluacion = $sql['ID_APLICACION'];
 
-<?php getModalLogout() ?>
+            $sql = $conexion->query(
+                'SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, evaluaciones.fin
+                FROM empleados 
+                INNER JOIN puestos 
+                ON empleados.id_puesto = puestos.id 
+                INNER JOIN aplicaciones 
+                ON empleados.id = aplicaciones.id_evaluado 
+                INNER JOIN evaluaciones
+                on aplicaciones.id_evaluacion = evaluaciones.id
+                WHERE aplicaciones.id = '.$id_evaluacion.''
+            );
+            $evaluacion_info = $sql->fetch_assoc();
 
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
-</body>
+            //SELECT PREGUNTAS CUESTIONARIO
+            $sql = 'SELECT SQL_CALC_FOUND_ROWS preguntas.id 
+            FROM preguntas
+            INNER JOIN cuestionarios
+            ON preguntas.id_cuestionario = cuestionarios.id
+            INNER JOIN evaluaciones
+            ON cuestionarios.id = evaluaciones.id_cuestionario
+            INNER JOIN aplicaciones
+            ON evaluaciones.id = aplicaciones.id_evaluacion
+            WHERE aplicaciones.hash = "'.$hash_evaluacion.'"
+            ORDER BY preguntas.orden';
 
-</html>
+            $query_questions = $conexion->query( $sql );
+
+            if ( !($query_questions->num_rows > 0) ) {
+                $errores .= 'No se ha encontrado el cuestionario.<br>';
+            }
+
+            //SELECT TOTAL PREGUNTAS
+            $total_preguntas = $conexion->query( 
+                'SELECT FOUND_ROWS() as TOTAL_PREGUNTAS'
+            );
+            $total_preguntas = $total_preguntas->fetch_assoc();
+            $total_preguntas = $total_preguntas['TOTAL_PREGUNTAS'];
+
+            //SELECT DE LAS PREGUNTAS QUE TIENEN RESPUESTAS PERO COMO SE GUARDAN EN PREGUNTAS RESPUESTAS BASTA CON HACER EL QUERY DE AHÍ
+            $total_respuestas = $conexion->query(
+                'SELECT SQL_CALC_FOUND_ROWS resultados.id_pregunta
+                FROM resultados
+                WHERE resultados.id_aplicacion = (SELECT id FROM aplicaciones WHERE aplicaciones.hash = "'.$hash_evaluacion.'")'
+            );
+
+            $total_respuestas = $conexion->query(
+                'SELECT FOUND_ROWS() as TOTAL_RESPUESTAS'
+            );
+            $total_respuestas = $total_respuestas->fetch_assoc();
+            $total_respuestas = $total_respuestas['TOTAL_RESPUESTAS'];
+
+            $porcentaje_completado = ( 100/$total_preguntas ) * $total_respuestas;
+
+            $porcentaje_completado = round( $porcentaje_completado, 0, PHP_ROUND_HALF_UP );
+            if ( $porcentaje_completado > 100 ) {
+                $porcentaje_completado = 100  . '%';
+            } else {
+                $porcentaje_completado = $porcentaje_completado  . '%';
+            }
+
+
+            $conexion->close();
+        } else {    
+            $errores .= 'No se ha proporcionado información.<br>';
+        }
+
+    }
+
+
+    require_once 'views/index.view.php';
