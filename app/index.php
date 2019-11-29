@@ -39,9 +39,9 @@ session_destroy();
     $errores[4] = 'Error contraseña sobrepasa el límite de caracteres.';
     $errores[5] = 'Error token invalido.';
 
-    $alertas[1] = 'Se ha cambiado la contraseña.';
-    $alertas[2] = 'Se a cambiado el correo a correo@correo.com para cambiar su contrasena consulte al administrador del sistema para validar su nuevo correo.';
+    $errores[6] = 'Consulte al administrador del sistema para validar su correo.';
 
+    $alertas[1] = 'Se ha cambiado la contraseña.';
 
     if(isset($_GET['error'])) {
         if(isset($errores[$_GET['error']])) {

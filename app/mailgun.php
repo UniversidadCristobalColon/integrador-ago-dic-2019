@@ -37,8 +37,9 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
         $mail->Body = $mensaje;
 
         if(!$mail->send()) {
-            echo 'Message could not be sent.';
+            //echo 'Message could not be sent.';
             //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            header('location: index.php?error=6');
         } else {
             //echo 'Message has been sent';
             header('location: '.$redirect);

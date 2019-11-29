@@ -5,7 +5,7 @@
 
 require '../config/config.php';
 
-$email      = @$_POST['email'];
+echo $email = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
                             PASSWORD_BCRYPT, 
                             $options);
@@ -34,8 +34,10 @@ if($res) {
 function login($email, $password, $redirect, $error) {
     require '../config/db.php';
     if($stmt = $conexion->prepare('SELECT passwd
-                                    FROM usuarios
-                                    WHERE usuario = ?')) {
+                                   FROM usuarios
+                                   WHERE id = (SELECT id 
+                                               FROM empleados 
+                                               WHERE email = ?)')) {
         $stmt->bind_param('s', $email);
         $res = $stmt->execute();
         $stmt->bind_result($passwd);
@@ -57,7 +59,7 @@ function login($email, $password, $redirect, $error) {
     }
 }
 
-if(isset($_POST['email'])) {
+if(isset($email)) {
     login($email, 
           $password, 
           './admin/catalogos/competencias/index.php',
