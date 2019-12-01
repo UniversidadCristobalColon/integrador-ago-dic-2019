@@ -1,8 +1,7 @@
 <?php
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
-define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
-// ob_start();
+define('RUTA_INCLUDE', '../../../../');
 ?>
 
 
@@ -45,39 +44,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 
 
 
-// Query to check if the organization already exist
-$checarOrganizacion = "SELECT * FROM organizaciones WHERE organizacion = '$_POST[organizacion]' ";
-// Variable $result hold the connection data and the query
-$result = $conexion-> query($checarOrganizacion);
-// Variable $count hold the result of the query
-$count = mysqli_num_rows($result);
-// If count == 1 that means the organization is already on the database
-if ($count == 1) {
-echo "<div class='alert alert-warning mt-4' role='alert'>
-                <h3>La organización ya existe.</h3>
-                <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
-            </div>";
-} else {	
-
 /*
 If the organization don't exist, the data from the form is sended to the
 database and the account is created
 */
 $organizacion = $_POST['organizacion'];
 $estatus = $_POST['estatus'];
+$id = $_POST['id'];
 
 // Query to send Name, Email and Password hash to the database
-$query = "INSERT INTO organizaciones (organizacion, creacion, actualizacion, estatus) VALUES ('$organizacion', NOW(), NOW(), '$estatus')";
+$query= "UPDATE organizaciones SET organizacion='$organizacion', actualizacion=NOW(), estatus='$estatus' WHERE id='$id'";
 if (mysqli_query($conexion, $query)) {
   /* header('location:index.php');
     ob_flush();
     */
-    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido una nueva organización.</h3>
-    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver organizaciones</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otra</a></div>";		
+    echo "<div class='alert alert-success mt-4' role='alert'><h3>El registro se editó exitosamente.</h3>
+    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver organizaciones</a> </div>";		
     } else {
         echo "Error: " .$query. "<br>" .mysqli_error($conexion);
     }	
-}	
+	
 mysqli_close($conexion);
 
             ?>
