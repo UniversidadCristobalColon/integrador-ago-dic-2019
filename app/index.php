@@ -1,6 +1,22 @@
 <?php
 
-require '../config/global.php';
+if(empty($_SESSION)) {
+    session_start();
+}
+
+if(isset($_SESSION['usuario'])) {
+    $email = $_SESSION['usuario'];
+    $cookie = session_id();
+    require '../app/login.php';
+    if(!cookie($email, $cookie)) {
+        logout($email)
+        header('location: '.$dir_base.'app/index.php');
+        exit();
+    }
+} else {
+    header('location: '.$dir_base.'app/index.php');
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
