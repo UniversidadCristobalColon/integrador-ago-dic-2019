@@ -117,7 +117,8 @@ require '../../../../config/db.php';
                         echo $fecha['actualizacion'];
                     }
                     ?>
-                </div>            </div>
+                </div>
+            </div>
         </div>
         <!-- /.container-fluid -->
         <?php getFooter() ?>
