@@ -1,13 +1,8 @@
 <?php
 
 session_start();
-
-if(isset($_SESSION['usuario'])) {
-    header("location: ./admin/catalogos/competencias/index.php");
-}
-
-setcookie(session_name(), '', time()-3600, '/');
-session_destroy();
+require_once '../config/global.php';
+define('RUTA_INCLUDE', '../');
 
 ?>
 <!DOCTYPE html>
