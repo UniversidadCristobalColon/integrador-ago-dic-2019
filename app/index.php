@@ -1,8 +1,6 @@
 <?php
 
-session_start();
-require_once '../config/global.php';
-define('RUTA_INCLUDE', '../');
+require '../config/global.php';
 
 ?>
 <!DOCTYPE html>
