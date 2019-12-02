@@ -1,19 +1,3 @@
-<?php
-
-if(empty($_SESSION)) {
-    session_start();
-}
-
-if(isset($_SESSION['usuario'])) {
-    $email = $_SESSION['usuario'];
-    $cookie = session_id();
-    require '../app/login.php';
-    if(!cookie($email, $cookie)) {
-        logout($email)
-    }
-}
-
-?>
 <!DOCTYPE html>
 <html lang="es">
 
