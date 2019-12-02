@@ -61,7 +61,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td>$row[competencia]</td>
                                         <td>$row[creacion]</td>
                                         <td>$row[actualizacion]</td>
-                                        <td><button class='btn' onclick='eliminar($row[id]);'><i class=\"fas fa-trash-alt\"></i></button>
+                                        <td class='text-center'><button class='btn' onclick='eliminar($row[id]);'><i class=\"fas fa-trash-alt\"></i></button>
                                         <button class='btn' onclick='actualizar($row[id]);'><i class=\"fas fa-edit\"></i></button></td>
                                         </tr>";
                                     }

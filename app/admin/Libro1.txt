@@ -1,0 +1,4 @@
+num_emplado	nombre	apellidos	telefono	email
+5000	Juan	Suarez	9111111111	juansu@gmail.com
+6000	Jose	Jimenez 	9222222222	jomez@gmail.com
+7000	Maria	Marquez	9333333333	marmar@gmail.com
