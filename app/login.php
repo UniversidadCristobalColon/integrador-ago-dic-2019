@@ -43,20 +43,82 @@ function login($email, $password, $redirect, $error) {
         $stmt->bind_result($passwd);
         $stmt->fetch();
         $stmt->close();
-        $conexion->close();
         if($res) {
             if($password == $passwd) {
                 session_start();
                 session_regenerate_id(true);
-                $_SESSION['usuario'] = $email;
-                //echo 'Bienvenido '.$email.'.';
-                header('location: '.$redirect);
+                $cookie = session_id();
+                if($stmt = $conexion->prepare('UPDATE usuarios 
+                                               SET cookie = ?
+                                               WHERE id = (SELECT id
+                                                           FROM empleados
+                                                           WHERE email = ?)')) {
+                    $stmt->bind_param('ss', $cookie, $email);
+                    $res = $stmt->execute();
+                    $stmt->bind_result($exists);
+                    $stmt->fetch();
+                    $stmt->close();
+                    $conexion->close();
+                    if($res) {
+                       $_SESSION['usuario'] = $email;
+                        //echo 'Bienvenido '.$email.'.';
+                        header('location: '.$redirect);
+                    }
+                }
             } else {
                 //echo 'Usuario o contraseña incorrecta.';
                 header('location: '.$error);
             }
         }
     }
+}
+
+function cookie($email, $cookie) {
+    require '../config/db.php';
+    if($stmt = $conexion->prepare('SELECT cookie
+                                   FROM usuarios
+                                   WHERE id = (SELECT id 
+                                               FROM empleados 
+                                               WHERE email = ?)')) {
+        $stmt->bind_param('s', $email);
+        $res = $stmt->execute();
+        $stmt->bind_result($cookie1);
+        $stmt->fetch();
+        $stmt->close();
+        $conexion->close();
+        if($res) {
+           if($cookie == $cookie1) {
+                return true;
+           } else {
+                return false;
+           }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function logout($email) {
+    require '../config/db.php';
+    if($stmt = $conexion->prepare('UPDATE usuarios 
+                                   SET cookie = NULL
+                                   WHERE id = (SELECT id
+                                               FROM empleados
+                                               WHERE email = ?)')) {
+        $stmt->bind_param('s', $email);
+        $res = $stmt->execute();
+        $stmt->bind_result($passwd);
+        $stmt->fetch();
+        $stmt->close();
+        $conexion->close();
+        if($res) {
+            setcookie(session_name(), '', time()-3600, '/');
+            session_unset();
+            session_destroy();
+        }
+    }    
 }
 
 if(isset($email)) {
