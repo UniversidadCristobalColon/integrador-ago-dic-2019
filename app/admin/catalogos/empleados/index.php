@@ -61,9 +61,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 
                                 $sql = "SELECT E.id, num_empleado, nombre, apellidos, email, E.creacion, 
-                                actualizacion, departamento, puesto, estado 
+                                actualizacion, departamento, puesto, E.estado 
                                 FROM empleados E left JOIN departamentos D on E.id_departamento = D.id 
-                                left JOIN puestos P on E.id_puesto = P.id ORDER BY estado";
+                                left JOIN puestos P on E.id_puesto = P.id ORDER BY E.estado";
 
                                 $result = $conexion->query($sql);
                                 
@@ -82,26 +82,28 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <td class="text-center"><?php  echo $row["departamento"] ?></td>
                                 <td class="text-center"><?php  echo $row["puesto"] ?></td>
                                 
-                                <td class="text-center"><?php  echo $row["estado"] ?></td>
-                                <td class="text-center">
                                 <?php
                                     if($row["estado"] == 'B'){
                                 ?>
-                                    <button disabled style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit">
-                                        <i class="fas fa-unlock text-center mx-auto"></i>
+                                <td class="text-center">Inactivo</td>
+                                <td class="text-center">
+                                    <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                        <i class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
                                 <?php
                                     }else{
                                 ?>
+                                <td class="text-center">Activo</td>
+                                <td class="text-center">
                                     <button  style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
-                                        <i style="cursor:pointer" class="far fa-edit text-center mx-auto"></i>
+                                        <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
 
                                 <?php
                                     }
                                 ?>
                                     <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "delete" value="<?php echo $row['id']?>">
-                                        <i style="cursor:pointer" class="far fa-trash-alt text-center mx-auto"></i>
+                                        <i style="cursor:pointer" class="fas fa-exchange-alt text-center mx-auto"></i>
                                     </button>
                                 </td>
                                 </tr>
