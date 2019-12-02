@@ -1,103 +1,103 @@
 <?php
-require_once '../../../../config/global.php';
-require_once '../../../../config/db.php';
 
-define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
+    require_once '../../../config/global.php';
+    require_once "../../../config/db.php";
+
+    define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
+
+    $errores = '';
+    if ( $_SERVER['REQUEST_METHOD']  ==  'GET' ) {
+
+        // GET HASH
+        if ( isset($_GET['id']) && $_GET['id'] !== '' ) {
+            $hash_evaluacion = $_GET['id'];
+        } else {
+            $errores .= 'No se ha proporcionado información.<br>';
+        }
+        
+        if ( isset( $hash_evaluacion ) && $hash_evaluacion !== '' ) {
+            //SELECT DATA EVALUACIÓN
+            $sql = 'SELECT 	aplicaciones.id, 
+                    aplicaciones.estado, 
+                    empleados.nombre, 
+                    empleados.apellidos, 
+                    puestos.puesto, 
+                    evaluaciones.fin 
+                    FROM aplicaciones 
+                    INNER JOIN empleados
+                    ON aplicaciones.id_evaluado = empleados.id
+                    INNER JOIN puestos
+                    ON empleados.id_puesto=puestos.id
+                    INNER JOIN evaluaciones
+                    ON aplicaciones.id_evaluacion=evaluaciones.id
+                    WHERE aplicaciones.hash = "'.$hash_evaluacion.'"';
+            $sql = $conexion->query( $sql );
+            $sql = $sql->fetch_assoc();
+
+            // TEXTO DEL BOTÓN
+            if ( $sql == NULL ) {
+                $errores .= 'No se ha encontrado la evaluación.<br>';
+            } else {
+                switch ( $sql['estado'] ) {
+                    case 'A':
+                        $texto_boton = 'Comenzar evaluación';
+                        break;
+                    case 'B':
+                        $texto_boton = 'Continuar evaluación';
+                        break;
+                    case 'C':
+                        $texto_boton = 'Evaluación terminada';
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+    
+                // GUARDAR INFORMACIÓN DE LA EVALUACIÓN
+                $id_aplicacion = $sql['id'];
+                $nombre_evaluado = $sql['nombre'] . ' ' . $sql['apellidos'];
+                $puesto_evaluado = $sql['puesto'];
+                $evaluacion_fin = $sql['fin'];
+    
+                // GET TOTAL DE RESPUESTAS Y PREGUNTAS PARA PODER SACAR EL PORCENTAJE COMPLETADO
+                $sql = 'SELECT COUNT(preguntas.id) 
+                        AS PREGUNTAS 
+                        FROM preguntas 
+                        INNER JOIN cuestionarios 
+                        ON preguntas.id_cuestionario = cuestionarios.id 
+                        INNER JOIN evaluaciones 
+                        ON cuestionarios.id = evaluaciones.id_cuestionario 
+                        INNER JOIN aplicaciones 
+                        ON evaluaciones.id = aplicaciones.id_evaluacion
+                        WHERE aplicaciones.id = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_preguntas =  $row['PREGUNTAS'];
+                
+                $sql = 'SELECT COUNT( resultados.id_pregunta ) 
+                        AS RESULTADOS
+                        FROM resultados 
+                        WHERE resultados.id_aplicacion = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_respuestas =  $row['RESULTADOS'];
+
+                // CALCULAR EL PORCENTAJE COMPLETADO
+                $porcentaje_completado = ( $total_respuestas == 0 ) ? 0 : ( 100/$total_preguntas ) * $total_respuestas;
+
+                // REDONDEAR PORCENTAJE COMPLETADO
+                $porcentaje_completado = round( $porcentaje_completado, 0, PHP_ROUND_HALF_UP );
+                if ( $porcentaje_completado > 100 ) {
+                    $porcentaje_completado = 100  . '%';
+                } else {
+                    $porcentaje_completado = $porcentaje_completado  . '%';
+                }
+            }
+
+            $conexion->close();
+        }
+    }
+
+    require_once 'views/index.view.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title><?php echo PAGE_TITLE ?></title>
-
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
-</head>
-
-<body id="page-top">
-
-<?php getNavbar() ?>
-
-<div id="wrapper">
-
-    <?php getSidebar() ?>
-
-    <div id="content-wrapper">
-
-        <div class="container-fluid">
-
-            <!-- DataTables Example -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fas fa-table"></i>
-                    Catalogo de competencias
-                </div>
-                <div class="card-body">
-                    <button class="btn btn-primary mb-3">Nuevo</button>
-                    <div class="table-responsive">
-                        <?php
-                        $sql = "SELECT cuestionario, creacion, actualizacion FROM cuestionarios ";
-                        $resultado = $conexion -> query($sql);
-                        if($resultado)    {
-                        ?>
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Cuestionario</th>
-                                <th>Creación</th>
-                                <th>Actualización</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-
-                            </tfoot>
-                            <tbody>
-                            <?php
-                            }
-                            while($row = $resultado -> fetch_assoc()) { //con esto es para recorrer toda la tabla de mysql
-                                ?>
-                                <tr>
-                                    <td><?php echo utf8_encode($row['cuestionario']) ?></td>
-                                    <td><?php echo utf8_encode($row['creacion']) ?></td>
-                                    <td><?php echo utf8_encode($row['actualizacion']) ?></td>
-                                    <td><?php echo 'Editar'.'Eliminar' ?></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-
-        </div>
-        <!-- /.container-fluid -->
-
-        <?php getFooter() ?>
-
-    </div>
-    <!-- /.content-wrapper -->
-
-</div>
-<!-- /#wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<?php getModalLogout() ?>
-
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
-</body>
-
-</html>
