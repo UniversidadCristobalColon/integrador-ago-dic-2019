@@ -10,12 +10,7 @@ if(isset($_SESSION['usuario'])) {
     require '../app/login.php';
     if(!cookie($email, $cookie)) {
         logout($email)
-        header('location: '.$dir_base.'app/index.php');
-        exit();
     }
-} else {
-    header('location: '.$dir_base.'app/index.php');
-    exit();
 }
 
 ?>
