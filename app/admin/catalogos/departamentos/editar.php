@@ -1,7 +1,34 @@
 <?php
+ob_start();
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
+
+if(isset($_POST['cambiar'])){
+    $cambiar =  $_POST["cambiar"];
+    $find=mysqli_query($conexion,"SELECT * FROM departamentos WHERE id='$cambiar'");
+    $row=mysqli_fetch_array($find);
+    $estado=$row['estatus'];
+  
+
+    if($estado == "Activo"){
+         $sqlCambiar = "UPDATE departamentos SET estatus = 'Inactivo' WHERE id = '$cambiar' ";
+    }else{
+        $sqlCambiar = "UPDATE departamentos SET estatus = 'Activo'  WHERE id = '$cambiar' ";
+    }
+
+        if ($conexion->query($sqlCambiar) === TRUE) {
+            header("location: index.php");
+            ob_flush();
+        }else{
+            echo "Error updating record: " . $conexion->error;
+        }
+}
+
+if(isset($_POST['editar'])){
+    $id =  $_POST['editar'];
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -46,14 +73,27 @@ function validaFormulario(params) {
 	
 
 	if (
-		$('input[name="organizacion"]').val() == ''
+		$('input[name="departamento"]').val() == ''
 	) {
         errores = true;
 
 		Swal.fire({
         icon: 'error',
         title: 'Error...',
-        text: 'Debes introducir un nombre para la organización'
+        text: 'Debes introducir un nombre para el departamento'
+});
+    mostrarErrores();
+	}
+
+    if (
+		$('select[name="organizacion"]').val() == '0'
+	) {
+        errores = true;
+
+		Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: 'Debes elegir una organización'
 });
     mostrarErrores();
 	}
@@ -70,14 +110,20 @@ function validaFormulario(params) {
 });
     mostrarErrores();
 	}
-
     $('#agregar').submit();
     }
 
 
 </script>
 
+<?php 
+$buscar=mysqli_query($conexion,"SELECT * FROM departamentos WHERE id='$id'");
+$fila=mysqli_fetch_array($buscar);
+$organizacion=$fila['organizaciones_id'];
+$estatus=$fila['estatus'];
+$departamento=$fila['departamento'];
 
+?>
 
 <body id="page-top">
 
@@ -95,16 +141,41 @@ function validaFormulario(params) {
             <div class="card">
                 <div class="card-header">
                         <i class="fas fa-table"></i>
-                        Catálogo: Organizaciones
+                        Catálogo: Departamentos
                     </div>
          
                 <div class="card-body">
-                <form id="agregar" action="guardar.php" method="post">
+                <form id="agregar" action="guardarEditar.php" method="post">
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>ID:</label>
+                                <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Departamento:</label>
+                                <input type="text" name="departamento" class="form-control" value="<?php echo $departamento; ?>">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Organización:</label>
-                                <input type="text" name="organizacion" class="form-control" placeholder="Introduce el nombre de la organización">
+                                <select id="organizacion" name="organizacion" class="form-control">
+                                <option value="0">Selecciona una organización</option>
+                                    <?php
+                                    $query = $conexion -> query ("SELECT * FROM organizaciones");
+                                    while ($valores = mysqli_fetch_array($query)) { ?>
+                                    <option value=" <?php echo $valores['id'] ?> " <?php if($organizacion == $valores['id']){echo 'selected';}?> > <?php echo $valores['organizacion']?> </option>
+                                 <?php   } ?>
+                          
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -115,8 +186,9 @@ function validaFormulario(params) {
                                 <label>Estatus:</label>
                                 <select id="estatus" name="estatus" class="form-control">
                                     <option>Selecciona un estatus</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Inactivo">Inactivo</option>
+                                    <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
+                                    <option value="Inactivo" <?php if ($estatus=="Inactivo"){echo 'selected';} ?>>Inactivo</option>
+                                   
                                 </select>
                             </div>
                         </div>
@@ -125,7 +197,7 @@ function validaFormulario(params) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary" id="boton" onclick="validaFormulario()">Guardar</button>
+                                <button type="submit"  class="btn btn-primary" id="boton" onclick="validaFormulario()">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -162,4 +234,4 @@ function validaFormulario(params) {
         <?php getFooter() ?>
 </body>
 </html>
-
+<?php } ?>

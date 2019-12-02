@@ -46,14 +46,27 @@ function validaFormulario(params) {
 	
 
 	if (
-		$('input[name="organizacion"]').val() == ''
+		$('input[name="departamento"]').val() == ''
 	) {
         errores = true;
 
 		Swal.fire({
         icon: 'error',
         title: 'Error...',
-        text: 'Debes introducir un nombre para la organización'
+        text: 'Debes introducir un nombre para el departamento'
+});
+    mostrarErrores();
+	}
+
+    if (
+		$('select[name="organizacion"]').val() == '0'
+	) {
+        errores = true;
+
+		Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: 'Debes elegir una organización'
 });
     mostrarErrores();
 	}
@@ -95,7 +108,7 @@ function validaFormulario(params) {
             <div class="card">
                 <div class="card-header">
                         <i class="fas fa-table"></i>
-                        Catálogo: Organizaciones
+                        Catálogo: Departamentos
                     </div>
          
                 <div class="card-body">
@@ -103,8 +116,26 @@ function validaFormulario(params) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label>Departamento:</label>
+                                <input type="text" name="departamento" class="form-control" placeholder="Introduce el nombre del departamento">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label>Organización:</label>
-                                <input type="text" name="organizacion" class="form-control" placeholder="Introduce el nombre de la organización">
+                                <select id="organizacion" name="organizacion" class="form-control">
+                                <option value="0">Selecciona una organización</option>
+                                    <?php
+                                    $query = $conexion -> query ("SELECT * FROM organizaciones");
+                                    while ($valores = mysqli_fetch_array($query)) {
+                                        echo '<option value="'.$valores['id'].'">'.$valores['organizacion'].'</option>';
+                                    }
+                                    ?>
+                          
+                                </select>
                             </div>
                         </div>
                     </div>

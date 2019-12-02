@@ -38,7 +38,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <!-- Page Content -->
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Organizaciones
+                    Catálogo: Departamentos
                 </div>
             <hr>
             <?php
@@ -46,15 +46,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 
 // Query to check if the organization already exist
-$checarOrganizacion = "SELECT * FROM organizaciones WHERE organizacion = '$_POST[organizacion]' ";
+$checarDepa = "SELECT * FROM departamentos WHERE departamento = '$_POST[departamento]' ";
 // Variable $result hold the connection data and the query
-$result = $conexion-> query($checarOrganizacion);
+$result = $conexion-> query($checarDepa);
 // Variable $count hold the result of the query
 $count = mysqli_num_rows($result);
 // If count == 1 that means the organization is already on the database
 if ($count == 1) {
 echo "<div class='alert alert-warning mt-4' role='alert'>
-                <h3>La organización ya existe.</h3>
+                <h3>El departamento ya existe.</h3>
                 <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
             </div>";
 } else {	
@@ -65,15 +65,16 @@ database and the account is created
 */
 $organizacion = $_POST['organizacion'];
 $estatus = $_POST['estatus'];
+$departamento = $_POST['departamento'];
 
 // Query to send Name, Email and Password hash to the database
-$query = "INSERT INTO organizaciones (organizacion, creacion, actualizacion, estatus) VALUES ('$organizacion', NOW(), NOW(), '$estatus')";
+$query = "INSERT INTO departamentos (departamento, organizaciones_id, ultima_actualizacion, estatus) VALUES ('$departamento', '$organizacion', NOW(), '$estatus')";
 if (mysqli_query($conexion, $query)) {
   /* header('location:index.php');
     ob_flush();
     */
-    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido una nueva organización.</h3>
-    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver organizaciones</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otra</a></div>";		
+    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido un nuevo departamento.</h3>
+    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver departamentos</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otro</a></div>";		
     } else {
         echo "Error: " .$query. "<br>" .mysqli_error($conexion);
     }	
