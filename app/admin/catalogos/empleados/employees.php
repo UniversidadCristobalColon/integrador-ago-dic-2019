@@ -29,9 +29,10 @@ if(isset($_POST['delete'])){
 if(isset($_POST['edit'])){
     $idEdited =  $_POST['edit'];
     $submitted = true;
+    $enable = "disabled";
 
     $sql = "SELECT E.id, num_empleado, nombre, apellidos, email, E.creacion, 
-            actualizacion, departamento, puesto, estado 
+            actualizacion, departamento, puesto, E.estado 
             FROM empleados E left JOIN departamentos D on E.id_departamento = D.id 
             left JOIN puestos P on E.id_puesto = P.id where E.id = $idEdited";
             $result = $conexion->query($sql);
@@ -67,7 +68,23 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 <body id="page-top">
 
-<?php getNavbar() ?>
+<?php getNavbar();
+if(isset($_GET["error"])){
+    $error = $_GET["error"];
+    ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+    Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'El correo ya está en uso',
+    });
+    </script>
+    <?php
+}else{
+    $error = "";
+}
+?>
 
 <div id="wrapper">
 
@@ -96,7 +113,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </div>
                         <div class="form-group">
                             <label for="emails">Correo Electrónico</label>
+                            <?php
+                            if($enable == "disabled"){
+                            ?>
+                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
+                            <?php
+                            }else{ 
+                            ?>
                             <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
+                            <?php
+                            }
+                            ?>
                             <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
                         </div>
                         <div class="form-group">
@@ -243,7 +270,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             $sqlUpdate = "UPDATE empleados SET 
             nombre='$nombre',
             apellidos = '$apellidos',
-            email = '$correo',
+            -- email = '$correo',
             id_departamento = $id_departamento,
             id_puesto = $id_puesto,
             actualizacion = '$ahora'
@@ -268,12 +295,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         $ahora = "";
         $random = "";
 
+        $sqlEmail = "SELECT email FROM empleados where email = '$correo'";
+        $resultEmail = $conexion->query($sqlEmail);                
+            if ($resultEmail->num_rows > 0) {
+                echo "Ya está utilizado el correo";
+                header("location: employees.php?error=2");
+            }else{
+
         $sqlDepartment = "SELECT id FROM departamentos where departamento = '$departamento'";
         $result2 = $conexion->query($sqlDepartment);                
             if ($result2->num_rows > 0) {
                 while($row = $result2->fetch_assoc()) {
                     $id_departamento = $row["id"];
-                    echo $id_departamento;
                 }
             }
         $sqlJob = "SELECT id FROM puestos where puesto = '$puesto'";
@@ -313,7 +346,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 
     }
+}
 ?>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 </body>
 
 </html>
