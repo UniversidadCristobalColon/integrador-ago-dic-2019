@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+require '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -46,29 +46,36 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <form>
                             <div class="form-group">
                                 <label for="orden">Decálogo</label>
-                                <select class="form-control" id="orden">
-                                    <option></option>
-                                    <option>Liderazgo 2019</option>
+                                <select class="form-control" id="decalogo" required>
+                                    <?php
+                                    $sql= "select id,decalogo from decalogos order by id";
+                                    $stmt = $conexion->prepare($sql);
+                                    $stmt->execute();
+                                    $stmt->bind_result($did,$decalogo);
+                                    echo "<option value='' disabled></option>";
+                                    while($stmt->fetch()){
+                                        echo "<option value='$did'>$decalogo</option>";
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="orden">Aseveración</label>
-                                <select class="form-control" id="orden">
-                                    <option></option>
+                                <select class="form-control" id="aseveracion" required>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="pregunta">Pregunta</label>
-                                <input type="text" class="form-control" id="pregunta">
+                                <input type="text" class="form-control" id="pregunta" required>
                             </div>
                             <div class="form-group">
                                 <label for="tipo">Tipo de pregunta</label>
-                                <select class="form-control" id="tipo">
-                                    <option>Opción Múlltiple</option>
-                                    <option>Abierta</option>
+                                <select class="form-control" id="tipo" required>
+                                    <option value="M">Opción Múlltiple</option>
+                                    <option value="A">Abierta</option>
                                 </select>
                             </div>
-
+                            <input type="hidden" id="ip" value="<?php echo getIP();?>"></input>
                             <div>
                                 <input type="button" class="btn btn-primary mb-3" id="nuevo" value="Guardar"></input>
                                 <input type="button" class="btn btn-secondary mb-3" OnClick="location.href='index.php'" value="Cancelar"></input>
@@ -81,6 +88,20 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
         </div>
         <!-- /.container-fluid -->
+        <?php
+        function getIP(){
+            if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+                //ip from share internet
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+                //ip pass from proxy
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }else{
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
+            return $ip;
+        }
+        ?>
 
         <?php getFooter() ?>
 

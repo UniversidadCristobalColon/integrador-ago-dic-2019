@@ -1,25 +1,30 @@
 <?php
 require '../../../../config/db.php';
-if(count($_POST)==3){
+if(count($_POST)==5){
     $pregunta = $conexion->real_escape_string($_POST["pregunta"]);
-    $orden = $conexion->real_escape_string($_POST["orden"]);
     $tipo = $conexion->real_escape_string($_POST["tipo"]);
+    $decalogo = $conexion->real_escape_string($_POST["decalogo"]);
+    $aseveracion = $conexion->real_escape_string($_POST["aseveracion"]);
+    $ip = $conexion->real_escape_string($_POST["ip"]);
     $msg = "";
-    if(strlen(trim($pregunta))<5){
-        $msg = "Escriba una pregunta valida";
+    $bandera = true;
+    if(!is_numeric($aseveracion)){
+        $bandera = false;
+        $msg = "Seleccione una aseveración";
     }
-    else{
-        $idcuestionario = 1;
-        $idcompetencia = 1;
+    if(!($pregunta)){
+        $bandera = false;
+        $msg = "Escriba una pregunta";
+    }
+
+    if($bandera){
         $creacion = date("Y-m-d H:i:s");
-        $sql = "insert into preguntas(pregunta,orden,tipo,id_cuestionario,id_competencia,creacion) values (?,?,?,?,?,?)";
+        $sql = "insert into preguntas(pregunta,tipo,creacion,id_decalogo,id_decalogo_aseveracion,creacion_ip) values (?,?,?,?,?,?)";
         $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("sisiis",$pregunta,$orden,$tipo,$idcuestionario,$idcompetencia,$creacion);
+        $stmt->bind_param("sssiis",$pregunta,$tipo,$creacion,$decalogo,$aseveracion,$ip);
         $stmt->execute();
         $msg = 's';
     }
     echo $msg;
-
 }
-
 ?>
