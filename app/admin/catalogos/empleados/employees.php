@@ -2,7 +2,7 @@
 ob_start();
 require_once '../../../../config/global.php';
 require_once("../../../../config/db.php");
-
+    $enable = "";
     $name = "";
     $lastname = "";
     $email = "";
