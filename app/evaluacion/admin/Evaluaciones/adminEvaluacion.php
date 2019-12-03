@@ -300,7 +300,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <!-- DataTables Example -->
                             <?php
-                                $sql = "SELECT id_evaluado FROM aplicaciones WHERE id_evaluacion = 2 GROUP BY id_evaluado";
+                                $sql = "SELECT id_evaluado FROM aplicaciones WHERE id_evaluacion = 1 GROUP BY id_evaluado";
                                 $resultado = mysqli_query($conexion,$sql);
                                 $evaluados = array();
                                 if($resultado){
@@ -312,19 +312,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     foreach ($evaluados as $id_evaluado) {
                                         $sql1="select emp.nombre,emp.apellidos from aplicaciones app 
                                                left join empleados emp on app.id_evaluador=emp.id where app.id_evaluado=$id_evaluado 
-                                               and app.id_evaluacion = 2";
+                                               and app.id_evaluacion = 1";
                                         $resultado2 = $conexion -> query($sql1);
-                                        ?>
-                                        <i class="fas fa-trash"></i>Test
-                                        <?php  ?>
-                                        <ul class="list-group">
-                                            <?php
-                                        while($row2 = $resultado2 -> fetch_assoc()) {
-                                        $nombre=$row2['nombre'];
-                                        $apellido=$row2['apellidos'];
 
                                         $sql2="select emp.nombre,emp.apellidos from aplicaciones app 
-                                               left join empleados emp on app.id_evaluado=emp.id where app.id_evaluado= $id_evaluado and app.id_evaluacion = 2
+                                               left join empleados emp on app.id_evaluado=emp.id where app.id_evaluado= $id_evaluado 
+                                               and app.id_evaluacion = 1
                                                GROUP BY emp.nombre,emp.apellidos";
 
                                         $resultado3 = $conexion -> query($sql2);
@@ -332,12 +325,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         $nombre_evaluado=$row3['nombre'];
                                         $apellido_evaluado=$row3['apellidos'];
                                         ?>
+                                        <i class="fas fa-trash"></i><?php echo " ".$nombre_evaluado." ".$apellido_evaluado ?>
+                                        <?php  ?>
+                                        <ul class="list-group">
+                                            <?php
+                                        while($row2 = $resultado2 -> fetch_assoc()) {
+                                        $nombre=$row2['nombre'];
+                                        $apellido=$row2['apellidos'];
+
+                                        ?>
 
                                             <li class="list-group-item"><?php echo $nombre." ".$apellido?></li>
 
                                         <?php
                                         }
-                                        echo "</ul>";
+                                        echo "</ul><br>";
                                     }
                                 } else {
                                     ?>
