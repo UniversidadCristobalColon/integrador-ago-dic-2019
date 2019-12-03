@@ -80,14 +80,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         type="submit" title="Editar registro"
                                                         name="b-edit"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn btn-xs btn-light edit">
+                                                        class="btn">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
                                                 <button
                                                         type="submit" title="Cambiar estado"
                                                         name="b-elim"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn btn-xs btn-light change">
+                                                        class="btn">
                                                     <i class="fas fa-exchange-alt"></i>
                                                 </button>
                                             </form>
