@@ -129,11 +129,9 @@ function confirmar($dir_base) {
         if(!cookie($email, $cookie)) {
             logout($email);
             header('location: '.$dir_base);
-            exit();
         }
     } else {
         header('location: '.$dir_base);
-        exit();
     }
 }
 
