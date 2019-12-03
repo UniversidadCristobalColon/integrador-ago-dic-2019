@@ -26,7 +26,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     </script>
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <?php getTopIncludes(RUTA_INCLUDE )?>
 </head>
 
 <body id="page-top">
@@ -53,7 +53,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <div class="table-responsive">
                         <?php
-                        $sql = "SELECT * FROM cuestionarios ";
+                        if(!empty($_GET["error"])){
+                            $error=$_GET["error"];
+                            if($error==1){
+
+                                echo
+                                '<div class="alert alert-success" role="alert">
+                                    El cuestionario ha sido eliminado
+                                </div>';
+                            }
+                        }
+
+                        $sql = "SELECT * FROM cuestionarios where estado='A'";
 
                         $resultado = $conexion -> query($sql);
                         if($resultado)    {
@@ -91,29 +102,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
 
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="desc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Cuestionario</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo $id ?>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-danger">
-                                            Sí, eliminar</button>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
