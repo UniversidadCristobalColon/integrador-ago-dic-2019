@@ -128,10 +128,10 @@ function confirmar($dir_base) {
         $cookie = session_id();
         if(!cookie($email, $cookie)) {
             logout($email);
-            header('location: '.$dir_base);
+            //header('location: '.$dir_base);
         }
     } else {
-        header('location: '.$dir_base);
+        //header('location: '.$dir_base);
     }
 }
 
