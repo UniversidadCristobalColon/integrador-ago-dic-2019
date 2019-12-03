@@ -101,6 +101,7 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                                     $conexion->close();
                                     header('location: index.php?'
                                            .'alert=1');
+                                    exit();
                                 }
                             }
                         }
@@ -110,6 +111,7 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                     header('location: ./cambiar.php?email='
                            .$email.'&token='
                            .$token.'&error=3');
+                    exit();
                 }
             } else {
                 $conexion->close();
@@ -118,10 +120,12 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                        .$token
                        .'&error=4'
                        );
+                exit();
             }
         } else {
             $conexion->close();
             header('location: ./index.php?error=5');
+            exit();
         }
     }
     $conexion->close();

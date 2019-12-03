@@ -53,6 +53,7 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
         );
     } else {
         header('location: /proyecto/app?error=1');
+        exit();
     }
 }
 ?>
