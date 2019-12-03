@@ -310,9 +310,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 }
                                 if (!empty($evaluados)) {
                                     foreach ($evaluados as $id_evaluado) {
-                                        $sql1="select emp.nombre,emp.apellidos from aplicaciones app 
-                                               left join empleados emp on app.id_evaluador=emp.id where app.id_evaluado=$id_evaluado 
-                                               and app.id_evaluacion = 1";
+                                        $sql1="select emp.nombre,emp.apellidos, puestos.puesto, niveles_puesto.nivel_puesto from aplicaciones app 
+                                                left join empleados emp on app.id_evaluador=emp.id 
+                                                LEFT JOIN puestos ON emp.id_puesto = puestos.id 
+                                                LEFT JOIN niveles_puesto ON niveles_puesto.id = puestos.id_nivel_puesto 
+                                                where app.id_evaluado=$id_evaluado and app.id_evaluacion = 1";
                                         $resultado2 = $conexion -> query($sql1);
 
                                         $sql2="select emp.nombre,emp.apellidos from aplicaciones app 
@@ -325,17 +327,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         $nombre_evaluado=$row3['nombre'];
                                         $apellido_evaluado=$row3['apellidos'];
                                         ?>
-                                        <i class="fas fa-trash"></i><?php echo " ".$nombre_evaluado." ".$apellido_evaluado ?>
+                                        <i class="fas fa-trash" onclick=""></i><?php echo " ".$nombre_evaluado." ".$apellido_evaluado ?>
                                         <?php  ?>
                                         <ul class="list-group">
                                             <?php
                                         while($row2 = $resultado2 -> fetch_assoc()) {
                                         $nombre=$row2['nombre'];
                                         $apellido=$row2['apellidos'];
-
+                                        $puesto=$row2['puesto'];
+                                        $npuesto=$row2['nivel_puesto'];
                                         ?>
 
-                                            <li class="list-group-item"><?php echo $nombre." ".$apellido?></li>
+                                            <li class="list-group-item"><?php echo $nombre." ".$apellido." ($puesto, $npuesto)"?></li>
 
                                         <?php
                                         }
