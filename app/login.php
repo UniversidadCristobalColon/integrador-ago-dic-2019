@@ -119,19 +119,21 @@ function cookie($email, $cookie) {
     }
 }
 
-function confirmar($dir_base) {
+function confirmar() {
     if(empty($_SESSION)) {
         session_start();
     }
     if(isset($_SESSION['usuario'])) {
         $email = $_SESSION['usuario'];
         $cookie = session_id();
-        if(!cookie($email, $cookie)) {
+        if(cookie($email, $cookie)) {
+            return true;
+        } else {
             logout($email);
-            //header('location: '.$dir_base);
+            return false;
         }
     } else {
-        //header('location: '.$dir_base);
+        return false;
     }
 }
 

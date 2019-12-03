@@ -1,7 +1,11 @@
 <?php
 
 require 'login.php';
-confirmar('index.php');
+
+if(confirmar()) {
+    header('location: /app/admin/catalogos/competencias/index.php');
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
