@@ -3,7 +3,7 @@
 /*Lógica para autenticar usuarios e iniciar sesión*/
 /*Si contrasena esta vacia no deja iniciar sesion por el md5(str)*/
 
-require '../config/config.php';
+require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/config.php';
 
 echo $email = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
@@ -32,7 +32,7 @@ if($res) {
 */
 
 function login($email, $password) {
-    require '../config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
     if($stmt = $conexion->prepare('SELECT passwd
                                    FROM usuarios
                                    WHERE id = (SELECT id 
@@ -72,7 +72,7 @@ function login($email, $password) {
 }
 
 function logout($email) {
-    require '../config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
     if($stmt = $conexion->prepare('UPDATE usuarios 
                                    SET cookie = NULL
                                    WHERE id = (SELECT id
@@ -85,15 +85,13 @@ function logout($email) {
         $stmt->close();
         $conexion->close();
         if($res) {
-            setcookie(session_name(), '', time()-3600, '/');
-            session_unset();
-            session_destroy();
+            unsetCookie();
         }
     }    
 }
 
 function cookie($email, $cookie) {
-    require '../config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
     if($stmt = $conexion->prepare('SELECT cookie
                                    FROM usuarios
                                    WHERE id = (SELECT id 
@@ -119,6 +117,12 @@ function cookie($email, $cookie) {
     }
 }
 
+function unsetCookie() {
+    setcookie(session_name(), '', time()-3600, '/');
+    session_unset();
+    session_destroy();
+}
+
 function confirmar() {
     if(empty($_SESSION)) {
         session_start();
@@ -129,10 +133,11 @@ function confirmar() {
         if(cookie($email, $cookie)) {
             return true;
         } else {
-            logout($email);
+            unsetCookie();
             return false;
         }
     } else {
+        unsetCookie();
         return false;
     }
 }
@@ -145,8 +150,10 @@ if(isset($email)) {
         $_SESSION['usuario'] = $email;
         //echo 'Bienvenido '.$email.'.';
         header('location: ./admin/catalogos/competencias/index.php');
+        exit();
     } else {
         header('location: ./index.php?error=2');
+        exit();
     }
 }
 
