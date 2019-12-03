@@ -55,6 +55,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Creación</th>
                                 <th>Actualización</th>
                                 <th hidden>id_escala</th>
+                                <th class="text-center">Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -62,7 +63,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <tbody>
 
                             <?php
-                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala FROM decalogos WHERE status='A'";
+                            $sql = "SELECT id, decalogo, creacion, actualizacion, id_escala, status FROM decalogos";
                             $resultado = mysqli_query($conexion, $sql);
                             ?>
                             <?php if ($resultado): ?>
@@ -72,17 +73,22 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td><?php echo $fila['creacion'] ?></td>
                                         <td><?php echo $fila['actualizacion'] ?></td>
                                         <td hidden><?php echo $fila['id_escala'] ?></td>
+                                        <td class="text-center"><?php echo $fila['status'] ?></td>
                                         <td class="text-center">
                                             <form name="f-el-ed" action="elim-edit.php" method="post">
-                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
-                                                        type="submit"
-                                                        name="b-elim" value="<?php echo $fila['id'] ?>">
-                                                    <i style="cursor:pointer" class="fas fa-trash"></i>
+                                                <button
+                                                        type="submit" title="Editar registro"
+                                                        name="b-edit"
+                                                        value="<?php echo $fila['id'] ?>"
+                                                        class="btn">
+                                                    <i class="fas fa-pencil-alt"></i>
                                                 </button>
-                                                <button style="border:none; background-color: rgba(255, 0, 0, 0);"
-                                                        type="submit"
-                                                        name="b-edit" value="<?php echo $fila['id'] ?>">
-                                                    <i style="cursor:pointer" class="fas fa-edit"></i>
+                                                <button
+                                                        type="submit" title="Cambiar estado"
+                                                        name="b-elim"
+                                                        value="<?php echo $fila['id'] ?>"
+                                                        class="btn">
+                                                    <i class="fas fa-exchange-alt"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -97,7 +103,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from decalogos order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->

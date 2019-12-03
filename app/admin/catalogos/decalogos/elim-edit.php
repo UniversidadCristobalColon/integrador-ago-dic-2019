@@ -4,15 +4,19 @@ require_once RUTA_INCLUDE . 'config/global.php';
 require '../../../../config/db.php';
 
 if (isset($_POST['bguard'])) {
-    if ($_POST['bguard'] == 'Eliminar') {
+    if ($_POST['bguard'] == 'Cambiar') {
         $id_bor = $_POST['idbor'];
 
-        $sql_elim = "UPDATE decalogos SET status='B' WHERE id='$id_bor';";
+        if ($_POST['statdec'] == 'A') {
+            $sql_elim = "UPDATE decalogos SET status='B' WHERE id='$id_bor';";
+        } elseif ($_POST['statdec'] == 'B') {
+            $sql_elim = "UPDATE decalogos SET status='A' WHERE id='$id_bor';";
+        }
         $resultado = mysqli_query($conexion, $sql_elim);
         if ($resultado) {
             header("location: index.php");
         } else {
-            echo "Error: " . $sql_elim . "<br>" . mysqli_error($conexion);
+            echo "Error";
         }
 
     } elseif ($_POST['bguard'] == 'Guardar') {
@@ -26,17 +30,19 @@ if (isset($_POST['bguard'])) {
             $fila = mysqli_fetch_assoc($resultado);
             $datet = $fila['now()'];
         } else {
-            echo "Error: " . $sql_now . "<br>" . mysqli_error($conexion);
+            echo "Error";
         }
 
         $sql_upd = "UPDATE decalogos
                 SET decalogo='$new_deca', actualizacion='$datet', id_escala='$new_esc'
                 WHERE id='$id_edit';";
-        $resultado = mysqli_query($conexion, $sql_upd);/*ojo*/
+        $resultado = mysqli_query($conexion, $sql_upd);
         if ($resultado) {
+            mysqli_close($conexion);
             header("location: index.php");
         } else {
-            echo "Error: " . $sql_now . "<br>" . mysqli_error($conexion);
+            mysqli_close($conexion);
+            echo "Error";
         }
     }
 } else {
@@ -50,6 +56,13 @@ if (isset($_POST['bguard'])) {
     if ($id_nom) {
         $fila = mysqli_fetch_assoc($id_nom);
         $nom_deca = $fila['decalogo'];
+    }
+
+    $sql_stat = "SELECT status FROM decalogos WHERE id='$id_elem'";
+    $sqlres = mysqli_query($conexion, $sql_stat);
+    if ($sqlres) {
+        $fila = mysqli_fetch_assoc($sqlres);
+        $stat_deca = $fila['status'];
     }
 }
 
@@ -86,13 +99,12 @@ if (isset($_POST['bguard'])) {
 
                 <div class="card-header">
                     <?php if (isset($_POST['b-elim'])): ?>
-                        <i class="fas fa-trash"></i>
-                        Eliminar decálogo
+                        <i class="fas fa-exchange-alt"></i>
+                        Cambiar estado
 
                     <?php elseif (isset($_POST['b-edit'])): ?>
                         <i class="fas fa-edit"></i>
                         Editar decálogo
-
                     <?php endif; ?>
                 </div>
 
@@ -105,7 +117,7 @@ if (isset($_POST['bguard'])) {
 
                             <div class="form-group">
                                 <?php if (isset($_POST['b-elim'])): ?>
-                                    <label>Decálogo a eliminar:</label>
+                                    <label>Decálogo:</label>
                                     <input type="hidden" value="<?php echo $id_elem ?>"
                                            name="idbor"><!--/*id del elemento a borrar*/-->
                                     <input class="form-control" type="text" value="<?php echo $nom_deca ?>"
@@ -119,8 +131,15 @@ if (isset($_POST['bguard'])) {
                                 <?php endif; ?>
                             </div>
 
-                            <?php if (isset($_POST['b-edit'])): ?>
-                                <div class="form-group">
+
+                            <div class="form-group">
+                                <?php if (isset($_POST['b-elim'])): ?>
+                                    <label>Estado actual:</label>
+                                    <input type="hidden" value="<?php echo $stat_deca ?>"
+                                           name="statdec"><!--/*estado actual del decálogo*/-->
+                                    <input class="form-control" type="text" value="<?php echo $stat_deca ?>"
+                                           readonly>
+                                <?php elseif (isset($_POST['b-edit'])): ?>
                                     <label>id_escala</label>
                                     <select class="form-control" id="orden" name="select_e">
                                         <option disabled selected>Elige una escala para el decálogo</option>
@@ -136,12 +155,13 @@ if (isset($_POST['bguard'])) {
                                         }
                                         ?>
                                     </select>
-                                </div>
-                            <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
+
 
                             <div class="form-group">
                                 <?php if (isset($_POST['b-elim'])): ?>
-                                    <label>¿Estás seguro que deseas eliminar el registro seleccionado?</label>
+                                    <label>¿Estás seguro que deseas cambiar el estado del registro seleccionado?</label>
                                 <?php elseif (isset($_POST['b-edit'])): ?>
                                     <label>¿Deseas guardar los cambios?</label>
                                 <?php endif; ?>
@@ -149,7 +169,7 @@ if (isset($_POST['bguard'])) {
 
                             <div class="form-group">
                                 <?php if (isset($_POST['b-elim'])): ?>
-                                    <input type="submit" class="btn btn-primary mb-3" name="bguard" value="Eliminar">
+                                    <input type="submit" class="btn btn-primary mb-3" name="bguard" value="Cambiar">
                                 <?php elseif (isset($_POST['b-edit'])): ?>
                                     <input type="submit" class="btn btn-primary mb-3" name="bguard" value="Guardar">
                                 <?php endif; ?>
@@ -162,7 +182,13 @@ if (isset($_POST['bguard'])) {
                     </div>
                 </div>
 
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from decalogos order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
 
             </div>
 

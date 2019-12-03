@@ -42,8 +42,8 @@ require '../../../../config/db.php';
 
                     <div class="table-responsive">
 
-                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                        <!--<form method="post" action="test.php">-->
+                        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                            <!--<form method="post" action="test.php">-->
 
                             <div class="form-group">
                                 <label>Decálogo</label>
@@ -78,36 +78,46 @@ require '../../../../config/db.php';
                         </form>
 
                         <?php
-                        if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != '') {
-                            if (isset($_POST['select_e'])) {
-                                $n_deca = $_POST['nuevodeca'];
-                                $s_esc = $_POST['select_e'];
-                                //$act = date("Y-m-d H:i:s");
-                                $act = "";
-                                $sql2 = "SELECT now()";
-                                $resultado = mysqli_query($conexion, $sql2);
-                                if ($resultado) {
-                                    while ($act = mysqli_fetch_assoc($resultado)) {
-                                        $act = $act["now()"];
+                        if (isset($_POST['bguard'])) {
+                            if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != '') {
+                                if (isset($_POST['select_e'])) {
+                                    $n_deca = $_POST['nuevodeca'];
+                                    $s_esc = $_POST['select_e'];
+                                    //$act = date("Y-m-d H:i:s");
+                                    $act = "";
+                                    $sql2 = "SELECT now()";
+                                    $resultado = mysqli_query($conexion, $sql2);
+                                    if ($resultado) {
+                                        $fila = mysqli_fetch_assoc($resultado);
+                                        $act = $fila["now()"];
                                         $sql = "INSERT INTO decalogos (decalogo, actualizacion, id_escala) VALUES ('$n_deca','$act','$s_esc');";
-
                                         if (mysqli_query($conexion, $sql)) {
                                             header("location: index.php");
                                         } else {
-                                            echo "Error: " . $sql . "<br>" . mysqli_error($conexion);
+                                            echo "Error";
                                         }
+
                                     }
+                                } else {
+                                    echo "<p style='color: red'>**Por favor seleccione una escala disponible**</p>";
                                 }
                             } else {
-                                echo "<p style='color: red'>**Por favor seleccione una opción disponible**</p>";
+                                echo "<p style='color: red'>**Por favor llene los campos solicitados**</p>";
                             }
-                        } else {echo "<p style='color: red'>**Por favor llene los campos solicitados**</p>";}
-                        ob_end_flush();
-                        mysqli_close($conexion);
+                            ob_end_flush();
+                            mysqli_close($conexion);
+                        }
                         ?>
+
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from decalogos order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
