@@ -38,12 +38,8 @@
 
     $resultado = mysqli_query($conexion, $insert);
     if ($resultado) {
-        /*$id_aspirante = mysqli_insert_id($conexion);
-        foreach ($carrera as $id_carrera) {
-            $insert = "insert into intereces (id_aspirante, id_carrera) values ($id_aspirante, $id_carrera)";
-            $resultado = mysqli_query($conexion, $insert);
-        }*/
-        header('location: adminEvaluacion.php?id_departamento='.$Depa.'&id_nombre='.$Descripcion);
+        $id_evaluacion = mysqli_insert_id($conexion);
+        header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$id_evaluacion");
 
     } else {
         echo 'No se guardo' . mysqli_error($conexion);
