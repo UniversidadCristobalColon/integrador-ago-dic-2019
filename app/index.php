@@ -1,7 +1,7 @@
 <?php
 
 require 'login.php';
-confirmar('/');
+confirmar('./');
 
 ?>
 <!DOCTYPE html>
