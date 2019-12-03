@@ -86,7 +86,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     if($row["estado"] == 'B'){
                                 ?>
                                 <td class="text-center">Inactivo</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
@@ -94,7 +94,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     }else{
                                 ?>
                                 <td class="text-center">Activo</td>
-                                <td class="text-center">
+                                <td class="text-center align-middle">
                                     <button  style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>

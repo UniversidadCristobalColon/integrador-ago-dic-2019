@@ -37,37 +37,74 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Usuarios
                 </div>
                 <div class="card-body">
+                <form action="users.php" method="POST" id="usersTable">
                     <button class="btn btn-primary mb-3">Nuevo</button>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Usuario</th>
-                                <th>Nombre</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Correo electónico</th>
-                                <th>Departamento</th>
-                                <th>Puesto</th>
-                                <th>Creado en</th>
-                                <th>Actualizado en</th>
-                                <th>Acciones</th>
+                                <th class="text-center">Correo Electrónico</th>
+                                <th class="text-center">Creado en</th>
+                                <th class="text-center">Actualizado en</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                             
                             </thead>
                             <tbody>
+                            <?php
+                                require_once("../../../../config/db.php");
 
-                            <!--
-                            <tr>
-                                <td>Pregunta 1</td>
-                                <td>Escala</td>
-                                <td>07-Nov-2019 20:34</td>
-                                <td>
-                                    <i class="far fa-edit"></i>
-                                    <i class="far fa-trash-alt"></i>
+
+                                $sql = "SELECT usuarios.id, email, usuarios.creacion, usuarios.actualizacion, usuarios.estado usuarios from usuarios left join empleados on empleados.id = usuarios.id";
+
+                                $result = $conexion->query($sql);
+                                
+                                if ($result->num_rows > 0) {
+                                    // output data of each row
+                                    while($row = $result->fetch_assoc()) {
+                                        //echo "id: " . $row["id"]. " - Name: " . $row["nombre"]. " " . $row["apellidos"]. "<br>";
+                            ?>
+                                <tr>
+                                <td class="text-center"><?php  echo $row["email"] ?></td>
+                                <td class="text-center"><?php  echo $row["creacion"] ?></td>
+                                <td class="text-center"><?php  echo $row["actualizacion"] ?></td>
+                                
+                                <?php
+                                    if($row["usuarios"] == 'B'){
+                                ?>
+                                <td class="text-center">Inactivo</td>
+                                <td class="text-center align-middle">
+                                    <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                        <i class="fas fa-pencil-alt text-center mx-auto"></i>
+                                    </button>
+                                <?php
+                                    }else {
+                                ?>
+                                <td class="text-center">Activo</td>
+                                <td class="text-center align-middle">
+                                    <button  style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                        <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>
+                                    </button>
+
+                                <?php
+                                    }
+                                ?>
+                                    <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "delete" value="<?php echo $row['id']?>">
+                                        <i style="cursor:pointer" class="fas fa-exchange-alt text-center mx-auto"></i>
+                                    </button>
                                 </td>
-                            </tr>
-                            -->
+                                </tr>
+
+                            <?php
+                                    }
+                                } else {
+                                    echo "0 results";
+                                }
+                                $conexion->close();
+
+                            ?>
+                            </form>
                             </tbody>
                         </table>
                     </div>
@@ -94,7 +131,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
-<script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>
