@@ -13,9 +13,17 @@ require_once("../../../../config/db.php");
 
 if(isset($_POST['delete'])){
     $deleteId =  $_POST["delete"];
+    $status ="";
 
-    $sqlDelete = "UPDATE empleados SET 
-        estado = 'B'
+    $sql = "SELECT * from empleados where id = $deleteId ";
+            $result = $conexion->query($sql);
+                                
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $status = $row["estado"];
+                    if($status == "B"){
+                        $sqlDelete = "UPDATE empleados SET 
+        estado = 'A'
         WHERE id = $deleteId ";
 
         if ($conexion->query($sqlDelete) === TRUE) {
@@ -24,6 +32,31 @@ if(isset($_POST['delete'])){
         } else {
             echo "Error updating record: " . $conexion->error;
         }
+                    }else{
+                        $sqlDelete = "UPDATE empleados SET 
+                        estado = 'B'
+                        WHERE id = $deleteId ";
+
+                        if ($conexion->query($sqlDelete) === TRUE) {
+                            header("location: index.php");
+                            ob_flush();
+                        } else {
+                            echo "Error updating record: " . $conexion->error;
+                        }
+                    }
+                }
+            }
+
+    // $sqlDelete = "UPDATE empleados SET 
+    //     estado = 'B'
+    //     WHERE id = $deleteId ";
+
+    //     if ($conexion->query($sqlDelete) === TRUE) {
+    //         header("location: index.php");
+    //         ob_flush();
+    //     } else {
+    //         echo "Error updating record: " . $conexion->error;
+    //     }
 }
 
 if(isset($_POST['edit'])){
