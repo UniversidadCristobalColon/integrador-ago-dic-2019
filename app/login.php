@@ -31,7 +31,7 @@ if($res) {
 }
 */
 
-function login($email, $password, $redirect, $error) {
+function login($email, $password) {
     require '../config/db.php';
     if($stmt = $conexion->prepare('SELECT passwd
                                    FROM usuarios
@@ -60,17 +60,36 @@ function login($email, $password, $redirect, $error) {
                     $stmt->close();
                     $conexion->close();
                     if($res) {
-                       $_SESSION['usuario'] = $email;
-                        //echo 'Bienvenido '.$email.'.';
-                        header('location: '.$redirect);
+                        return true;
                     }
                 }
             } else {
                 //echo 'Usuario o contraseña incorrecta.';
-                header('location: '.$error);
+                return false;
             }
         }
     }
+}
+
+function logout($email) {
+    require '../config/db.php';
+    if($stmt = $conexion->prepare('UPDATE usuarios 
+                                   SET cookie = NULL
+                                   WHERE id = (SELECT id
+                                               FROM empleados
+                                               WHERE email = ?)')) {
+        $stmt->bind_param('s', $email);
+        $res = $stmt->execute();
+        $stmt->bind_result($passwd);
+        $stmt->fetch();
+        $stmt->close();
+        $conexion->close();
+        if($res) {
+            setcookie(session_name(), '', time()-3600, '/');
+            session_unset();
+            session_destroy();
+        }
+    }    
 }
 
 function cookie($email, $cookie) {
@@ -100,32 +119,35 @@ function cookie($email, $cookie) {
     }
 }
 
-function logout($email) {
-    require '../config/db.php';
-    if($stmt = $conexion->prepare('UPDATE usuarios 
-                                   SET cookie = NULL
-                                   WHERE id = (SELECT id
-                                               FROM empleados
-                                               WHERE email = ?)')) {
-        $stmt->bind_param('s', $email);
-        $res = $stmt->execute();
-        $stmt->bind_result($passwd);
-        $stmt->fetch();
-        $stmt->close();
-        $conexion->close();
-        if($res) {
-            setcookie(session_name(), '', time()-3600, '/');
-            session_unset();
-            session_destroy();
+function confirmar($dir_base) {
+    if(empty($_SESSION)) {
+        session_start();
+    }
+    if(isset($_SESSION['usuario'])) {
+        $email = $_SESSION['usuario'];
+        $cookie = session_id();
+        if(!cookie($email, $cookie)) {
+            logout($email);
+            header('location: '.$dir_base.'app/index.php');
+            exit();
         }
-    }    
+    } else {
+        header('location: '.$dir_base.'app/index.php');
+        exit();
+    }
 }
 
 if(isset($email)) {
-    login($email, 
-          $password, 
-          './admin/catalogos/competencias/index.php',
-          './index.php?error=2');
+    if(login($email, $password)) {
+        if(empty($_SESSION)) {
+            session_start();
+        }
+        $_SESSION['usuario'] = $email;
+        //echo 'Bienvenido '.$email.'.';
+        header('location: ./admin/catalogos/competencias/index.php');
+    } else {
+        header('location: ./index.php?error=2');
+    }
 }
 
 ?>

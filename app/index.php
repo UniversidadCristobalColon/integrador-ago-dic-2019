@@ -1,3 +1,9 @@
+<?php
+
+require 'login.php';
+confirmar('/');
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
