@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+require '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <title><?php echo PAGE_TITLE ?></title>
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <?php getTopIncludes(RUTA_INCLUDE) ?>
 </head>
 
 <body id="page-top">
@@ -38,83 +38,82 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </div>
                 <div class="card-body">
 
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <div class="row ml-auto mb-3">
+                        <button onclick="location.href='nuevo.php'" type="button" class="btn btn-primary">
+                            Nueva
+                        </button>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
                             <thead>
                             <tr>
-                                <th>nivel1_etiqueta</th>
-                                <th>nivel1_descripcion</th>
-                                <th>nivel1_inferior</th>
-                                <th>nivel1_superior</th>
-                                <th>nivel2_etiqueta</th>
-                                <th>nivel2_descripcion</th>
-                                <th>nivel2_inferior</th>
-                                <th>nivel2_superior</th>
-                                <th>nivel3_etiqueta</th>
-                                <th>nivel3_descripcion</th>
-                                <th>nivel3_inferior</th>
-                                <th>nivel3_superior</th>
-                                <th>nivel4_etiqueta</th>
-                                <th>nivel4_descripcion</th>
-                                <th>nivel4_inferior</th>
-                                <th>nivel4_superior</th>
-                                <th>nivel5_etiqueta</th>
-                                <th>nivel5_descripcion</th>
-                                <th>nivel5_inferior</th>
-                                <th>nivel5_superior</th>
-                                <th>creación</th>
+                                <th>nivel1</th>
+                                <th>nivel2</th>
+                                <th>nivel3</th>
+                                <th>nivel4</th>
+                                <th>nivel5</th>
                                 <th>actualización</th>
-                                <th>creacion_ip</th>
-                                <th>actualizacion_ip</th>
+                                <th class="text-center">Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
 
-                            <tfoot>
-                            <tr>
-
-                            </tr>
-                            </tfoot>
-
                             <tbody>
-                            <tr>
-                                <td>A</td>
-                                <td>B</td>
-                                <td>C</td>
-                                <td>D</td>
-                                <td>E</td>
-                                <td>F</td>
-                                <td>G</td>
-                                <td>H</td>
-                                <td>I</td>
-                                <td>J</td>
-                                <td>K</td>
-                                <td>L</td>
-                                <td>M</td>
-                                <td>N</td>
-                                <td>Ñ</td>
-                                <td>O</td>
-                                <td>P</td>
-                                <td>Q</td>
-                                <td>R</td>
-                                <td>S</td>
-                                <td>2019/11/01</td>
-                                <td>2019/11/02</td>
-                                <td>127.0.0.0</td>
-                                <td>127.0.0.0</td>
-                                <td>Editar Eliminar</td>
-                            </tr>
+                            <?php
+                            $sql = "SELECT id, nivel1_etiqueta, nivel2_etiqueta, nivel3_etiqueta, 
+                                    nivel4_etiqueta, nivel5_etiqueta, actualizacion, status FROM escalas";
+                            $resultado = mysqli_query($conexion, $sql);
+                            ?>
+                            <?php if ($resultado): ?>
+                                <?php while ($fila = mysqli_fetch_assoc($resultado)): ?>
+                                    <tr>
+                                        <td><?php echo $fila['nivel1_etiqueta'] ?></td>
+                                        <td><?php echo $fila['nivel2_etiqueta'] ?></td>
+                                        <td><?php echo $fila['nivel3_etiqueta'] ?></td>
+                                        <td><?php echo $fila['nivel4_etiqueta'] ?></td>
+                                        <td><?php echo $fila['nivel5_etiqueta'] ?></td>
+                                        <td><?php echo $fila['actualizacion'] ?></td>
+                                        <td class="text-center"><?php echo $fila['status'] ?></td>
+                                        <td class="text-center row">
+                                            <form name="f-ed" action="editar.php"  method="post">
+                                                <button
+                                                        type="submit" title="Editar registro"
+                                                        name="b-edit"
+                                                        value="<?php echo $fila['id'] ?>"
+                                                        class="btn mr-1 ml-4">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                            </form>
+                                            <form name="f-cb" action="cambiar.php" method="post">
+                                                <button
+                                                        type="submit" title="Cambiar estado"
+                                                        name="b-camb"
+                                                        value="<?php echo $fila['id'] ?>"
+                                                        class="btn mr-2 ml-1">
+                                                    <i class="fas fa-exchange-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else:
+                                echo "ERROR";
+                            endif; ?>
                             </tbody>
 
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from escalas order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
 
@@ -133,7 +132,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 <?php getModalLogout() ?>
 
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
+<?php getBottomIncudes(RUTA_INCLUDE) ?>
 </body>
 
 </html>
