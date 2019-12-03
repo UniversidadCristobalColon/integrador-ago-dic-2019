@@ -5,25 +5,8 @@ $php_self       = dirname($_SERVER['PHP_SELF']);
 $pos_inicial    = strpos($php_self,'app');
 $dir_base       = substr($php_self,0,$pos_inicial);
 
-/*
-if(empty($_SESSION)) {
-    session_start();
-}
-
-if(isset($_SESSION['usuario'])) {
-    $email = $_SESSION['usuario'];
-    $cookie = session_id();
-    require '../app/login.php';
-    if(!cookie($email, $cookie)) {
-        logout($email)
-        header('location: '.$dir_base.'app/index.php');
-        exit();
-    }
-} else {
-    header('location: '.$dir_base.'app/index.php');
-    exit();
-}
-*/
+require '../app/login.php';
+confirmar($dir_base);
 
 function getSidebar($ruta = ''){
     global $dir_base;
