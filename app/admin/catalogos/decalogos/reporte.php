@@ -1,14 +1,16 @@
 <?php
 include('../../../../config/db.php');
-$idevaluacion = $_GET['id'];
-$sql1 = "Select * from promedios_por_evaluado where id_evaluacion=$idevaluacion;";
+//id
+$idevaluacion = $_GET['idevaluacion'];
+$idevaluado = $_GET['idevaluado'];
+
+$sql1 = "Select id_evaluador,id_periodo,id_cuestionario, id_aplicacion 
+from promedios_por_evaluado where id_evaluacion=1 group by id_evaluador,id_periodo,id_cuestionario, id_aplicacion;";
 $res1 = $conexion->query($sql1);
 while ($row1 = $res1->fetch_assoc()) {
 $idcuestionario = $row1['id_cuestionario'];
 $idperiodo = $row1['id_periodo'];
-$idevaluado = $row1['id_evaluado'];
 $idevaluador = $row1['id_evaluador'];
-$puntajetotal = $row1['puntos'];
 $idaplicacion = $row1['id_aplicacion'];
 $sql2 = "SELECT Tdecalogo.decalogo, Tperiodo.periodo, Templeados.nombre,
 Templeados.apellidos,Tpuesto.puesto
@@ -107,22 +109,20 @@ $nivelpuestoevaluador = utf8_encode($row3['nivel_puesto']);
 
 <?php
 $sql4 = "select Tdecalogoaseveracion.aseveracion, 
-Tpreguntasrespuestas.puntos 
+res.puntos 
 from promedios_por_evaluado ppe
-left join preguntas Tpreguntas on
-Tpreguntas.id_cuestionario=ppe.id_cuestionario
 left join aplicaciones app on
 ppe.id_evaluador=app.id_evaluador 
 left join resultados res on
 res.id_aplicacion=app.id
-left join preguntas_respuestas Tpreguntasrespuestas on
-Tpreguntasrespuestas.id_pregunta=Tpreguntas.id
+left join preguntas pre on 
+pre.id=res.id_pregunta
 left join decalogos_aseveraciones Tdecalogoaseveracion on
-Tdecalogoaseveracion.id=Tpreguntas.id_decalogo_aseveracion
+Tdecalogoaseveracion.id=pre.id_decalogo_aseveracion
 where ppe.id_cuestionario = $idcuestionario and ppe.id_evaluacion=$idevaluacion 
 and ppe.id_evaluador=$idevaluador and res.id_aplicacion=$idaplicacion
 group by Tdecalogoaseveracion.aseveracion, 
-Tpreguntasrespuestas.puntos";
+res.puntos";
 $res4 = $conexion->query($sql4);
 if ($res4) {
     ?>
@@ -151,35 +151,69 @@ if ($res4) {
     </div>
     <?php
 } ?>
+<?php
+$sql5 = "Select Te.nivel1_etiqueta,Te.nivel1_descripcion,
+Te.nivel1_inferior,Te.nivel1_superior,
+Te.nivel2_etiqueta,Te.nivel2_descripcion,
+Te.nivel2_inferior,Te.nivel2_superior,
+Te.nivel3_etiqueta,Te.nivel3_descripcion,
+Te.nivel3_inferior,Te.nivel3_superior,
+Te.nivel4_etiqueta,Te.nivel4_descripcion,
+Te.nivel4_inferior,Te.nivel4_superior,
+Te.nivel5_etiqueta,Te.nivel5_descripcion,
+Te.nivel5_inferior,Te.nivel5_superior
+from evaluaciones Teva 
+LEFT JOIN preguntas Tpre ON
+Tpre.id_cuestionario=Teva.id_cuestionario
+LEFT JOIN decalogos_aseveraciones Tda ON
+Tda.id=Tpre.id_decalogo_aseveracion
+LEFT JOIN decalogos Td ON
+Td.id=Tda.id_decalogo
+LEFT JOIN escalas Te ON
+Te.id=Td.id_escala 
+where Teva.id=1 GROUP BY Te.nivel1_etiqueta,Te.nivel1_descripcion,
+Te.nivel1_inferior,Te.nivel1_superior,
+Te.nivel2_etiqueta,Te.nivel2_descripcion,
+Te.nivel2_inferior,Te.nivel2_superior,
+Te.nivel3_etiqueta,Te.nivel3_descripcion,
+Te.nivel3_inferior,Te.nivel3_superior,
+Te.nivel4_etiqueta,Te.nivel4_descripcion,
+Te.nivel4_inferior,Te.nivel4_superior,
+Te.nivel5_etiqueta,Te.nivel5_descripcion,
+Te.nivel5_inferior,Te.nivel5_superior;";
+$res5 = $conexion->query($sql5);
+$row5 = mysqli_fetch_array($res5, MYSQLI_ASSOC);
+?>
+//:0
 <div>
     <table class="tabla4">
         <tr>
             <th colspan="3" class="th1">Escala de calificacion</th>
         </tr>
         <tr>
-            <td class="td5">1</td>
-            <td class="td6">Marginal</td>
-            <td class="td7">(rara vez muestra el comportamiento esperado)</td>
+            <td class="td5"><?php echo intval($row5['nivel1_inferior']) . "-" . intval($row5['nivel1_superior']) ?></td>
+            <td class="td6"><?php echo utf8_encode(ucfirst($row5['nivel1_etiqueta'])) ?></td>
+            <td class="td7"><?php echo utf8_encode(ucfirst($row5['nivel1_descripcion'])) ?></td>
         </tr>
         <tr>
-            <td class="td5">2</td>
-            <td class="td6">Minimo Aceptable</td>
-            <td class="td7">(Comportamiento inconsciente)</td>
+            <td class="td5"><?php echo intval($row5['nivel2_inferior']) . "-" . intval($row5['nivel2_superior']) ?></td>
+            <td class="td6"><?php echo utf8_encode(ucfirst($row5['nivel2_etiqueta'])) ?></td>
+            <td class="td7"><?php echo utf8_encode(ucfirst($row5['nivel2_descripcion'])) ?></td>
         </tr>
         <tr>
-            <td class="td5">3</td>
-            <td class="td6">Satisfactorio</td>
-            <td class="td7">(Comportamiento esperado)</td>
+            <td class="td5"><?php echo intval($row5['nivel3_inferior']) . "-" . intval($row5['nivel3_superior']) ?></td>
+            <td class="td6"><?php echo utf8_encode(ucfirst($row5['nivel3_etiqueta'])) ?></td>
+            <td class="td7"><?php echo utf8_encode(ucfirst($row5['nivel3_descripcion'])) ?></td>
         </tr>
         <tr>
-            <td class="td5">4</td>
-            <td class="td6">Notable</td>
-            <td class="td7">(Comportamiento superior a lo esperado)</td>
+            <td class="td5"><?php echo intval($row5['nivel4_inferior']) . "-" . intval($row5['nivel4_superior']) ?></td>
+            <td class="td6"><?php echo utf8_encode(ucfirst($row5['nivel4_etiqueta'])) ?></td>
+            <td class="td7"><?php echo utf8_encode(ucfirst($row5['nivel4_descripcion'])) ?></td>
         </tr>
         <tr>
-            <td class="td5">5</td>
-            <td class="td6">Excelente</td>
-            <td class="td7">(Comportamiento que trasciende su area de influencia)</td>
+            <td class="td5"><?php echo intval($row5['nivel5_inferior']) . "-" . intval($row5['nivel5_superior']) ?></td>
+            <td class="td6"><?php echo utf8_encode(ucfirst($row5['nivel5_etiqueta'])) ?></td>
+            <td class="td7"><?php echo utf8_encode(ucfirst($row5['nivel5_descripcion'])) ?></td>
         </tr>
     </table>
 </div>

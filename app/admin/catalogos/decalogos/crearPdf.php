@@ -1,14 +1,16 @@
 <?php
 require("../../../../config/db.php");
-$idevaluacion = $_GET['id'];
+//ids
+$idevaluacion = $_GET['idevaluacion'];
+$idevaluado = $_GET['idevaluado'];
 // Cargamos la librería dompdf que hemos instalado en la carpeta dompdf
 require_once '../../../../vendor/dompdf/autoload.inc.php';
 
 use Dompdf\Dompdf;
 
-// Introducimos HTML de prueba
+// Introducimos HTML de prueba :0
 
-$html = file_get_contents_curl("http://localhost/Integrador2/integrador-ago-dic-2019/app/admin/catalogos/decalogos/reporte.php?id=$idevaluacion");
+$html = file_get_contents_curl("http://localhost/Integrador2/integrador-ago-dic-2019/app/admin/catalogos/decalogos/reporte.php?idevaluacion=$idevaluacion&idevaluado=$idevaluado");
 
 
 // Instanciamos un objeto de la clase DOMPDF.
