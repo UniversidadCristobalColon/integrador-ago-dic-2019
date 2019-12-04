@@ -1,6 +1,6 @@
 <?php
-include '../../../../config/db.php';
 
+include '../../../../config/db.php';
 session_start();
 require_once '../../../../config/global.php';
 ob_start();
@@ -22,10 +22,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 </head>
 
 <body id="page-top">
+
 <?php 
     getModalLogout('../../../');
     getNavbar();
 ?>
+
 <div id="wrapper">
 
     <?php getSidebar() ?>
@@ -48,12 +50,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Competencia</th>
                                 <th>Creación</th>
                                 <th>Última actualización</th>
+                                <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                    $sql = 'select * from competencias where estado = "1"';
+                                    $sql = 'select * from competencias';
                                     $result = mysqli_query($conexion,$sql) or die('Consulta fallida: ' . mysqli_error());
 
                                     while ($row = mysqli_fetch_array($result)){
@@ -61,8 +64,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td>$row[competencia]</td>
                                         <td>$row[creacion]</td>
                                         <td>$row[actualizacion]</td>
-                                        <td class='text-center'><button class='btn' onclick='eliminar($row[id]);'><i class=\"fas fa-trash-alt\"></i></button>
-                                        <button class='btn' onclick='actualizar($row[id]);'><i class=\"fas fa-edit\"></i></button></td>
+                                        <td>$row[estado]</td>
+                                        <td class='text-center'><button class='btn' onclick='actualizar($row[id]);'><i class='fas fa-pencil-alt'></i></button>
+                                        <button class='btn' onclick='eliminar($row[id]);'><i class='fas fa-exchange-alt'></i></button></td>
                                         </tr>";
                                     }
                                 ob_end_flush();
@@ -74,12 +78,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         function eliminar(id){
                             location.href="eliminar.php?id="+id;
                         }
-                        function actualizar(id,com){
+                        function actualizar(id){
                             location.href="agregar_editar.php?id="+id;
                         }
                     </script>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from escalas order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->

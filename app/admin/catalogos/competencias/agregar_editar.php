@@ -3,12 +3,13 @@ require_once '../../../../config/global.php';
 include '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 if(isset($_GET['id'])){
-    $sql= "select id, competencia from competencias where id=$_GET[id]";
+    $sql= "select id, competencia, estado from competencias where id=$_GET[id]";
     $resultado=mysqli_query($conexion, $sql);
     if (isset($resultado)) {
         $row = mysqli_fetch_array($resultado, MYSQLI_ASSOC);
     }
     $competencia= $row['competencia'];
+    $estado= $row['estado'];
 
 }
 ?>
@@ -74,7 +75,13 @@ if(isset($_GET['id'])){
                         </form>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from escalas order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
 
         </div>
