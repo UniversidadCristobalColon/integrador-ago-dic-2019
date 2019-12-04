@@ -3,9 +3,10 @@
 /*Lógica para terminar la sesión del usuario*/
 
 session_start();
-setcookie(session_name(), '', time()-3600, '/');
-session_unset();
-session_destroy();
+require 'login.php';
+$email = $_SESSION['usuario'];
+logout($email);
 header("location: index.php");
+exit();
 
 ?>

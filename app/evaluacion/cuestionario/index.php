@@ -1,130 +1,103 @@
 <?php
 
-/*
-TODO:
-    - Mostrar a quien se está evaluando.
-    - Contar con una fecha y hora de caducidad.
-    - Mostrar en una o más páginas las preguntas a responder (paginación).
-    - Mostrar al evaluador el porcentaje o información sobre su avance.
-    - Validar que sean respondidas aquellas preguntas que sean obligatorias.
-    - Guardar las respuestas que el evaluador ha registrado.
-    - Permitir reanudar en otro momento al evaluador.
-    - Validar que solo se ha contestada una vez.
-    - Permitir desactivarla/cancelarla para prevenir sea respondida.
-*/
+    require_once '../../../config/global.php';
+    require_once "../../../config/db.php";
 
+    define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 
-require_once '../../../config/global.php';
+    $errores = '';
+    if ( $_SERVER['REQUEST_METHOD']  ==  'GET' ) {
 
-define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
-?>
-<!DOCTYPE html>
-<html lang="es">
+        // GET HASH
+        if ( isset($_GET['id']) && $_GET['id'] !== '' ) {
+            $hash_evaluacion = $_GET['id'];
+        } else {
+            $errores .= 'No se ha proporcionado información.<br>';
+        }
+        
+        if ( isset( $hash_evaluacion ) && $hash_evaluacion !== '' ) {
+            //SELECT DATA EVALUACIÓN
+            $sql = 'SELECT 	aplicaciones.id, 
+                    aplicaciones.estado, 
+                    empleados.nombre, 
+                    empleados.apellidos, 
+                    puestos.puesto, 
+                    evaluaciones.fin 
+                    FROM aplicaciones 
+                    INNER JOIN empleados
+                    ON aplicaciones.id_evaluado = empleados.id
+                    INNER JOIN puestos
+                    ON empleados.id_puesto=puestos.id
+                    INNER JOIN evaluaciones
+                    ON aplicaciones.id_evaluacion=evaluaciones.id
+                    WHERE aplicaciones.hash = "'.$hash_evaluacion.'"';
+            $sql = $conexion->query( $sql );
+            $sql = $sql->fetch_assoc();
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title><?php echo PAGE_TITLE ?></title>
-
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
-</head>
-
-<body id="page-top">
-
-<?php //getNavbar() ?>
-
-<div id="wrapper">
-
-    <?php //getSidebar() ?>
-
-    <div id="content-wrapper">
-
-        <div class="container-fluid">
-            <div class="container">
-                
-                <!-- DIV CARD -->
-                <div class="card mb-3">
-                    <!-- DIV CARD-HEADER -->
-                    <div class="card-header">
-                        <i class="fas fa-tasks"></i>
-                        Evaluación 360
-                        <hr>
-                        <!-- ROW -->
-                        <small>
-                            <b class="mr-1">Porcentaje completado:</b>
-                            <!-- PROGRESS BAR -->
-                            <div class="progress mx-auto" style="display: inline-flex; width: 100%;">
-                                    <div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">35%</div>
-                            </div>
-                        </small>
-                        <!-- ROW -->
-                    </div>
-                    <!-- DIV CARD-HEADER -->
-
-                    <!-- DIV CARD-BODY -->
-                    <div class="card-body">
+            // TEXTO DEL BOTÓN
+            if ( $sql == NULL ) {
+                $errores .= 'No se ha encontrado la evaluación.<br>';
+            } else {
+                switch ( $sql['estado'] ) {
+                    case 'A':
+                        $texto_boton = 'Comenzar evaluación';
+                        break;
+                    case 'B':
+                        $texto_boton = 'Continuar evaluación';
+                        break;
+                    case 'C':
+                        $texto_boton = 'Evaluación terminada';
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
     
-                        <!-- DIV TEXT -->
-                        <div class="px-1 text-justify">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis.</p>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde aliquid, dolorum quod natus fugiat nostrum amet earum a velit ratione ab iure temporibus quibusdam hic mollitia excepturi. Magnam, distinctio vero.</p>
+                // GUARDAR INFORMACIÓN DE LA EVALUACIÓN
+                $id_aplicacion = $sql['id'];
+                $nombre_evaluado = $sql['nombre'] . ' ' . $sql['apellidos'];
+                $puesto_evaluado = $sql['puesto'];
+                $evaluacion_fin = $sql['fin'];
+    
+                // GET TOTAL DE RESPUESTAS Y PREGUNTAS PARA PODER SACAR EL PORCENTAJE COMPLETADO
+                $sql = 'SELECT COUNT(preguntas.id) 
+                        AS PREGUNTAS 
+                        FROM preguntas 
+                        INNER JOIN cuestionarios 
+                        ON preguntas.id_cuestionario = cuestionarios.id 
+                        INNER JOIN evaluaciones 
+                        ON cuestionarios.id = evaluaciones.id_cuestionario 
+                        INNER JOIN aplicaciones 
+                        ON evaluaciones.id = aplicaciones.id_evaluacion
+                        WHERE aplicaciones.id = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_preguntas =  $row['PREGUNTAS'];
+                
+                $sql = 'SELECT COUNT( resultados.id_pregunta ) 
+                        AS RESULTADOS
+                        FROM resultados 
+                        WHERE resultados.id_aplicacion = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_respuestas =  $row['RESULTADOS'];
 
-                            <p>
-                                <b>Evaluando a: </b>Roberto López López
-                            </p>
-                            <p>
-                                <b>Fecha de cierre: </b>27/Noviembre/2019 16:00 hrs.
-                            </p>
-                        </div>
-                        <!-- DIV TEXT -->                        
-                    </div>
-                    <!-- DIV CARD-BODY -->
-                    
-                    <!-- DIV CARD-FOOTER -->
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-secondary btn-block">
-                                    Reanudar evaluación
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="cuestionario.php" class="btn btn-primary btn-block">
-                                    Comenzar evaluación
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- DIV CARD-FOOTER -->
-                </div>
-                <!-- DIV CARD-BODY -->
-            </div>
-            <!-- DIV CARD -->
-            
+                // CALCULAR EL PORCENTAJE COMPLETADO
+                $porcentaje_completado = ( $total_respuestas == 0 ) ? 0 : ( 100/$total_preguntas ) * $total_respuestas;
 
-        </div>
-        <!-- /.container-fluid -->
-        
-        <?php //getFooter() ?>
-        
-    </div>
-    <!-- /.content-wrapper -->
+                // REDONDEAR PORCENTAJE COMPLETADO
+                $porcentaje_completado = round( $porcentaje_completado, 0, PHP_ROUND_HALF_UP );
+                if ( $porcentaje_completado > 100 ) {
+                    $porcentaje_completado = 100  . '%';
+                } else {
+                    $porcentaje_completado = $porcentaje_completado  . '%';
+                }
+            }
 
-</div>
-<!-- /#wrapper -->
+            $conexion->close();
+        }
+    }
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+    require_once 'views/index.view.php';
 
-<?php getModalLogout() ?>
-
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
-</body>
-
-</html>
+?>

@@ -1,7 +1,5 @@
 <?php
 
-
-
 $email          = @$_POST['usuario'];
 $token          = @$_POST['token'];
 $contrasena     = @$_POST['pass'];
@@ -55,13 +53,15 @@ if($res){
 */
 
 if($stmt = $conexion->prepare('SELECT EXISTS(SELECT * 
-                                FROM password_resets 
-                                WHERE id = (SELECT id 
-                                            FROM usuarios 
-                                            WHERE usuario = ?)
-                                AND token = ?
-                                AND expira > NOW()
-                                AND status = 1)')) {
+                                             FROM password_resets 
+                                             WHERE id = (SELECT id 
+                                                         FROM usuarios 
+                                                         WHERE id = (SELECT id 
+                                                                     FROM empleados 
+                                                                     WHERE email = ?))
+                                             AND token = ?
+                                             AND expira > NOW()
+                                             AND status = 1)')) {
     $stmt->bind_param('ss', $email, $token);
     $res = $stmt->execute();
     $stmt->bind_result($exists);
@@ -72,22 +72,28 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
             if(strlen($contrasena)) {
                 if($contrasena != '' && $contrasena == $contrasena1) {
                     if($stmt = $conexion->prepare('UPDATE usuarios 
-                                                    SET passwd      = ?,
-                                                    actualizacion   = NOW()
-                                                    WHERE usuario   = ?')){
+                                                   SET passwd        = ?,
+                                                       actualizacion = NOW()
+                                                   WHERE id = (SELECT id
+                                                               FROM empleados
+                                                               WHERE email = ?)')){
                         $stmt->bind_param('ss', 
-                                            password_hash($contrasena, 
-                                                            PASSWORD_BCRYPT, 
-                                                            $options), 
-                                            $email);
-                        echo $res = $stmt->execute();
+                                          password_hash($contrasena, 
+                                                  PASSWORD_BCRYPT, 
+                                                  $options), 
+                                          $email);
+                        $res = $stmt->execute();
                         $stmt->close();
                         if($res) {
                             if($stmt = $conexion->prepare('UPDATE password_resets  
-                                                            SET status = 0
-                                                            WHERE id   = (SELECT id 
-                                                                            FROM usuarios 
-                                                                            WHERE usuario = ?)')) {
+                                                           SET status = 0
+                                                           WHERE id   = (SELECT id 
+                                                                         FROM usuarios 
+                                                                         WHERE id 
+
+                                                                         = (SELECT id
+                                                                            FROM empleados
+                                                                            WHERE email = ?))')) {
                                 $stmt->bind_param('s', $email);
                                 $res = $stmt->execute();
                                 $stmt->close();
@@ -95,6 +101,7 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                                     $conexion->close();
                                     header('location: index.php?'
                                            .'alert=1');
+                                    exit();
                                 }
                             }
                         }
@@ -104,6 +111,7 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                     header('location: ./cambiar.php?email='
                            .$email.'&token='
                            .$token.'&error=3');
+                    exit();
                 }
             } else {
                 $conexion->close();
@@ -112,10 +120,12 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                        .$token
                        .'&error=4'
                        );
+                exit();
             }
         } else {
             $conexion->close();
             header('location: ./index.php?error=5');
+            exit();
         }
     }
     $conexion->close();

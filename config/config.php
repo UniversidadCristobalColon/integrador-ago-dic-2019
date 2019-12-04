@@ -6,5 +6,5 @@ $options = [
 			 .'$12$pjQdOp2B3VPnQ3bUpjQdOeNrlmxypb9'
 			 .'803Hyw9Ile6FnIF/Zl2abO'
 ];
-echo password_hash('password', PASSWORD_BCRYPT, $options)
+
 ?>

@@ -1,7 +1,24 @@
 <?php
+
 define('PAGE_TITLE', 'Evaluación 360');
+$php_self       = dirname($_SERVER['PHP_SELF']);
+$pos_inicial    = strpos($php_self,'app');
+$dir_base       = substr($php_self,0,$pos_inicial);
+
+/*
+
+require '../app/login.php';
+
+if(!confirmar()) {
+    header('location: '.$dir_base.'app/index.php');
+    exit();
+}
+
+*/
 
 function getSidebar($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
@@ -15,16 +32,24 @@ function getSidebar($ruta = ''){
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Páginas</span>
+            <span>Catálogos</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <h6 class="dropdown-header">Sección</h6>            
-            <a class="dropdown-item" href="#">Página W</a>
-            <a class="dropdown-item" href="#">Página X</a>
+            <h6 class="dropdown-header">Organización</h6>            
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/organizaciones/">Organizaciones</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/departamentos/">Departamentos</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/puestos/">Puestos</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/niveles_puesto/">Niveles de puesto</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/empleados/">Empleados</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/usuarios/">Usuarios</a>
             <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Otra sección</h6>
-            <a class="dropdown-item" href="#">Página Y</a>
-            <a class="dropdown-item active" href="#">Página Z</a>
+            <h6 class="dropdown-header">Evaluación</h6>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/periodos/">Periodos</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/competencias/">Competencias</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/decalogos/">Decálogo</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/escalas/">Escalas</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/preguntas/">Preguntas</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/respuestas/">Respuestas</a>
         </div>
     </li>
     <li class="nav-item">
@@ -46,6 +71,8 @@ EOD;
 }
 
 function getNavbar($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
@@ -70,6 +97,7 @@ function getNavbar($ruta = ''){
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0 mr-md-3 my-2 my-md-0">
+        <!--
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
@@ -87,7 +115,7 @@ function getNavbar($ruta = ''){
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
-                <span class="badge badge-danger">7</span>
+                <span class="badge badge-danger"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
                 <a class="dropdown-item" href="#">Action</a>
@@ -96,16 +124,17 @@ function getNavbar($ruta = ''){
                 <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </li>
+        -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-user-circle fa-fw"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Settings</a>
-                <a class="dropdown-item" href="#">Activity Log</a>
+                <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/changeEmail.php">Configurar correo electrónico</a>                
+                <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/mailConfig.php">Configurar envío e-mail</a>                
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
             </div>
         </li>
     </ul>
@@ -132,6 +161,8 @@ EOD;
 }
 
 function getModalLogout($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -139,15 +170,15 @@ function getModalLogout($ruta = ''){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">¿Desea salir del sistema?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">De clic en el botón <b>salir</b> para terminar su sesión.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="{$ruta}logout.php">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-primary" href="{$dir_base}app/logout.php">Salir</a>
             </div>
         </div>
     </div>
@@ -179,6 +210,8 @@ EOD;
 }
 
 function getBottomIncudes($ruta = ''){
+    global $dir_base;
+
     $html = <<<EOD
     <!-- Bootstrap core JavaScript-->    
     <script src="{$ruta}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -198,7 +231,9 @@ function getBottomIncudes($ruta = ''){
     <script src="{$ruta}js/demo/chart-bar-demo.js"></script>
     <script src="{$ruta}js/demo/chart-pie-demo.js"></script>
 
-
+    <script>
+        var dir_base = '$dir_base';
+    </script>
     <script src="{$ruta}js/demo/datatables-demo.js"></script>
 EOD;
 

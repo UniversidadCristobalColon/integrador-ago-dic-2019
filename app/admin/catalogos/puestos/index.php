@@ -1,8 +1,9 @@
 <?php
-require_once '../../../../../../../../../../../../../config/global.php';
-
-define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a necesidad
+require_once '../../../../config/global.php';
+require_once '../../../../config/db.php';
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -37,18 +38,22 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
                     Catálogo: Puestos
                 </div>
 
-                 <div class="card-body">
-                     <button class="btn btn-primary mb-3">Nuevo</button>
+                <div class="card-body">
+                    <form method="POST" action="agregar.php">
+                        <button class="btn btn-primary mb-3" title="Agrega un nuevo registro" type="submit">Nuevo</button>
+                    </form>
 
-                     <div class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Puesto</th>
-                                <th>Ultima Actualización</th>
-                                <th></th>
+                                <th class="text-center">Puesto</th>
+                                <th class="text-center">Creación</th>
+                                <th class="text-center">ID de Puesto</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                             </thead>
+                            <!--
                             <tfoot>
                             <tr>
                                 <th>Name</th>
@@ -59,12 +64,20 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
                                 <th>Salary</th>
                             </tr>
                             </tfoot>
+                            -->
                             <tbody>
-                            <tr>
-                                <td>Puesto 1</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
+
+                            <?php foreach ($conexion->query('SELECT * from puestos') as $row){  ?>
+                                <tr>
+                                    <td align="center"><?php echo $row ['puesto']?></td>
+                                    <td align="center"><?php echo $row['creacion'] ?></td>
+                                    <td align="center"><?php echo $row['id_nivel_puesto'] ?></td>
+                                    <td class="text-center"><a href="editar.php" style="color: black;"><i class="fas fa-edit" title="Modificar registro" title="submit"></i></a>&ensp;
+                                        <a href="eliminar.php" style="color: black;"><i class="fas fa-trash" title="Eliminar registro" type="submit"></i></a></td>
+                                    </td>
                                 </tr>
+                                <?php
+                            } ?>
                             </tbody>
                         </table>
                     </div>
@@ -88,9 +101,7 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
     <i class="fas fa-angle-up"></i>
 </a>
 
-<?php getModalLogout() ?>
+<?php getModalLogout();  getBottomIncudes( RUTA_INCLUDE ); ?>
 
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
 </body>
-
 </html>

@@ -1,99 +1,90 @@
 <?php
-require_once '../../../../config/global.php';
+require '../../../../config/db.php';
+$id = $conexion->real_escape_string($_POST["id"]);
+$pregunta = $conexion->real_escape_string($_POST["pregunta"]);
+$sql = "select preguntas.tipo, (select decalogos.decalogo from decalogos where decalogos.id=preguntas.id_decalogo) as decalogo, (select decalogos_aseveraciones.aseveracion from decalogos_aseveraciones where decalogos_aseveraciones.id=preguntas.id_decalogo_aseveracion) as aseveracion from preguntas where preguntas.id=?";
+$stmt = $conexion->prepare($sql);
+$stmt->bind_param("i",$id);
+$stmt->execute();
+$stmt->store_result();
+$stmt->bind_result($tipo, $decalogo, $aseveracion);
+$stmt->fetch();
+$stmt->close();
+if($tipo=='M'){
+    $tipoC ="Opción Múltiple";
+}else {
+    $tipoC ="Abierta";
+}
 
-define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
-<!DOCTYPE html>
-<html lang="es">
-
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btn-editar").click(function(){
+           var pregunta = $("#pregunta").val();
+           var pid = <?=$id;?>;
+            var ip = $("#ip").val();
+           $.ajax({
+               url: "editar_final.php",
+               type: "POST",
+               data: "id=" + pid + "&pregunta=" + pregunta + "&ip=" + ip,
+               success:function(exito){
+                   if(exito=='s'){
+                       location.href="index.php";
+                   }
+               }
+           });
 
-    <title><?php echo PAGE_TITLE ?></title>
+        });
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    });
+
+</script>
 </head>
-
-<body id="page-top">
-
-<?php getNavbar() ?>
-
-<div id="wrapper">
-
-    <?php getSidebar() ?>
-
-    <div id="content-wrapper">
-
-        <div class="container-fluid">
-
-            <!-- DataTables Example -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fas fa-table"></i>
-                    Editar pregunta
-                </div>
-                <div class="card-body">
-
-                    <div class="table-responsive">
-                        <form>
-                            <div class="form-group">
-                                <label for="pregunta">Pregunta</label>
-                                <input type="pregunta" class="form-control" id="pregunta1">
-                            </div>
-                            <div class="form-group">
-                                <label for="orden">Orden</label>
-                                <select class="form-control" id="orden">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="tipo">Tipo de pregunta</label>
-                                <select class="form-control" id="tipopreg">
-                                    <option>M</option>
-                                    <option>A</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="example">Example textarea</label>
-                                <textarea class="form-control" id="example" rows="3"></textarea>
-                            </div>
-                            <div>
-                                <input type="button" class="btn btn-primary mb-3" OnClick="location.href='index.php'" value="Actualizar"></input>
-                                <input type="button" class="btn btn-secondary mb-3" OnClick="location.href='index.php'" value="Cancelar"></input>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<form method="post" class="form-horizontal" role="form">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Pregunta</h4>
+                <button type="button" class="close" data-dismiss="modal" OnClick="location.href='index.php'">
+                   <!-- <span aria-hidden="true">&times;</span>-->
+                    &times;
+                </button>
             </div>
+            <div class="modal-body">
+                <input type="hidden" name="editar_pregunta" value="<?php echo $id; ?>">
+                <div class="form-group">
+                    <label for="item_name">Pregunta:</label>
+                    <input type="text" class="form-control" id="pregunta" name="pregunta" value="<?php echo $pregunta; ?>" placeholder="Pregunta" required autofocus>
+                    <label for="item_code">Decálogo:</label>
+                    <input type="text" readonly class="form-control" id="decalogo" name="decalogo" value="<?php echo $decalogo; ?>" placeholder="Decálogo" required>
+                    <label for="tipo">Tipo:</label>
+                    <input type="text" readonly class="form-control" id="tipo" name="pregunta" value="<?php echo $tipoC; ?>" placeholder="Pregunta" required autofocus>
 
+                    <label for="aseveracion">Aseveración:</label>
+                    <input type="text" readonly class="form-control" id="asever" name="aseveracion" value="<?php echo $aseveracion; ?>" placeholder="Aseveracion" required>
+                </div>
+                <input type="hidden" id="ip" value="<?php echo getIP();?>"></input>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary mb-3" name="update" id="btn-editar">Editar</button>
+                <button type="button" class="btn btn-secondary mb-3" data-dismiss="modal"  OnClick="location.href='index.php'">Cancelar</button>
+            </div>
         </div>
-        <!-- /.container-fluid -->
-
-        <?php getFooter() ?>
-
     </div>
-    <!-- /.content-wrapper -->
-
-</div>
-<!-- /#wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<?php getModalLogout() ?>
-
-<?php getBottomIncudes( RUTA_INCLUDE ) ?>
-</body>
-
-</html>
+</form>
+<?php
+function getIP(){
+    if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        //ip from share internet
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        //ip pass from proxy
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }else{
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+?>

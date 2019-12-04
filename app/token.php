@@ -32,7 +32,9 @@ if($res) {
 if($stmt = $conexion->prepare('INSERT INTO password_resets 
                                 VALUES((SELECT id 
                                         FROM usuarios 
-                                        WHERE usuario = ?), 
+                                        WHERE id = (SELECT id 
+                                                    FROM empleados 
+                                                    WHERE email = ?)), 
                                         ?, 
                                         NOW() + INTERVAL 1 HOUR,
                                         1)')) {
@@ -51,6 +53,7 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
         );
     } else {
         header('location: /proyecto/app?error=1');
+        exit();
     }
 }
 ?>
