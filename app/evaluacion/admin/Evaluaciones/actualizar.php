@@ -2,12 +2,12 @@
     require_once '../../../../config/global.php';
     include '../../../../config/db.php';
 
-    $Evaluacion = /*$_POST["Departamento"]*/ 2;
-    $Evaluado = /*convertirFecha($_POST["Inicio"])*/ 2;
-    $EvaluadoS = /*convertirFecha($_POST["Inicio"])*/ 9;
-    $EvaluadoP = /*convertirFecha($_POST["Inicio"])*/ 10;
-    $EvaluadoP1 = /*convertirFecha($_POST["Inicio"])*/ 11;
-    $EvaluadoC = /*convertirFecha($_POST["Inicio"])*/ 12;
+    $Evaluacion = /*$_POST["Departamento"]*/ 1;
+    $Evaluado = /*convertirFecha($_POST["Inicio"])*/ 23;
+    $EvaluadoS = /*convertirFecha($_POST["Inicio"])*/ 26;
+    $EvaluadoP = /*convertirFecha($_POST["Inicio"])*/ 27;
+    $EvaluadoP1 = /*convertirFecha($_POST["Inicio"])*/ 28;
+    $EvaluadoC = /*convertirFecha($_POST["Inicio"])*/ 30;
     $Depa = /*$_GET['id_departamento']*/ 3;
     $Nombre = /*$_GET['id_nombre']*/ "Pruebas";
 
@@ -117,5 +117,5 @@
             }
         }
     }
-    header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$id_evaluacion");
+    header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Nombre&id_evaluacion=$id_evaluacion");
 ?>
