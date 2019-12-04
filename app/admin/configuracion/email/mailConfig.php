@@ -2,7 +2,7 @@
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
 
-$sql = "SELECT host, port, username, password, email_name FROM email_conf";
+$sql = "SELECT host, port, username, password, email_name, content FROM email_conf where id = 1";
 $result = $conexion->query($sql);
 
 if ($result->num_rows > 0) {
@@ -12,6 +12,7 @@ if ($result->num_rows > 0) {
         $username = $row['username'];
         $password = $row['password'];
         $mailName = $row['email_name'];
+        $content = $row['content'];
     }
 }
 
@@ -28,7 +29,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <script src="ckeditor/ckeditor.js"></script>
     <title><?php echo PAGE_TITLE ?></title>
 
 
@@ -53,24 +54,44 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Parametros SMTP
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form action="changeEmailParameters.php" method="post">
   <div class="form-group">
     <label for="mailConfigHost">Host</label>
-    <input type="form-text" class="form-control" id="mailConfigHost" value ="<?php echo $host;?>" placeholder="Host" readonly>
+    <input name= "host" type="form-text" class="form-control" id="mailConfigHost" value ="<?php echo $host;?>" placeholder="Host" >
   </div>
   <div class="form-group">
     <label for="mailConfigPort">Port</label>
-    <input type="form-text" class="form-control" id="mailConfigPort" value ="<?php echo $port;?>" placeholder="Port" readonly>
+    <input name ="port" type="form-text" class="form-control" id="mailConfigPort" value ="<?php echo $port;?>" placeholder="Port" >
   </div>  
   <div class="form-group">
+    <label for="mailConfigName">Nombre</label>
+    <input name="name" type="form-text" class="form-control" id="mailConfigName" value ="<?php echo $mailName;?>" placeholder="Nombre">
+  </div>
+  <div class="form-group">
     <label for="mailConfigUser">User</label>
-    <input type="form-text" class="form-control" id="mailConfigUser" value ="<?php echo $username;?>" placeholder="User" readonly>
+    <input name= "user" type="form-text" class="form-control" id="mailConfigUser" value ="<?php echo $username;?>" placeholder="User" >
   </div>  
   <div class="form-group">
     <label for="mailConfigPass">Pass</label>
-    <input type="password" class="form-control" id="mailConfigPass" value ="<?php echo $password;?>" placeholder="Pass">
+    <input name="pass" type="form-text" class="form-control" id="mailConfigPass" value ="<?php echo $password;?>" placeholder="Pass">
   </div>
-  <button type="submit" class="btn btn-primary">Editar</button>
+
+  <div class="form-group">
+  <textarea name="editor" class= "form-control" id="editor"  name ="editor" id="editor">
+      <?php echo $content;?>
+  </textarea>
+<script type="text/javascript">
+    ClassicEditor
+    .create( document.querySelector( '#editor' ) )
+    .then( editor => {
+        console.log( editor );
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+</script>
+</div>
+  <input type="submit" value = "Editar" class="btn btn-primary">
 </form>
 
                    
