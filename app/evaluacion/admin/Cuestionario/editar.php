@@ -20,6 +20,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         function guardarPreguntas() {
             $('#form_preguntas').submit()
         }
+
+        function eliminarPreguntas() {
+            $('#form_preguntas').submit()
+        }
     </script>
 </head>
 
@@ -46,7 +50,16 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Nombre</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nuevo Cuestionario">
+                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="<?php
+                            $sqlc = "select cuestionario, id from cuestionarios where id=1";
+                            $resultadoc = mysqli_query($conexion, $sqlc);
+                            if ($resultadoc){
+                                while ($filac = mysqli_fetch_assoc($resultadoc)){
+                                    echo $filac["cuestionario"];
+                                }
+                            }
+                            ?>
+                                                                                                                                     ">
                         </div>
                         <!-- en este boton debe ir mi modal -->
                         <!-- Button trigger modal -->
@@ -125,17 +138,39 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tr>
                             </thead>
                             <tbody>
+                            <form action="guardar_preguntas.php" method="post" id="form_preguntas">
                             <tr>
-                                <td>Pregunta 1</td>
+                                <?php
+
+                                $sql2 = "select pregunta, id from preguntas where id_cuestionario = 1";
+                                $resultado2 = mysqli_query($conexion, $sql2);
+                                if ($resultado2){
+                                    while ($filap = mysqli_fetch_assoc($resultado2)){
+
+                                        echo "
+                                        <tr>
+                                        <td>$filap[pregunta]</td>
                                 <td>
-                                    <a href="#"><i class="fas fa-edit"></i></a>
-                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#modalEliminarPreguntaCuestionario">
-                                        <i class="fa fa-trash"></i>
+                                    <a href=\"#\"><i class=\"fas fa-edit\"></i></a>
+                                    <button type=\"button\" class=\"btn btn-link\" data-toggle=\"modal\"  data-target=\"#modalEliminarPreguntaCuestionario\">
+                                        <i class=\"fa fa-trash\"></i>
                                     </button>
 
                                 </td>
+                                </tr>
+                                        ";
+                                    }
+
+                                }
+
+
+                                ?>
+
+
+
 
                             </tr>
+                            </form>
 
                             </tbody>
                         </table>
@@ -181,7 +216,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger">Si, eliminar</button>
+                <button type="button" class="btn btn-danger" onclick="eliminarPreguntas()">Si, eliminar</button>
             </div>
         </div>
     </div>
