@@ -1,7 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
-
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -23,7 +22,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 window.location='deshabilitar.php?id='+id;
             }
         }
-
     </script>
 
     <?php getTopIncludes(RUTA_INCLUDE )?>
@@ -48,7 +46,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catalogo: Cuestionarios
                 </div>
                 <div class="card-body">
-                    <a href="index.php"><button class="btn btn-primary mb-3">Nuevo</button></a>
+                    <a href="editar.php"><button class="btn btn-primary mb-3" ">Nuevo</button></a>
 
 
                     <div class="table-responsive">
@@ -56,19 +54,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         if(!empty($_GET["error"])){
                             $error=$_GET["error"];
                             if($error==1){
-
                                 echo
                                 '<div class="alert alert-success" role="alert">
                                     El cuestionario ha sido eliminado
                                 </div>';
                             }
                         }
-
                         $sql = "SELECT * FROM cuestionarios where estado='A'";
-
                         $resultado = $conexion -> query($sql);
                         if($resultado)    {
                         ?>
+                        <form action="editar.php" method="post">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
@@ -90,8 +86,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <td><?php echo $row['creacion'] ?></td>
                                     <td><?php echo $row['actualizacion'] ?></td>
                                     <td>
-                                        <a href="index.php"><i class="fas fa-edit"></i></a>
-                                        <a href="#" onclick="eliminar(<?php echo $id ?>)"><i class="fa fa-trash" > </i></a>
+                                        <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button title="Eliminar registro"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
+                                        <i class="fa fa-trash" ></i>
+                                        </button>
 
                                     </td>
                                 </tr>
@@ -101,6 +101,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tbody>
                         </table>
 
+
+                        </form>
 
                     </div>
                 </div>
