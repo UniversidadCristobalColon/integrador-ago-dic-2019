@@ -58,9 +58,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 '<div class="alert alert-success" role="alert">
                                     El cuestionario ha sido eliminado
                                 </div>';
+                            }else if($error==2){
+                                echo
+                                '<div class="alert alert-danger" role="alert">
+                                    El cuestionario no se puede eliminar porque ya ha sido utilizado en una evaluación.
+                                </div>';
                             }
                         }
-                        $sql = "SELECT * FROM cuestionarios where estado='A'";
+                        //Para llenar la tabla
+                        $sql = "SELECT * FROM cuestionarios";
                         $resultado = $conexion -> query($sql);
                         if($resultado)    {
                         ?>
