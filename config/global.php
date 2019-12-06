@@ -23,13 +23,13 @@ function getSidebar($ruta = ''){
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
     <li class="nav-item">
-        <a class="nav-link" href="{$ruta}index.php">
+        <a class="nav-link text-dark" href="{$ruta}index.php">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Inicio</span>
         </a>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
             <span>Catálogos</span>
@@ -52,17 +52,35 @@ function getSidebar($ruta = ''){
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/respuestas/">Respuestas</a>
         </div>
     </li>
+    
     <li class="nav-item">
-        <a class="nav-link" href="{$ruta}charts.php">
+        <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/cuestionario/">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Gráficos</span>
+            <span>Cuestionarios</span>
+        </a>
+    </li>  
+     
+    <li class="nav-item">
+        <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/admin/Evaluaciones/">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Evaluaciones</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{$ruta}tables.php">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tablas</span>
+    
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Resultados</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
+            <a class="dropdown-item" href="{$dir_base}app/consultas/decalogo/">Individual</a>
+            <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>            
+        </div>
+    </li>  
+    
+    <li class="text-center pt-5">        
+        <img src="{$dir_base}img/logo_ICAVE.png" id="sidebar-logo"/>
     </li>
 </ul>
 EOD;
@@ -71,73 +89,56 @@ EOD;
 }
 
 function getNavbar($ruta = ''){
-    global $dir_base;
+    global $dir_base, $conexion;
+
+    $titulo_notificaciones = '';
+    $clase_notificaciones = '';
+    $sql = "select count(id_notificaciones) from notificaciones where estado_visto = 0";
+    $res = mysqli_query($conexion, $sql);
+
+    if($res){
+        $f = mysqli_fetch_row($res);
+        $cantidad = $f[0];
+        $clase_notificaciones = $cantidad > 0 ? 'text-danger' : '';
+        $titulo_notificaciones = $cantidad == 1 ? "Tiene una notificación" : "Tiene $cantidad notificaciones";
+    }
 
     $html = <<<EOD
-<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">    
 
     <a class="navbar-brand mr-1" href="{$ruta}index.php">Evaluación 360</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
     </button>
+    
 
-    <!-- Navbar Search -->
-    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-        <!--<div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for..." aria-label="Search"
-                   aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </div>-->
-    </form>
-
-    <!-- Navbar -->
-    <ul class="navbar-nav ml-auto ml-md-0 mr-md-3 my-2 my-md-0">
-        <!--
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <span class="badge badge-danger">9+</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </li>
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
-                <span class="badge badge-danger"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </li>
-        -->
-        <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-user-circle fa-fw"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/changeEmail.php">Configurar correo electrónico</a>                
-                <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/mailConfig.php">Configurar envío e-mail</a>                
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
-            </div>
-        </li>
-    </ul>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{$dir_base}app/admin/catalogos/notificaciones/" role="button" title="$titulo_notificaciones">
+                    <i class="fas fa-bell fa-fw $clase_notificaciones"></i>                
+                </a>            
+            </li>       
+            
+            
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user-circle fa-fw"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/changeEmail.php">Configurar correo electrónico</a>                
+                    <a class="dropdown-item" href="{$dir_base}app/admin/configuracion/email/mailConfig.php">Configurar envío e-mail</a>                
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
+                </div>
+            </li>
+        </ul>
+    </div>
 </nav>
 EOD;
 
