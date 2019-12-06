@@ -95,6 +95,7 @@ function getNavbar($ruta = ''){
     $clase_notificaciones = '';
     $sql = "select count(id_notificaciones) from notificaciones where estado_visto = 0";
     $res = mysqli_query($conexion, $sql);
+
     if($res){
         $f = mysqli_fetch_row($res);
         $cantidad = $f[0];
