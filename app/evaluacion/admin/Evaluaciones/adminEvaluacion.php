@@ -181,41 +181,45 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                 <input type="hidden" name="id_evaluacion" value="<?php echo $Evaluacion?>">
                                                 <input type="hidden" name="id_departamento" value="<?php echo $Depa?>">
                                                 <input type="hidden" name="id_nombre" value="<?php echo $Nombre?>">
-                                            <div class="form-check">
-                                                <p>Evaluado</p>
-                                                <select class="form-control mb-3" name="evaluado" id="evaluado">
-                                                    <option selected value="">Seleccione al trabajador</option>
-                                                    <?php
-                                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                            LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                            LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                            LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                            WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                                    $resultado = mysqli_query($conexion,$sql);
-                                                    if($resultado){
-                                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                <div class="form-group">
+                                                    <label for="evaluado">Evaluado</label>
+                                                    <select class="form-control mb-3" name="evaluado" id="evaluado">
+                                                        <option selected value="">Seleccione al trabajador</option>
+                                                        <?php
+                                                        $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                                        $resultado = mysqli_query($conexion,$sql);
+                                                        if($resultado){
+                                                            while($fila = mysqli_fetch_assoc($resultado)){
+                                                                echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>
-                                                <p>Superior</p>
-                                                <select class="form-control mb-3" name="evaluadorS" id="evaluadorS">
-                                                    <option selected value="">Seleccione al trabajador</option>
-                                                    <?php
-                                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                            LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                            LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                            LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                            WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                                    $resultado = mysqli_query($conexion,$sql);
-                                                    if($resultado){
-                                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="evaluadorS">Superior</label>
+                                                    <select class="form-control mb-3" name="evaluadorS" id="evaluadorS">
+                                                        <option selected value="">Seleccione al trabajador</option>
+                                                        <?php
+                                                        $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
+                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                                        $resultado = mysqli_query($conexion,$sql);
+                                                        if($resultado){
+                                                            while($fila = mysqli_fetch_assoc($resultado)){
+                                                                echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                                            }
                                                         }
-                                                    }
-                                                    ?>
-                                                </select>
+                                                        ?>
+                                                    </select>
+                                                </div>
                                                 <p>Par 1</p>
                                                 <select class="form-control mb-3" name="evaluadorP1" id="evaluadorP1">
                                                     <option selected value="">Seleccione al trabajador</option>
@@ -277,8 +281,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                     }
                                                     ?>
                                                 </select>
-                                                <input type="checkbox" name="auto" value="1"> Autoevaluación
-                                            </div>
+                                                <input type="checkbox" name="auto" value="1"> Autoevaluación                                            
                                             </form>
                                         </div>
                                     <div class="modal-footer">
