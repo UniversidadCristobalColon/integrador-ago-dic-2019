@@ -22,14 +22,15 @@ if(confirmar()) {
     <title>Evaluación 360</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../../../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin.css" rel="stylesheet">
+    <link href="../css/estilos.css" rel="stylesheet">
 
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark index-login">
 <?php 
     $errores[1] = 'No existe la cuenta de usuario.';
     $errores[2] = 'Usuario o contraseña incorrecto.';
@@ -54,6 +55,9 @@ if(confirmar()) {
     }
 ?>
 <div class="container">
+    <div class="text-center">
+        <img src="../img/logo_ICAVE.png" id="logo"/>
+    </div>
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Bienvenido</div>
         <div class="card-body">
