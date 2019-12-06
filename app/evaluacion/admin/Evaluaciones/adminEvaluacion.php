@@ -332,7 +332,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <button title="Eliminar registro"  type="button" onclick="eliminar(<?php echo $id_eliminar?>, <?php echo $Evaluacion?>, <?php echo $Depa?>, '<?php echo $Nombre?>')" class="btn btn-xs btn-light" ">
                         <i class="fa fa-trash" ></i>
                         </button>
-                        <?php echo " ".$nombre_evaluado." ".$apellido_evaluado ?>
+                        <?php echo "".$nombre_evaluado." ".$apellido_evaluado ?>
                         <?php  ?>
                         <ul class="list-group">
                             <?php
@@ -341,9 +341,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 $apellido=$row2['apellidos'];
                                 $puesto=$row2['puesto'];
                                 $npuesto=$row2['nivel_puesto'];
+
+                                //$estado = $row2['estado'];
+                                $estado = 'A';
+
+                                $clase = '';
+                                switch($estado){
+                                    case 'A':
+                                        $clase = 'text-danger';
+                                        break;
+                                    case 'B':
+                                        $clase = 'text-warning';
+                                        break;
+                                    case 'C':
+                                        $clase = 'text-success';
+                                        break;
+
+                                }
                                 ?>
 
-                                <li class="list-group-item"><?php echo $nombre." ".$apellido." ($puesto, $npuesto)"?></li>
+                                <li class="list-group-item"><i class="fa fa-circle <?php echo $clase ?>"></i> <?php echo $nombre." ".$apellido." ($puesto, $npuesto)"?></li>
 
                                 <?php
                             }
