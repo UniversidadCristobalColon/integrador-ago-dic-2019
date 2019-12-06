@@ -1,7 +1,37 @@
 <?php
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
-
+$Actualizar = 0;
+$Evaluacion = $_GET['id'];
+$Nombre = "";
+$Departamento = "";
+$Cuestionario = "";
+$Periodo = "";
+$Inicio = "";
+$Fin = "";
+function convertirFecha($fecha){
+    $outs = explode('-',$fecha);
+    return "$outs[1]/$outs[2]/$outs[0]";
+}
+if (!empty($Evaluacion)){
+    $Actualizar = 1;
+    $sql = "SELECT cuestionarios.id as id_cuestionario , departamentos.id as id_departamento, periodos.id as id_periodo, evaluaciones.inicio, evaluaciones.fin, evaluaciones.descripcion from evaluaciones
+            LEFT JOIN cuestionarios ON cuestionarios.id = evaluaciones.id_cuestionario
+            LEFT JOIN departamentos ON departamentos.id = evaluaciones.id_departamento
+            LEFT JOIN periodos ON periodos.id = evaluaciones.id_periodo
+            where evaluaciones.id = $Evaluacion";
+    $resultado = mysqli_query($conexion,$sql);
+    if($resultado){
+        $fila = mysqli_fetch_assoc($resultado);
+        //var_dump($fila);
+        $Nombre = $fila['descripcion'];
+        $Departamento = $fila['id_departamento'];
+        $Cuestionario = $fila['id_cuestionario'];
+        $Periodo = $fila['id_periodo'];
+        $Inicio = convertirFecha($fila['inicio']);
+        $Fin = convertirFecha($fila['fin']);
+    }
+}
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -23,35 +53,43 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <link rel="stylesheet" href="../../../../vendor/datepicker/css/bootstrap-datepicker.standalone.min.css">
 
     <script>
-        /*$(function () {
-            $("#F-inicio").datepicker({
-                closeText: 'Cerrar',
-                prevText: '<Ant',
-                nextText: 'Sig>',
-                currentText: 'Hoy',
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
-                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
-                weekHeader: 'Sm',
-                dateFormat: 'dd/mm/yy',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''
-            });
-        });*/
-
-        /*$(document).ready(function () {
-            $('#F-inicio').datepicker();
-            dateFormat = 'yy-m-d';
-                inline = true;
-                onselect = function (dateText, inst) {
-                    var date = new Date(dateText);
-                    alert(date.getDate() + date.getMonth() + date.getFullYear());
+        function validar(){
+            var descripcion = $('#Descripcion').val();
+            var departamento = $('#Departamento').val();
+            var cuestionario = $('#Cuestionario').val();
+            var periodo = $('#Periodo').val();
+            var inicio = $('#Inicio').val();
+            var fin = $('#Fin').val();
+            if (descripcion == "") {
+                alert("Escriba un nombre para la evaluación");
+                return false;
             }
-        });*/
+            if (departamento == "") {
+                alert("Seleccione el departamento a evaluar");
+                return false;
+            }
+            if (cuestionario == "") {
+                alert("Seleccione el cuestionario de la evaluación");
+                return false;
+            }
+            if (periodo == "") {
+                alert("Seleccione el periodo de la evaluación");
+                return false;
+            }
+            if (inicio == "") {
+                alert("Seleccione el inicio de la evaluación");
+                return false;
+            }
+            if (fin == "") {
+                alert("Seleccione el fin de la evaluación");
+                return false;
+            }
+            if (inicio > fin){
+                alert("La fecha de inicio no puede ser mayor a la fecha de fin");
+                return false;
+            }
+            return true;
+        }
 
         $(document).ready(function () {
             $('#F-inicio').datepicker();
@@ -76,22 +114,25 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         <div class="container-fluid">
 
             <!-- Page Content -->
-            <form action="guardar.php" method="post">
+            <form action="guardar.php" method="post" onsubmit="return validar()">
+                <input type="hidden" name="actualizar" value="<?php echo $Actualizar?>">
+                <input type="hidden" name="id_evaluacion" value="<?php echo $Evaluacion?>">
                 <h1>Nueva Evaluación</h1>
                 <hr>
                 <div class="form-group">
                     <label for="Descripcion">Nombre de la evaluación:</label>
-                    <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion">
+                    <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion" value="<?php echo $Nombre ?>">
 
                     <label for="Evaluar">Departamento:</label>  <!-- Evaluado -->
                     <select class="form-control mb-3" id="Departamento" name="Departamento">
-                        <option selected disabled>Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from departamentos";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
-                                echo "<option value = '$fila[id]'>$fila[departamento]</option>";
+                                $selected = $fila['id'] == $Departamento ? 'selected="selected"' : '';
+                                echo "<option $selected value = '$fila[id]'>$fila[departamento]</option>";
                             }
                         }
                         ?>
@@ -99,13 +140,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <label for="Cuestionario">Cuestionario:</label>
                     <select class="form-control mb-3" id="Cuestionario" name="Cuestionario">
-                        <option selected disabled>Seleccione una opción</option>
+                        <option selected value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from cuestionarios";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
-                                echo "<option value = '$fila[id]'>$fila[cuestionario]</option>";
+                                $selected = $fila['id'] == $Cuestionario ? 'selected="selected"' : '';
+                                echo "<option $selected value = '$fila[id]'>$fila[cuestionario]</option>";
                             }
                         }
                         ?>
@@ -113,13 +155,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <label for="Periodo">Periodo:</label>
                     <select class="form-control mb-3" id="Periodo" name="Periodo">
-                        <option selected disabled>Seleccione una opción</option>
+                        <option selected value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from periodos";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
-                                echo "<option value = '$fila[id]'>$fila[periodo]</option>";
+                                $selected = $fila['id'] == $Periodo ? 'selected="selected"' : '';
+                                echo "<option $selected value = '$fila[id]'>$fila[periodo]</option>";
                             }
                         }
                         ?>
@@ -131,13 +174,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <div class="col">
                                 <label>Inicia:</label>
                                 <div class="input-group date" id="F-inicio">
-                                    <input type="text" class="form-control mb-3" name="Inicio" id="Inicio" readonly><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                    <input type="text" class="form-control mb-3" name="Inicio" id="Inicio" readonly value="<?php echo $Inicio ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                             <div class="col">
                                 <label>Termina:</label>
                                 <div class="input-group date" id="F-fin">
-                                    <input type="text" class="form-control mb-3" name="Fin" id="Fin" readonly><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                    <input type="text" class="form-control mb-3" name="Fin" id="Fin" readonly value="<?php echo $Fin ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                         </div>
