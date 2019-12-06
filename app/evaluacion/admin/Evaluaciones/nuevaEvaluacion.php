@@ -2,7 +2,7 @@
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
 $Actualizar = 0;
-$Evaluacion = $_GET['id'];
+$Evaluacion = 0;
 $Nombre = "";
 $Departamento = "";
 $Cuestionario = "";
@@ -13,8 +13,9 @@ function convertirFecha($fecha){
     $outs = explode('-',$fecha);
     return "$outs[1]/$outs[2]/$outs[0]";
 }
-if (!empty($Evaluacion)){
+if (!empty($_GET['id'])){
     $Actualizar = 1;
+    $Evaluacion = $_GET['id'];
     $sql = "SELECT cuestionarios.id as id_cuestionario , departamentos.id as id_departamento, periodos.id as id_periodo, evaluaciones.inicio, evaluaciones.fin, evaluaciones.descripcion from evaluaciones
             LEFT JOIN cuestionarios ON cuestionarios.id = evaluaciones.id_cuestionario
             LEFT JOIN departamentos ON departamentos.id = evaluaciones.id_departamento

@@ -156,22 +156,39 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                 <button class="btn btn-info mb-3">Cálculo de promedio</button>
 
+                <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalSiguiente">
+                    Agregar
+                </button>
+            <p>Progreso general de la evaluacion:</p>
+            <?php
+                $total = 0;
+                $Correctas = 0;
+                $sqlTotal = "SELECT COUNT(aplicaciones.estado) as total FROM aplicaciones 
+                WHERE aplicaciones.id_evaluacion = $Evaluacion";
+                $resultadoTotal = mysqli_query($conexion,$sqlTotal);
+                if($resultadoTotal){
+                    $fila = mysqli_fetch_assoc($resultadoTotal);
+                    $total = $fila['total'];
+                }
+                $sqlCorrectas = "SELECT COUNT(aplicaciones.estado) as contestadas FROM aplicaciones 
+                WHERE aplicaciones.id_evaluacion = $Evaluacion and aplicaciones.estado = 'C'";
+                $resultadoCorrectas = mysqli_query($conexion,$sqlCorrectas);
+                if($resultadoCorrectas){
+                    $fila = mysqli_fetch_assoc($resultadoCorrectas);
+                    $Correctas = $fila['contestadas'];
+                }
+            ?>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: <?php echo ($Correctas*100)/$total ?>%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><?php echo ($Correctas*100)/$total ?>%</div>
+            </div>
+            <br>
                 <div class="form-group">
 
-                    <div class="input-group mb-3 col-3">
-                        <p>Personal a evaluar</p>
-
-                        <!-- modal -->
-
-                        <button type="button" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modalSiguiente">
-                            Agregar
-                        </button>
-                    </div>
                         <div class="modal fade" id="modalSiguiente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modal"><?php echo $Nombre?></h5>
+                                        <h5 class="modal-title" id="modal">Agregar una evaluación</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -307,7 +324,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         }
                         if (!empty($evaluados)) {
                         foreach ($evaluados as $id_evaluado) {
-                        $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, niveles_puesto.nivel_puesto from aplicaciones app 
+                        $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, niveles_puesto.nivel_puesto, app.estado from aplicaciones app 
                                                 left join empleados emp on app.id_evaluador=emp.id 
                                                 LEFT JOIN puestos ON emp.id_puesto = puestos.id 
                                                 LEFT JOIN niveles_puesto ON niveles_puesto.id = puestos.id_nivel_puesto 
@@ -341,9 +358,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 $apellido=$row2['apellidos'];
                                 $puesto=$row2['puesto'];
                                 $npuesto=$row2['nivel_puesto'];
+                                $estado=$row2['estado'];
 
                                 //$estado = $row2['estado'];
-                                $estado = 'A';
+                                //$estado = 'A';
 
                                 $clase = '';
                                 switch($estado){
@@ -373,11 +391,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             }
                             ?>
                     </form>
-                    <p>Progreso:</p>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 18%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">18%</div>
-                    </div>
-                    <br>
             </div>
 
         </div>
