@@ -199,6 +199,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         }
                                                         ?>
                                                     </select>
+                                                    <input type="checkbox" name="auto" value="1"> El evaluado se auto-evalúa                                            
                                                 </div>
                                                 
                                                 <div class="form-group">
@@ -280,8 +281,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         }
                                                     }
                                                     ?>
-                                                </select>
-                                                <input type="checkbox" name="auto" value="1"> Autoevaluación                                            
+                                                </select>                                                
                                             </form>
                                         </div>
                                     <div class="modal-footer">
