@@ -15,7 +15,7 @@ if(!confirmar()) {
 }
 
 */
-echo getUrl();
+
 function getUrl(){
     require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
     $sql = 'SELECT url
