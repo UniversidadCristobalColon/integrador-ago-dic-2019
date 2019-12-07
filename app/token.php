@@ -4,6 +4,7 @@ $email = @$_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
 require '../config/global.php';
+define('PROYECTO', getUrl('../'));
 require '../config/db.php';
 
 /*
