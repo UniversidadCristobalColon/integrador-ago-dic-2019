@@ -64,16 +64,13 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                 </div>
 
                 <div class="card-body">
-
+                    <form method="get">
                     <div class="row">
 
                         <div class="col">
-
-                            <form method="get">
-
-                            Periodos <br><br>
+                            <label>Periodos</label>
                             <div class="dropdown">
-                                <button class="browser-default custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleccione periodos</button>
+                                <button class="custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleccione periodos</button>
                                 <ul class="dropdown-menu">
                                     <?php
                                     $sql="SELECT id, periodo FROM periodos";
@@ -86,11 +83,13 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                                     ?>
                                 </ul>
                             </div>
+
                         </div>
 
                         <div class="col">
-                            Departamento <br><br>
-                            <select class="browser-default custom-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="departamentos" name="departamento">
+                            <div class="form-group">
+                            <label>Departamento</label>
+                            <select class="browser-default custom-select" id="departamentos" name="departamento">
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
                                 $sql="SELECT id, departamento FROM departamentos";
@@ -102,25 +101,25 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                                 }
                                 ?>
                             </select>
+                            </div>
                         </div>
 
                         <div class="col">
-                            Empleados <br><br>
+                            <div class="form-group">
+                           <label>Empleados</label>
                             <select class="browser-default custom-select" id="empleados" name="empleado" >
                             </select>
+                            </div>
                         </div>
 
+
                         <div class="col">
-                        </div>
-                        <div class="col">
+                            <input type="submit" class="btn btn-primary mt-4" value="Buscar">
                         </div>
 
                     </div>
 
 
-                    <br>
-                    <input type="submit" class="btn btn-dark" value="Aceptar">
-                    <br> <br>
 
                     </form>
 
@@ -132,75 +131,93 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                     //echo " ";
                     $empleado = @$_GET['empleado'];
                     //echo "<br>";
+$anterior = null;
+                        if (isset($_GET['periodo'])){
+                            if (isset($_GET['departamento'])){
+                                if (isset($_GET['empleado'])) {
+                                    //    foreach($_GET['periodo'] as $periodo){
 
-                        $sql = "SELECT (SELECT periodo FROM periodos WHERE id = p.id_periodo) AS \"Periodo\", 
+                                   $sql = "SELECT (SELECT periodo FROM periodos WHERE id = p.id_periodo) AS \"Periodo\", 
                                 (SELECT nombre FROM empleados WHERE id = p.id_evaluado) AS \"Nombre de Evaluado\", 
                                 (SELECT apellidos FROM empleados WHERE id = p.id_evaluado) AS \"Apellido de Evaluado\", 
                                 (SELECT nivel_puesto FROM niveles_puesto WHERE id = p.id_evaluador_nivel) AS \"Nivel de Puesto\", 
                                 (SELECT aseveracion FROM decalogos_aseveraciones WHERE id = (SELECT id_decalogo_aseveracion FROM preguntas WHERE id = p.id_pregunta)) AS \"Aseveraciones\", 
-                                puntos AS \"Puntos\"
-                                FROM promedios_por_evaluado AS p";
-                            $res = $conexion->query($sql);
+                                puntos AS \"Puntos\",
+                                (SELECT p.id_pregunta) AS \"Id Pregunta\"
+                                FROM promedios_por_evaluado AS p
+                                WHERE id_evaluado = " . $_GET["empleado"]."
+                                ORDER BY p.id_evaluador_nivel
+                                ";
+                                    $res = $conexion->query($sql);
 
-                            if ($res) {
-                                $row = $res->fetch_assoc();
-
-                                ?>
-                                <!--<h3>Resultados de <?php //echo $row['Nombre de Evaluado']. ' ' .$row['Apellido de Evaluado']  ?></h3>-->
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" width="100%" cellspacing="0">
-                                        <thead>
-                                        <tr>
-                                            <td><?php echo $row['Nivel de Puesto']; ?></td>
-                                            <?php
-                                            if(isset($periodos)) {
-                                            foreach ($periodos as $periodo) {
-                                                echo "<td>" . $periodo . "</td>";
-                                            }
-                                            }
+                                    if ($res) {
+                                        $row = $res->fetch_assoc();
+                                        if (isset($row['Nombre de Evaluado'])) {
                                             ?>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
 
+                                            <div class="table-responsive">
+                                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                            <thead>
                                             <tr>
-                                                <td><?php echo $row['Aseveraciones'] ?></td>
+                                                <td><h3>Resultados
+                                                        de <?php echo $row['Nombre de Evaluado'] . ' ' . $row['Apellido de Evaluado'] ?></h3></td>
                                                 <?php
-                                                if(isset($periodos)) {
+
+                                                if (isset($periodos)) {
                                                     foreach ($periodos as $periodo) {
-                                                        echo "<td>" . $row['Puntos'] . "</td>";
+                                                        echo "<td>" . $periodo . "</td>";
                                                     }
                                                 }
+
                                                 ?>
                                             </tr>
+                                            </thead>
+                                            <tbody>
 
 
                                             <?php
+                                            $res = $conexion->query($sql);
                                             while ($row = $res->fetch_assoc()) {
                                                 ?>
+                                                <?php if($row['Nivel de Puesto'] != $anterior) {echo "<tr><td colspan='5'><b>".$row['Nivel de Puesto']."</b></tr></td>"; } $anterior = $row['Nivel de Puesto']; ?>
+
                                                 <tr>
-                                                    <td><?php echo $row['Aseveraciones'] ?></td>
+                                                    <td><?php echo $row['Aseveraciones']; ?></td>
                                                     <?php
-                                                    if(isset($periodos)) {
+                                                    if (isset($periodos)) {
                                                         foreach ($periodos as $periodo) {
-                                                            echo "<td>" . $row['Puntos'] . "</td>";
+                                                            $sql1 = "SELECT puntos FROM promedios_por_evaluado WHERE id_evaluado = \"" . $_GET["empleado"] . "\"
+                                                                    AND id_periodo = (SELECT id FROM periodos WHERE periodo = \"" . $periodo . "\")
+                                                                    AND id_pregunta = " . $row["Id Pregunta"];
+                                                            //echo "<br>";
+                                                            $res1 = $conexion->query($sql1);
+                                                            $row1 = $res1->fetch_assoc();
+                                                            if(isset($row1['puntos'])) {
+                                                                echo "<td>" . $row1['puntos'] . "</td>";
+                                                            } else {
+                                                                echo "<td> - </td>";
+                                                            }
                                                         }
                                                     }
+
                                                     ?>
                                                 </tr>
+
                                                 <?php
                                             }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                                        } //ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
+
+                                ?>
+                                </tbody>
+                                </table>
                                 </div>
                                 <?php
 
-                                while ($row = $res->fetch_assoc()) {
-                                    //echo $row['Periodo'] . " " . $row['Nombre de Evaluado'] . " " . $row['Apellido de Evaluado'] . " " . $row['Nivel de Puesto'] . " " . $row['Aseveraciones'] . " " . $row['Puntos'] . "<br>";
-
-                                }
                             }
+
+                                } //ESTE ES EL IF DE SELECCIONAR PERIODO
+                            } //ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
+                        } //ESTE ES EL IF DE SELECCIONAR EMPLEADO
                     ?>
 
                 <!--
