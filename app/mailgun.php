@@ -13,7 +13,7 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
     $sql = 'SELECT host, port, username, password, email_name 
             FROM email_conf
-            WHERE id = 2';
+            WHERE id = 1';
 
     $res = $conexion->query($sql);
 
