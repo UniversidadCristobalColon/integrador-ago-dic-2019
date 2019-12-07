@@ -152,10 +152,10 @@ if(isset($email)) {
         }
         $_SESSION['usuario'] = $email;
         //echo 'Bienvenido '.$email.'.';
-        header('location: '.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/admin/catalogos/competencias/index.php');
+        header('location: http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/admin/catalogos/competencias/index.php');
         exit();
     } else {
-        header('location: '.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/index.php?error=2');
+        header('location: http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/index.php?error=2');
         exit();
     }
 }
