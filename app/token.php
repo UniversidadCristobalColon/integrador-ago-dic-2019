@@ -62,7 +62,7 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
                         utf8_decode('Restablecer Contraseña'), 
                         'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
                         .$email.'&token='.$token,
-                        null
+                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/admin/configuracion/email/changeEmail.php'
                     ); 
         }
     } else {
