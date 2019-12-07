@@ -16,6 +16,25 @@ if(!confirmar()) {
 
 */
 
+Global $url = getUrl();
+
+function getUrl(){
+    require '../config/db.php';
+
+    $sql = 'SELECT url
+            FROM email_conf
+            WHERE id = 1';
+
+    $res = $conexion->query($sql);
+
+    if($res) { 
+        $assoc = $res->fetch_assoc();
+        return $assoc['url'];
+    } else {
+        return 'proyecto';
+    }
+}
+
 function getSidebar($ruta = ''){
     global $dir_base;
 
