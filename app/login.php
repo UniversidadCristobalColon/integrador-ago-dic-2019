@@ -5,6 +5,7 @@
 
 require '../config/global.php';
 define('PROYECTO', getUrl('../'));
+echo PROYECTO;
 require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
 
 $email = @$_POST['email'];
