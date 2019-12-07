@@ -1,0 +1,217 @@
+html {
+    margin: 0;
+}
+
+hr {
+    page-break-after: always;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10pt;
+    margin: 6mm 8mm 2mm 8mm;
+    background-color: #FFFFFF;
+}
+
+
+.part1 {
+    float: left;
+}
+
+.img-1 {
+    width: 260px;
+    margin: 2%;
+    float: left;
+}
+
+.enc-1 {
+    font-size: 10pt;
+    margin-left: 350pt;
+    margin-top: 5%;
+    text-align: justify;
+    float: left;
+    letter-spacing: 1px;
+}
+
+.enc-2 {
+    font-size: 10pt;
+    margin-left: 130pt;
+    margin-top: 130pt;
+    text-align: justify;
+    float: left;
+    letter-spacing: 1px;
+}
+
+.pie1 {
+    font-size: 11.5pt;
+    margin-top: 10%;
+    margin-left: 5%;
+    color: darkgray;
+    text-align: justify;
+    float: left;
+    letter-spacing: 1px;
+}
+
+.pie2 {
+    font-size: 11.5pt;
+    margin-left: 38%;
+    color: darkgray;
+    text-align: justify;
+    float: left;
+    letter-spacing: 1px;
+}
+
+.pie3 {
+    font-size: 11.5pt;
+    margin-left: 53%;
+    color: darkgray;
+    text-align: justify;
+    float: left;
+    letter-spacing: 1px;
+}
+
+
+.tabla1 {
+    border: 1px black solid;
+    border-collapse: collapse;
+    margin-top: 70px;
+    padding-top: 70px;
+    width: 100%;
+}
+
+.tabla11 {
+    border: 1px black solid;
+    border-collapse: collapse;
+    margin-top: 45px;
+    padding-top: 45px;
+    width: 100%;
+}
+
+.tabla2 {
+    border: 1px black solid;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tabla3 {
+    border: 1px black solid;
+    border-collapse: collapse;
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-left: 50%;
+    width: 132%;
+}
+
+.tabla4 {
+    border: 1px black solid;
+    border-collapse: collapse;
+    margin-top: 23px;
+    padding-top: 23px;
+    margin-left: 39%;
+    width: 125%;
+}
+
+.th1 {
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    color: #ffffff;
+    background: #051867;
+    letter-spacing: 2px;
+    width: 50%;
+}
+
+.th2 {
+    border: 1px black solid;
+    text-transform: uppercase;
+    font-size: 10pt;
+    text-align: center;
+    color: #ffffff;
+    background: #4EB7F5;
+    letter-spacing: 2px;
+    width: 47%;
+}
+
+.th3 {
+    border: 1px black solid;
+    text-transform: uppercase;
+    font-size: 10pt;
+    text-align: center;
+    color: #ffffff;
+    background: #051867;
+    letter-spacing: 1px;
+    width: 35%;
+}
+
+.u1 {
+    text-decoration: none;
+    border-bottom: 1.5px solid white;
+    font-size: 16pt;
+    text-align: center;
+}
+
+.td1 {
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    letter-spacing: 2px;
+    width: 50%;
+}
+
+.td2 {
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    background: #4EB7F5;
+    color: #FFFFFF;
+    letter-spacing: 2px;
+    width: 20%;
+}
+
+.td3 {
+    border: 1px black solid;
+    font-size: 9pt;
+    text-align: justify;
+    letter-spacing: 2px;
+    width: 120%;
+}
+
+.td4 {
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    letter-spacing: 2px;
+    width: 1%;
+}
+
+.td5 {
+    font-weight: bold;
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    letter-spacing: 2px;
+    width: 10%;
+}
+
+.td6 {
+    font-weight: bold;
+    border: 1px black solid;
+    font-size: 10pt;
+    text-align: center;
+    letter-spacing: 2px;
+    width: 60%;
+}
+
+.td7 {
+    border: 1px black solid;
+    font-size: 9pt;
+    text-align: center;
+    letter-spacing: 2px;
+    width: 140%;
+}
+
+
+

@@ -1,3 +1,13 @@
+<?php
+
+require 'login.php';
+
+if(confirmar()) {
+    header('location: /app/admin/catalogos/competencias/index.php');
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -16,32 +26,57 @@
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin.css" rel="stylesheet">
+    <link href="../css/estilos.css" rel="stylesheet">
 
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark index-login">
+<?php 
+    $errores[1] = 'No existe la cuenta de usuario.';
+    $errores[2] = 'Usuario o contraseña incorrecto.';
+    
+    $errores[4] = 'Error contraseña sobrepasa el límite de caracteres.';
+    $errores[5] = 'Error token invalido.';
 
+    $errores[6] = 'Consulte al administrador del sistema para validar su correo.';
+
+    $alertas[1] = 'Se ha cambiado la contraseña.';
+
+    if(isset($_GET['error'])) {
+        if(isset($errores[$_GET['error']])) {
+            echo '<div class="alert alert-danger">'.$errores[$_GET['error']].'</div>';
+        }
+    }
+
+    if(isset($_GET['alert'])) {
+        if(isset($alertas[$_GET['alert']])) {
+            echo '<div class="alert alert-success">'.$alertas[$_GET['alert']].'</div>';
+        }
+    }
+?>
 <div class="container">
+    <div class="text-center">
+        <img src="../img/logo_ICAVE.png" id="logo"/>
+    </div>
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Bienvenido</div>
         <div class="card-body">
-            <form>
+            <form method="post" action="login.php">
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Email address"
-                               required="required" autofocus="autofocus">
-                        <label for="inputEmail">Email address</label>
+                        <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico"
+                               required="required" autofocus="autofocus" name="email">
+                        <label for="inputEmail">Correo electrónico</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Password"
-                               required="required">
-                        <label for="inputPassword">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña"
+                               required="required" name="pass">
+                        <label for="inputPassword">Contraseña</label>
                     </div>
                 </div>
-
-                <a class="btn btn-primary btn-block" href="index.php">Ingresar</a>
+                <input type="submit" value="Ingresar" class="btn btn-primary btn-block">
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="recuperar.php">¿Olvidó su contraseña?</a>

@@ -1,3 +1,4 @@
+
 /*!
  * Start Bootstrap - SB Admin v5.1.1 (https://startbootstrap.com/template-overviews/sb-admin)
  * Copyright 2013-2019 Start Bootstrap
@@ -2614,8 +2615,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #009be0;
+  border-color: #009be0;
 }
 
 .btn-primary:hover {
@@ -6985,7 +6986,9 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-  background-color: #343a40 !important;
+  /*background-color: #343a40 !important;*/
+  background-color: #002e6d !important;
+
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
@@ -10670,7 +10673,11 @@ body {
 
 .sidebar {
   width: 90px !important;
-  background-color: #212529;
+  /*background-color: #009bde;*/
+  background-color: #eaeaea;
+
+
+
   min-height: calc(100vh - 56px);
 }
 
