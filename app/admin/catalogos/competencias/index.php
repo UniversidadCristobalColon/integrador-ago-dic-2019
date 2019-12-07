@@ -4,11 +4,11 @@ include '../../../../config/db.php';
 session_start();
 require_once '../../../../config/global.php';
 ob_start();
+
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,11 +23,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 <body id="page-top">
 
+
+<?php getNavbar() ?>
 <?php 
     getModalLogout('../../../');
     getNavbar();
 ?>
-
 <div id="wrapper">
 
     <?php getSidebar() ?>
@@ -35,6 +36,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <div id="content-wrapper">
 
         <div class="container-fluid">
+          
             <!-- DataTables Example -->
             <div class="card mb-3">
                 <div class="card-header">
