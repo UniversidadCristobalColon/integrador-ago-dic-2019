@@ -17,7 +17,7 @@ if(!confirmar()) {
 */
 
 define('PROYECTO', getUrl());
-
+echo PROYECTO;
 function getUrl(){
     require '../config/db.php';
 
