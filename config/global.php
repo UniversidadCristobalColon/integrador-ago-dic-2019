@@ -15,7 +15,7 @@ if(!confirmar()) {
 }
 
 */
-
+getUrl('../');
 function getUrl($ruta){
     echo $ruta.'config/db.php';
     require $ruta.'config/db.php';
