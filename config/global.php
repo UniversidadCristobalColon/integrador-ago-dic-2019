@@ -15,7 +15,7 @@ if(!confirmar()) {
 }
 
 */
-getUrl('../');
+/*
 function getUrl($ruta){
     echo $ruta.'config/db.php';
     require $ruta.'config/db.php';
@@ -33,7 +33,7 @@ function getUrl($ruta){
         return 'proyecto';
     }
 }
-
+*/
 function getSidebar($ruta = ''){
     global $dir_base;
 
