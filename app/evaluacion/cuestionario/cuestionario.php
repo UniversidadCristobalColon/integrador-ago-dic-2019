@@ -101,12 +101,46 @@
     
                 //GET PREGUNTAS DE LA PÁGINA ACTUAL
                 $sql_preguntas_pagina = $conexion->query( $sql );
+
+                // GET TOTAL DE RESPUESTAS Y PREGUNTAS PARA PODER SACAR EL PORCENTAJE COMPLETADO
+                $sql = 'SELECT COUNT(preguntas.id) 
+                        AS PREGUNTAS 
+                        FROM preguntas 
+                        INNER JOIN cuestionarios 
+                        ON preguntas.id_cuestionario = cuestionarios.id 
+                        INNER JOIN evaluaciones 
+                        ON cuestionarios.id = evaluaciones.id_cuestionario 
+                        INNER JOIN aplicaciones 
+                        ON evaluaciones.id = aplicaciones.id_evaluacion
+                        WHERE aplicaciones.id = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_preguntas =  $row['PREGUNTAS'];
+                
+                $sql = 'SELECT COUNT( resultados.id_pregunta ) 
+                        AS RESULTADOS
+                        FROM resultados 
+                        WHERE resultados.id_aplicacion = '.$id_aplicacion.'';
+                $sql = $conexion->query( $sql );
+                $row = $sql->fetch_assoc();
+                $total_respuestas =  $row['RESULTADOS'];
     
+                // CALCULAR EL PORCENTAJE COMPLETADO
+                $porcentaje_completado = ( $total_respuestas == 0 ) ? 0 : ( 100/$total_preguntas ) * $total_respuestas;
+    
+                // REDONDEAR PORCENTAJE COMPLETADO
+                $porcentaje_completado = round( $porcentaje_completado, 0, PHP_ROUND_HALF_UP );
+                if ( $porcentaje_completado > 100 ) {
+                    $porcentaje_completado = 100  . '%';
+                } else {
+                    $porcentaje_completado = $porcentaje_completado  . '%';
+                }
+                $numero_pregunta = $total_respuestas + 1;
                 $echo_pregunta = '';
                 while ( $row = $sql_preguntas_pagina->fetch_assoc() ) {
                         $echo_pregunta .= '<div class="form-group pt-3 pb-3">';
     
-                        $echo_pregunta .= '<p>'. $row['orden'] . '.-' . $row['pregunta'].'</p>';
+                        $echo_pregunta .= '<p>'. $numero_pregunta++ . '.-' . $row['pregunta'].'</p>';
     
                         if ( $row['tipo'] == 'A' ) {
                             $echo_pregunta .= '
@@ -148,40 +182,6 @@
                         $echo_pregunta .= '<hr>';
                 }
     
-                // GET TOTAL DE RESPUESTAS Y PREGUNTAS PARA PODER SACAR EL PORCENTAJE COMPLETADO
-                $sql = 'SELECT COUNT(preguntas.id) 
-                        AS PREGUNTAS 
-                        FROM preguntas 
-                        INNER JOIN cuestionarios 
-                        ON preguntas.id_cuestionario = cuestionarios.id 
-                        INNER JOIN evaluaciones 
-                        ON cuestionarios.id = evaluaciones.id_cuestionario 
-                        INNER JOIN aplicaciones 
-                        ON evaluaciones.id = aplicaciones.id_evaluacion
-                        WHERE aplicaciones.id = '.$id_aplicacion.'';
-                $sql = $conexion->query( $sql );
-                $row = $sql->fetch_assoc();
-                $total_preguntas =  $row['PREGUNTAS'];
-                
-                $sql = 'SELECT COUNT( resultados.id_pregunta ) 
-                        AS RESULTADOS
-                        FROM resultados 
-                        WHERE resultados.id_aplicacion = '.$id_aplicacion.'';
-                $sql = $conexion->query( $sql );
-                $row = $sql->fetch_assoc();
-                $total_respuestas =  $row['RESULTADOS'];
-    
-                // CALCULAR EL PORCENTAJE COMPLETADO
-                $porcentaje_completado = ( $total_respuestas == 0 ) ? 0 : ( 100/$total_preguntas ) * $total_respuestas;
-    
-                // REDONDEAR PORCENTAJE COMPLETADO
-                $porcentaje_completado = round( $porcentaje_completado, 0, PHP_ROUND_HALF_UP );
-                if ( $porcentaje_completado > 100 ) {
-                    $porcentaje_completado = 100  . '%';
-                } else {
-                    $porcentaje_completado = $porcentaje_completado  . '%';
-                }
-    
             }
             $conexion->close();
         }
@@ -190,6 +190,8 @@
 
     
     if ( $_SERVER['REQUEST_METHOD']  ==  'POST' ) {
+
+        // COMPROBAR QUE TODAS LAS PREGUNTAS TENGAN RESPUESTA
         foreach ($_POST as $key => $value) {
             if ( $value == 'none' || $value == '' ) {
                 $errores .= 'No se han respondido todas las preguntas.<br>';
@@ -200,74 +202,132 @@
         }
 
         if ( $errores == '' ) {
-            $respuesta_existe = 0;
+            $id_aplicacion = $_POST['id_aplicacion'];
+            // POR CADA VALOR DE $POST COMO $KEY SACAR $VALUE
             foreach ($_POST as $key => $value) {
+                // SI SE LLEGA AL ID_APLICACION QUE NO HAGA NADA
                 if ( $key != 'id_aplicacion' ) {
-                    $sql = 'SELECT preguntas.tipo, preguntas.orden 
-                            AS ORDEN_PREGUNTA 
-                            FROM preguntas 
-                            INNER JOIN cuestionarios 
-                            ON preguntas.id_cuestionario = cuestionarios.id INNER JOIN evaluaciones 
-                            ON cuestionarios.id = evaluaciones.id_cuestionario INNER JOIN aplicaciones 
-                            ON evaluaciones.id = aplicaciones.id_evaluacion WHERE aplicaciones.id = '.$_POST['id_aplicacion'].'
-                            AND preguntas.id = '.$key.'';
+
+                    // GET TIPO Y ORDEN PREGUNTA
+                    $sql = '
+                        SELECT
+                            preguntas.tipo AS TIPO_PREGUNTA,
+                            preguntas.orden AS ORDEN_PREGUNTA
+                        FROM preguntas
+                        INNER JOIN cuestionarios
+                        ON preguntas.id_cuestionario = cuestionarios.id
+                        INNER JOIN evaluaciones
+                        ON cuestionarios.id = evaluaciones.id_cuestionario
+                        INNER JOIN aplicaciones
+                        ON evaluaciones.id = aplicaciones.id_evaluacion
+                        WHERE aplicaciones.id = '.$id_aplicacion.'
+                        AND preguntas.id = '.$key.'';
                     $sql = $conexion->query( $sql );
                     $sql = $sql->fetch_assoc();
+                    $tipo_pregunta = $sql['TIPO_PREGUNTA'];
                     $orden_pregunta = $sql['ORDEN_PREGUNTA'];
-                    $tipo_pregunta = $sql['tipo'];
-
-                    $sql = 'SELECT resultados.id_respuesta
-                            FROM resultados
-                            WHERE id_pregunta = '.$key.'
-                            AND resultados.id_aplicacion = '.$_POST['id_aplicacion'].'';
-                    $sql = $conexion->query( $sql );
-                    $respuesta_existe += $sql->num_rows;
-
+                    
                     if ( $tipo_pregunta == 'M' ) {
-                        $sql = 'SELECT preguntas_respuestas.puntos,                     preguntas_respuestas.id_respuesta 
-                                FROM preguntas_respuestas 
-                                WHERE preguntas_respuestas.id_pregunta = '.$key.'';
+                        // GET PUNTOS, ID_RESPUESTA
+                        $sql = '
+                            SELECT 
+                                preguntas_respuestas.puntos,
+                                preguntas_respuestas.id_respuesta
+                            FROM preguntas_respuestas
+                            WHERE preguntas_respuestas.id_pregunta = '.$key.'';
                         $sql = $conexion->query( $sql );
                         $sql = $sql->fetch_assoc();
-                        $pregunta_puntos = $sql['puntos'];
+                        $puntos_pregunta = $sql['puntos'];
                         $id_respuesta = $sql['id_respuesta'];
 
-                        $sql = 'SELECT resultados.id_respuesta
-                                FROM resultados
-                                WHERE id_pregunta = '.$key.'
-                                AND resultados.id_aplicacion = '.$_POST['id_aplicacion'].'';
-                        $sql = $conexion->query( $sql );
 
-                        if ( $respuesta_existe == 0 ) {
-                            $sql = 'INSERT INTO resultados (id, id_aplicacion, id_pregunta, id_respuesta, orden, creacion, puntos, texto_libre, ip) VALUES (NULL, '.$_POST['id_aplicacion'].', '.$key.', '.$id_respuesta.', '.$orden_pregunta.', NOW(), '.$pregunta_puntos.', NULL, "'.$_SERVER['REMOTE_ADDR'].'")';
+                        $sql_resultado_existe = '
+                            SELECT resultados.id
+                            FROM resultados
+                            WHERE id_aplicacion = '.$id_aplicacion.'
+                            AND id_pregunta = '.$key.'
+                            AND id_respuesta = '.$id_respuesta.'
+                            AND orden = '.$orden_pregunta.'
+                            AND puntos = '.$puntos_pregunta.'';
+                        $sql_resultado_existe = $conexion->query( $sql_resultado_existe );
+                        if ( $sql_resultado_existe->num_rows == 0 ) {
+                            // INSERT RESPUESTA
+                            $sql = '
+                                INSERT INTO resultados (
+                                    id,
+                                    id_aplicacion,
+                                    id_pregunta,
+                                    id_respuesta,
+                                    orden,
+                                    creacion,
+                                    puntos,
+                                    texto_libre,
+                                    ip
+                                ) VALUES (
+                                    NULL,
+                                    '.$id_aplicacion.',
+                                    '.$key.',
+                                    '.$id_respuesta.',
+                                    '.$orden_pregunta.',
+                                    NOW(),
+                                    '.$puntos_pregunta.',
+                                    NULL,
+                                    "'.$_SERVER['REMOTE_ADDR'].'"
+                                )';
                             $conexion->query( $sql );
                         }
                     } else {
-                        $sql = 'SELECT resultados.id_respuesta
-                                FROM resultados
-                                WHERE id_pregunta = '.$key.'
-                                AND resultados.id_aplicacion = '.$_POST['id_aplicacion'].'';
-                        $sql = $conexion->query( $sql );
-
-                        if ( $respuesta_existe == 0 ) {
-                            $sql = 'INSERT INTO resultados (id, id_aplicacion, id_pregunta, id_respuesta ,orden, creacion, puntos, texto_libre, ip) VALUES (NULL, '.$_POST['id_aplicacion'].', '.$key.', -1, '.$orden_pregunta.', NOW(), NULL, "'.$value.'", "'.$_SERVER['REMOTE_ADDR'].'")';
+                        $sql_resultado_existe = '
+                            SELECT resultados.id
+                            FROM resultados
+                            WHERE id_aplicacion = '.$id_aplicacion.'
+                            AND id_pregunta = '.$key.'
+                            AND id_respuesta = -1
+                            AND orden = '.$orden_pregunta.'
+                            AND texto_libre = "'.$value.'"';
+                        $sql_resultado_existe = $conexion->query( $sql_resultado_existe );
+                        if ( $sql_resultado_existe->num_rows == 0 ) {
+                            $sql = '
+                                INSERT INTO resultados (
+                                    id,
+                                    id_aplicacion,
+                                    id_pregunta,
+                                    id_respuesta,
+                                    orden,
+                                    creacion,
+                                    puntos,
+                                    texto_libre,
+                                    ip
+                                ) VALUES (
+                                    NULL,
+                                    '.$id_aplicacion.',
+                                    '.$key.',
+                                    -1,
+                                    '.$orden_pregunta.',
+                                    NOW(),
+                                    NULL,
+                                    "'.$value.'",
+                                    "'.$_SERVER['REMOTE_ADDR'].'"
+                                )';
                             $conexion->query( $sql );
                         }
                     }
-                   
+
                 }
             }
 
-            $sql = 'SELECT aplicaciones.pagina 
-                    AS PAGINA_ACTUAL 
-                    FROM aplicaciones 
-                    WHERE aplicaciones.id = '.$_POST['id_aplicacion'].'';
+            $sql = '
+                SELECT 
+                    aplicaciones.pagina AS PAGINA_ACTUAL
+                    FROM aplicaciones
+                    WHERE aplicaciones.id = '.$id_aplicacion.'';
             $sql = $conexion->query( $sql );
             $sql = $sql->fetch_assoc();
             $pagina_actual = $sql['PAGINA_ACTUAL'];
 
-            //LLEGA A LA PÁGINA FINAL
-            $sql = 'SELECT DISTINCT preguntas.pagina AS TOTAL_PAGINAS
+            $sql = '
+                SELECT DISTINCT 
+                    preguntas.pagina AS TOTAL_PAGINAS
                     FROM preguntas
                     INNER JOIN cuestionarios
                     ON preguntas.id_cuestionario = cuestionarios.id
@@ -275,29 +335,77 @@
                     ON cuestionarios.id = evaluaciones.id_cuestionario
                     INNER JOIN aplicaciones
                     ON evaluaciones.id = aplicaciones.id_evaluacion
-                    WHERE aplicaciones.id = '.$_POST['id_aplicacion'].'
-                    ORDER BY preguntas.pagina DESC LIMIT 1';
+                    WHERE aplicaciones.id = '.$id_aplicacion.'
+                    ORDER BY preguntas.pagina
+                    DESC LIMIT 1';
             $sql = $conexion->query( $sql );
             $sql = $sql->fetch_assoc();
             $total_paginas = $sql['TOTAL_PAGINAS'];
 
-            if ( $pagina_actual == $total_paginas && $respuesta_existe == 0 ) {
-                $sql = $conexion->query(
-                    'UPDATE aplicaciones SET aplicaciones.estado = "C"'
+            if ( $pagina_actual == $total_paginas ) {
+                $conexion->query(
+                    'UPDATE aplicaciones
+                    SET aplicaciones.estado = "C"
+                    WHERE aplicaciones.id = '.$id_aplicacion.''
                 );
-            } else {
-                if ( $respuesta_existe == 0 ) {
-                    $pagina_actualizada = $pagina_actual + 1;
-                    $sql = $conexion->query(
-                        'UPDATE aplicaciones SET aplicaciones.pagina = '.$pagina_actualizada.' WHERE aplicaciones.id = '.$_POST['id_aplicacion'].''
+
+                $sql = $conexion->query(
+                    'SELECT
+                        id_evaluado,
+                        id_evaluador
+                    FROM aplicaciones
+                    WHERE aplicaciones.id = '.$id_aplicacion.''
+                );
+
+                $sql = $sql->fetch_assoc();
+                $id_evaluado = $sql['id_evaluado'];
+                $id_evaluador = $sql['id_evaluador'];
+
+                $sql_resultado_existe = '
+                    SELECT notificaciones.id_notificaciones
+                    FROM notificaciones
+                    WHERE id_evaluado = '.$id_evaluado.'
+                    AND id_evaluador = '.$id_evaluador.'
+                    AND id_aplicacion = '.$id_aplicacion.'';
+                $sql_resultado_existe = $conexion->query( $sql_resultado_existe );
+                if ( $sql_resultado_existe->num_rows == 0 ) {
+                    $conexion->query(
+                        'INSERT INTO notificaciones (
+                            id_notificaciones,
+                            id_evaluado,
+                            id_evaluador,
+                            id_aplicacion,
+                            estado_visto,
+                            fecha_creacion,
+                            fecha_visto
+                        ) VALUES (
+                            NULL,
+                            '.$id_evaluado.',
+                            '.$id_evaluador.',
+                            '.$id_aplicacion.',
+                            0,
+                            NOW(),
+                            NULL
+                        )'
                     );
-                    $sql = $conexion->query(
-                        'SELECT aplicaciones.hash AS EVALUACION_HASH FROM aplicaciones WHERE aplicaciones.id = '.$_POST['id_aplicacion'].''
-                    );
-                    $sql = $sql->fetch_assoc();
-                    $hash_evaluacion = $sql['EVALUACION_HASH'];
-                    header( 'Location: cuestionario.php?id='.$hash_evaluacion.'' );
                 }
+
+            } else {
+                $pagina_actualizada = $pagina_actual + 1;
+                $sql = $conexion->query(
+                    'UPDATE aplicaciones
+                    SET aplicaciones.pagina = '.$pagina_actualizada.'
+                    WHERE aplicaciones.id = '.$id_aplicacion.''
+                );
+                $sql = $conexion->query(
+                    'SELECT 
+                        aplicaciones.hash AS EVALUACION_HASH
+                    FROM aplicaciones
+                    WHERE aplicaciones.id = '.$id_aplicacion.''
+                );
+                $sql = $sql->fetch_assoc();
+                $hash_evaluacion = $sql['EVALUACION_HASH'];
+                header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
             }
 
         }

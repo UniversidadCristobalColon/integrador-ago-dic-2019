@@ -8,7 +8,7 @@
     if ( $_SERVER['REQUEST_METHOD'] == 'GET' ) {
         // echo 'Es GET';
         $pagina_actual = isset( $_GET['pagina'] ) ? (int) $_GET['pagina'] : 1;
-        $notificaciones_por_pagina = 10;
+        $notificaciones_por_pagina = 5;
 
         $inicio = ( $pagina_actual > 1 ) ? ( $pagina_actual * $notificaciones_por_pagina - $notificaciones_por_pagina ) : 0;
 
