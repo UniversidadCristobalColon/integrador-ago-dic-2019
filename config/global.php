@@ -72,14 +72,14 @@ function getSidebar($ruta = ''){
     
     <li class="nav-item">
         <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/cuestionario/">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-book-open"></i>
             <span>Cuestionarios</span>
         </a>
     </li>  
      
     <li class="nav-item">
         <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/admin/Evaluaciones/">
-            <i class="fas fa-fw fa-chart-area"></i>
+            <i class="fas fa-fw fa-clipboard-check"></i>
             <span>Evaluaciones</span>
         </a>
     </li>
@@ -91,7 +91,7 @@ function getSidebar($ruta = ''){
             <span>Resultados</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
-            <a class="dropdown-item" href="{$dir_base}app/consultas/decalogo/">Individual</a>
+            <a class="dropdown-item" href="{$dir_base}app/evaluacion/admin/">Individual</a>
             <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>            
         </div>
     </li>  
