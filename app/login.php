@@ -4,8 +4,9 @@
 /*Si contrasena esta vacia no deja iniciar sesion por el md5(str)*/
 
 require '../config/global.php';
+echo getUrl('../');
 define('PROYECTO', getUrl('../'));
-echo PROYECTO;
+
 require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
 
 $email = @$_POST['email'];
