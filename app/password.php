@@ -87,7 +87,7 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                         if($res) {
                             if($stmt = $conexion->prepare('UPDATE password_resets  
                                                            SET status = 0
-                                                           WHERE token = ?') {
+                                                           WHERE token = ?')) {
                                 $stmt->bind_param('s', $token);
                                 $res = $stmt->execute();
                                 $stmt->close();
