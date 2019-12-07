@@ -32,63 +32,61 @@
                     Notificaciones
                 </div>
                 <div class="card-body">
+                    <?php if( $errores != '' ): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?php echo $errores ?>
+                        </div>
+                    <?php endif; ?>
                     <?php echo $html_notificaciones ?>
                 </div>
                 <div class="card-footer small">
                 <nav aria-label="...">
-                    <ul class="pagination my-0 justify-content-center flex-wrap">
-                        
-                        <!-- Si la página es la primera mostrar Anterior como disabled -->
-                        <?php if( $pagina_actual == 1 ): ?>
-                            <li class="page-item disabled">
-                                <a class="page-link">Anterior</a>
-                            </li>
-                        <?php else: ?>
-                            <li class="page-item">
-                                <a class="page-link" href="?pagina=<?php echo $pagina_actual - 1 ?>">Anterior</a>
-                            </li>
-                        <?php endif; ?>
+                    <?php if( $errores == '' ): ?>
+                        <ul class="pagination my-0 justify-content-center flex-wrap">
+                            <!-- Si la página es la primera mostrar Anterior como disabled -->
+                            <?php if( $pagina_actual == 1 ): ?>
+                                <li class="page-item disabled">
+                                    <a class="page-link">Anterior</a>
+                                </li>
+                            <?php else: ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?pagina=<?php echo $pagina_actual - 1 ?>">Anterior</a>
+                                </li>
+                            <?php endif; ?>
 
-                        <?php
-                            for ( $i = $pagina_actual-2; $i <= $pagina_actual+2; $i++ ) {
-                                // Si es la página 1 no mostrar paginación menor a 1
-                                if ( $i < 1 ) {
-                                    continue;
+                            <?php
+                                for ( $i = 1 ; $i <= $numero_paginas; $i++ ) {
+                                    // Si $i es igual a la $pagina_actual agregar clase active, sino mostrar el <li> normal
+                                    if ( $i == $pagina_actual ) {
+                                        echo '
+                                        <li class="page-item active">
+                                            <a class="page-link">
+                                                '.$i.'
+                                            </a>
+                                        </li>';
+                                    } else {
+                                        echo '
+                                        <li class="page-item">
+                                            <a class="page-link" href="?pagina='.$i.'">
+                                                '.$i.'
+                                            </a>
+                                        </li>';
+                                    }
                                 }
-                                // Si la página es la final, no mostrar más paginación
-                                if ( $i == $numero_paginas-2 ) {
-                                    break;
-                                }
-                                // Si $i es igual a la $pagina_actual agregar clase active, sino mostrar el <li> normal
-                                if ( $i == $pagina_actual ) {
-                                    echo '
-                                    <li class="page-item active">
-                                        <a class="page-link">
-                                            '.$i.'
-                                        </a>
-                                    </li>';
-                                } else {
-                                    echo '
-                                    <li class="page-item">
-                                        <a class="page-link" href="?pagina='.$i.'">
-                                            '.$i.'
-                                        </a>
-                                    </li>';
-                                }
-                            }
-                        ?>
+                            ?>
 
-                        <!-- Si la página es la final mostrar Siguiente como disabled -->
-                        <?php if( $pagina_actual == $numero_paginas ): ?>
-                            <li class="page-item disabled">
-                                <a class="page-link">Siguiente</a>
-                            </li>
-                        <?php else: ?>
-                            <li class="page-item">
-                                <a class="page-link" href="?pagina=<?php echo $pagina_actual + 1 ?>" >Siguiente</a>
-                            </li>
-                        <?php endif; ?>   
-                    </ul>
+                            <!-- Si la página es la final mostrar Siguiente como disabled -->
+                            <?php if( $pagina_actual == $numero_paginas ): ?>
+                                <li class="page-item disabled">
+                                    <a class="page-link">Siguiente</a>
+                                </li>
+                            <?php else: ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?pagina=<?php echo $pagina_actual + 1 ?>" >Siguiente</a>
+                                </li>
+                            <?php endif; ?>   
+                        </ul>
+                    <?php endif; ?>
                 </nav>
                 </div>
             </div>

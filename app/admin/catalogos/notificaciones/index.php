@@ -5,10 +5,11 @@
     require_once '../../../../config/db.php';
     define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
+    $errores = '';
     if ( $_SERVER['REQUEST_METHOD'] == 'GET' ) {
         // echo 'Es GET';
         $pagina_actual = isset( $_GET['pagina'] ) ? (int) $_GET['pagina'] : 1;
-        $notificaciones_por_pagina = 5;
+        $notificaciones_por_pagina = 10;
 
         $inicio = ( $pagina_actual > 1 ) ? ( $pagina_actual * $notificaciones_por_pagina - $notificaciones_por_pagina ) : 0;
 
@@ -23,11 +24,6 @@
                 ORDER BY notificaciones.fecha_creacion
                 LIMIT '.$inicio.','.$notificaciones_por_pagina.'';
         $sql = $conexion->query( $sql );
-
-        // Si el usuario pone una página que no existe, se le redirige a la primera
-        if ( $sql->num_rows == 0 ) {
-            header( 'Location: index.php?pagina=1' );
-        }
 
         // Calcular el número total de páginas
         $total_notificaciones = $conexion->query(
@@ -66,6 +62,10 @@
                 </div>
             </div>
             <hr>';
+        }
+
+        if ( $numero_paginas == 0 || $pagina_actual > $numero_paginas ) {
+            $errores .= 'No se han encontrado notificaciones.<br>';
         }
     }
 
