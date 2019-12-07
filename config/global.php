@@ -15,11 +15,9 @@ if(!confirmar()) {
 }
 
 */
-/*
-define('PROYECTO', getUrl());
 
-function getUrl(){
-    require '../config/db.php';
+function getUrl($ruta){
+    require '{$ruta}config/db.php';
 
     $sql = 'SELECT url
             FROM email_conf
@@ -34,7 +32,7 @@ function getUrl(){
         return 'proyecto';
     }
 }
-*/
+
 function getSidebar($ruta = ''){
     global $dir_base;
 
