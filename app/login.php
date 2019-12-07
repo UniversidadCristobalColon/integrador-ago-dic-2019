@@ -5,7 +5,6 @@
 
 require '../config/global.php';
 echo getUrl();
-define('PROYECTO', getUrl());
 
 require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
 
