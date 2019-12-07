@@ -148,6 +148,7 @@ $anterior = null;
                                 WHERE id_evaluado = " . $_GET["empleado"]."
                                 ORDER BY p.id_evaluador_nivel
                                 ";
+
                                     $res = $conexion->query($sql);
 
                                     if ($res) {
