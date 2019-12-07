@@ -15,7 +15,7 @@ if(!confirmar()) {
 }
 
 */
-
+/*
 define('PROYECTO', getUrl());
 
 function getUrl(){
@@ -34,7 +34,7 @@ function getUrl(){
         return 'proyecto';
     }
 }
-
+*/
 function getSidebar($ruta = ''){
     global $dir_base;
 
