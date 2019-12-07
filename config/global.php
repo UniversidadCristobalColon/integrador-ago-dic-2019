@@ -17,7 +17,7 @@ if(!confirmar()) {
 */
 
 function getUrl(){
-    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
+    require '../config/db.php';
     $sql = 'SELECT url
             FROM email_conf
             WHERE id = 1';
