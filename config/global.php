@@ -16,7 +16,7 @@ if(!confirmar()) {
 
 */
 
-echo Global $url = getUrl();
+echo getUrl();
 
 function getUrl(){
     require '../config/db.php';
