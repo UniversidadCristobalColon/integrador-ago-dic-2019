@@ -4,8 +4,8 @@
 /*Si contrasena esta vacia no deja iniciar sesion por el md5(str)*/
 
 require '../config/global.php';
-echo getUrl('../');
-define('PROYECTO', getUrl('../'));
+echo getUrl();
+define('PROYECTO', getUrl());
 
 require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
 
