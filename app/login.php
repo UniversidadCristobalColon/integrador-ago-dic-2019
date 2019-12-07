@@ -5,7 +5,7 @@
 
 require '../config/global.php';
 
-require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/config.php';
+require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
 
 $email = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
@@ -34,7 +34,7 @@ if($res) {
 */
 
 function login($email, $password) {
-    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/db.php';
     if($stmt = $conexion->prepare('SELECT passwd
                                    FROM usuarios
                                    WHERE id = (SELECT id 
@@ -74,7 +74,7 @@ function login($email, $password) {
 }
 
 function logout($email) {
-    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/db.php';
     if($stmt = $conexion->prepare('UPDATE usuarios 
                                    SET cookie = NULL
                                    WHERE id = (SELECT id
@@ -93,7 +93,7 @@ function logout($email) {
 }
 
 function cookie($email, $cookie) {
-    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/db.php';
     if($stmt = $conexion->prepare('SELECT cookie
                                    FROM usuarios
                                    WHERE id = (SELECT id 
