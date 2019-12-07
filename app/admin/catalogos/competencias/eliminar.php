@@ -61,13 +61,13 @@
             <!-- Page Content -->
             <h1>Cambio de estado</h1>
             <hr>
-            <p>Cambiar estado de: </p>
+            <p>¿ Desea cambiar el estado de: ? </p>
             <label for="com"> <?php
                 $id = $_GET['id'];
                 $find=mysqli_query($conexion,"SELECT * FROM competencias WHERE id='$id'");
                 $row=mysqli_fetch_array($find);
                 $competencia = $row['competencia'];
-                echo $competencia;
+                echo '<h3>'.$competencia.'</h3>';
                 ?></label>
             <div class="form-group mt-5">
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">

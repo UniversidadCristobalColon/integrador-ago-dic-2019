@@ -51,20 +51,9 @@ if(isset($_GET['id'])){
                         <form method="post" action="guardar.php">
                             <div class="form-group">
                                 <label for="competencia">Competencia</label>
-                                <input type="text" class="form-control" name="nom_Com" onkeyup="this.value=str_check(this.value)"
+                                <input type="text" class="form-control" name="nom_Com"
                                     <?php if(isset($_GET['id'])) echo "value='$competencia'";?>
                                 >
-                                <script type="text/javascript">
-                                    function str_check(string){
-                                        var out = '';
-                                        var filtro = 'abcdefghijklmnñopqrstuvwxyzáéíóúABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚüÜ';
-
-                                        for (var i=0; i<string.length; i++)
-                                            if (filtro.indexOf(string.charAt(i)) != -1)
-                                                out += string.charAt(i);
-                                        return out;
-                                    }
-                                </script>
                             </div>
                             <div>
                                 <input type="submit" class="btn btn-primary mb-3" value="Guardar">
