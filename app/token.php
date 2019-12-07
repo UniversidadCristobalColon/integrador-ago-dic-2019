@@ -1,6 +1,6 @@
 <?php
 
-$email = @$_POST['email'];
+$email = empty($_POST['email']) ? $_SESSION['username']: $_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
 require '../config/global.php';
@@ -46,15 +46,26 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
     $conexion->close();
     if($res) {
         require './mailgun.php';
-        enviarCorreo(
-            $email, 
-            utf8_decode('Restablecer Contraseña'), 
-            'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
-            .$email.'&token='.$token,
-            '/'.PROYECTO.'/app/recuperar.php?email='.$email
-        );
+        if(isset($_POST['email'])) {
+                    enviarCorreo(
+                        $email, 
+                        utf8_decode('Restablecer Contraseña'), 
+                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
+                        .$email.'&token='.$token,
+                        '/'.PROYECTO.'/app/recuperar.php?email='.$email
+                    );
+        } else {
+                   enviarCorreo(
+                        $email, 
+                        utf8_decode('Restablecer Contraseña'), 
+                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
+                        .$email.'&token='.$token
+                    ); 
+        }
     } else {
-        header('location: /'.PROYECTO.'/app?error=1');
+        if(isset($_POST['email'])) {        
+            header('location: /'.PROYECTO.'/app?error=1');
+        }        
         exit();
     }
 }
