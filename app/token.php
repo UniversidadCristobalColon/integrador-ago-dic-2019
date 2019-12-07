@@ -2,7 +2,7 @@
 if(empty($_SESSION)) {
             session_start();
 }
-$email = empty($_POST['email']) ? $_SESSION['username']: $_POST['email'];
+$email = empty($_POST['email']) ? $_SESSION['usuario']: $_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
 require '../config/global.php';
