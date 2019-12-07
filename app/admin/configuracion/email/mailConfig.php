@@ -56,42 +56,55 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <div class="card-body">
                     <form action="changeEmailParameters.php" method="post">
   <div class="form-group">
-    <label for="mailConfigHost">Host</label>
+       <h5>Host</h5>
     <input name= "host" type="form-text" class="form-control" id="mailConfigHost" value ="<?php echo $host;?>" placeholder="Host" >
   </div>
   <div class="form-group">
-    <label for="mailConfigPort">Port</label>
+       <h5>Puerto</h5>
     <input name ="port" type="form-text" class="form-control" id="mailConfigPort" value ="<?php echo $port;?>" placeholder="Port" >
   </div>  
   <div class="form-group">
-    <label for="mailConfigName">Nombre</label>
+       <h5>Nombre</h5>
     <input name="name" type="form-text" class="form-control" id="mailConfigName" value ="<?php echo $mailName;?>" placeholder="Nombre">
   </div>
   <div class="form-group">
-    <label for="mailConfigUser">User</label>
+       <h5>User</h5>
     <input name= "user" type="form-text" class="form-control" id="mailConfigUser" value ="<?php echo $username;?>" placeholder="User" >
   </div>  
   <div class="form-group">
-    <label for="mailConfigPass">Pass</label>
+    <h5>Pass</h5>
     <input name="pass" type="form-text" class="form-control" id="mailConfigPass" value ="<?php echo $password;?>" placeholder="Pass">
   </div>
 
+
+
   <div class="form-group">
+     <h3>Texto del correo para evaluadores</h3>
+<div class="alert alert-warning" role="alert">
+  Es importante incluir este token <strong>{{url_encuesta}}</strong> en la plantilla del correo electrónico para que sea reemplazado por el enlace de la encuesta de manera automática.
+  </div>
   <textarea name="editor" class= "form-control" id="editor"  name ="editor" id="editor">
       <?php echo $content;?>
   </textarea>
 <script type="text/javascript">
     ClassicEditor
-    .create( document.querySelector( '#editor' ) )
-    .then( editor => {
-        console.log( editor );
+.create( document.querySelector( '#editor' ), {
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+            ]
+        }
     } )
     .catch( error => {
-        console.error( error );
+        console.log( error );
     } );
 </script>
 </div>
-  <input type="submit" value = "Editar" class="btn btn-primary">
+
+  <input type="submit" value = "Guardar" class="btn btn-primary">
 </form>
 
                    
