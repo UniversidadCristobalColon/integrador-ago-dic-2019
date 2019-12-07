@@ -43,8 +43,10 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
             exit();
         } else {
             //echo 'Message has been sent';
-            header('location: '.$redirect);
-            exit();
+            if(isset($redirect)) {
+                header('location: '.$redirect);
+                exit();
+            }
         }
     }
     
