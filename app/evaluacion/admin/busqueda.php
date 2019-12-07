@@ -8,8 +8,9 @@ $id_periodo=$_POST['id_periodo'];;
 $suma=0;
 $cont=0;
 
-$sql = "select distinct pe.id_evaluador,e.nombre from promedios_por_evaluado pe join empleados e
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
 on e.id = pe.id_evaluador
+join roles r on pe.id_rol_evaluador = r.id
 where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
@@ -23,8 +24,39 @@ $resselempleado = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion))
 $sql = "select * from periodos";
 $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
+$sql = "select * from escalas ";
+$resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+$cont2=0;
 
 
+//$sql = "";
+
+    /*$escala[0]["etiqueta"] = 'malo'
+    $escala[0]["inferior"] = 0
+    $escala[0]["superior"] = 1
+
+    $escala[1]["etiqueta"] = 'medio'
+    $escala[1]["inferior"] = 1
+    $escala[1]["superior"] = 2
+
+    $escala[2]["etiqueta"] = 'alto'
+    $escala[2]["inferior"] = 2
+    $escala[2]["superior"] = 3*/
+    $escala = array();
+    $puntos = 1;
+    $calificacion = calcularNivelEscala($puntos);
+    function calcularNivelEscala($puntos){
+        global $db, $escala;
+        $etiqueta = '';
+        foreach($escala as $e){
+            if($puntos >= $e['inferior'] && $puntos <= $e['superior']){
+                $etiqueta = $e['etiqueta'];
+                break;
+            }
+        }
+    return $etiqueta;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -61,6 +93,7 @@ $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                     Resultados de busqueda
                 </div>
                 <div class="card-body">
+
                     <form method="POST">
                         <select name='id_evaluado' class="chosen-select">
                             <option>Seleccione un empleado</option>
@@ -74,6 +107,7 @@ $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                         </select>
 
                         <select name='id_periodo' class="chosen-select">
+                            <option>Seleccione un periodo</option>
                             <?php
                             while($row = mysqli_fetch_array($resselperiodo)){
                                 echo"
@@ -82,11 +116,43 @@ $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                             }
                             ?>
                         </select>
-                        <button type="submit" class="btn btn-primary" formaction="busqueda.php">Empezar busqueda</button>
+                        <button type="submit" class="btn btn-primary" formaction="busqueda.php">Buscar</button>
+                    </form>
+
+                    <form method="POST" >
+                        <button type="submit" class="btn btn-primary" formaction="generarexcel.php">Generar Excel</button>
                     </form>
 
 
                     <?php
+                    $escala[5] = array();
+                    while($row = mysqli_fetch_array($resesacalas)){
+                        $escala[0]['etiqueta']=$row['nivel1_etiqueta'];
+                        $escala[0]['inferior']=$row['nivel1_inferior'];
+                        $escala[0]['superior']=$row['nivel1_superior'];
+
+                        $escala[1]['etiqueta']=$row['nivel2_etiqueta'];
+                        $escala[1]['inferior']=$row['nivel2_inferior'];
+                        $escala[1]['superior']=$row['nivel2_superior'];
+
+                        $escala[2]['etiqueta']=$row['nivel3_etiqueta'];
+                        $escala[2]['inferior']=$row['nivel3_inferior'];
+                        $escala[2]['superior']=$row['nivel3_superior'];
+
+                        $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
+                        $escala[3]['inferior']=$row['nivel3_inferior'];
+                        $escala[3]['superior']=$row['nivel3_superior'];
+
+                        $escala[4]['etiqueta']=$row['nivel4_etiqueta'];
+                        $escala[4]['inferior']=$row['nivel4_inferior'];
+                        $escala[4]['superior']=$row['nivel4_superior'];
+
+                        $escala[5]['etiqueta']=$row['nivel5_etiqueta'];
+                        $escala[5]['inferior']=$row['nivel5_inferior'];
+                        $escala[5]['superior']=$row['nivel5_superior'];
+                    }
+
+
                         while($row2 = mysqli_fetch_array($resultado2)){
                             /*Se obtienen las preguntas de acuerdo al evaluador, periodo y evaluado*/
                             $sql = "select da.aseveracion,pe.puntos from promedios_por_evaluado pe join preguntas p 
@@ -97,39 +163,50 @@ $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                                     ";
                             $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                             echo "
-                                
+                                <h3>$row2[nombre] $row2[apellidos] / $row2[rol]</h3>
                                 <table class='table table - bordered' id='dataTable' width='100 % ' cellspacing='0'>
-                                <h3>Respuestas de: $row2[nombre]</h3>
+                                
                                     <thead>
                                     
                                     <tr>
                                         <th>Pregunta</th>
-                                        <th>Calificación</th>
+                                        <th colspan='2'>Calificación</th>
                                     </tr>
-                                    </thead>
+                                    </thead> <tbody>
                             ";
                                 while($row4 = mysqli_fetch_array($resultado3)){
                                     $suma +=$row4['puntos'];
                                     $cont++;
                                     echo "
-                                    <tbody>
+                                   
                                     <tr>
                                          <tr>
                                                <td>$row4[aseveracion]</td>
-                                               <td>$row4[puntos]</td>
-                                          </tr>
-                                    </tr>
-                                    </tbody>
-                                ";
+                                               <td>$row4[puntos]</td>";
+                                                foreach($escala as $e){
+                                                    if($row4['puntos'] >= $e['inferior'] && $row4['puntos'] <= $e['superior']){
+                                                        echo "
+                                                            <td>$e[etiqueta]</td>
+                                                        ";
+                                                        break;
+                                                    }
+                                                }
+                                                echo"
+                                                    </tr> 
+                                                    </tr>
+                                                 ";
+                                    
+
                                 }
                                 $promedio=$suma/$cont;
-                            echo "
+                            echo "</tbody>
                                     <tfoot>
                                         <tr style='background-color:#d6e5fa'>
                                             <td>Promedio</td>
                                             <td>$promedio</td>
                                        </tr>
                                     </tfoot>
+                                    </table>
                             ";
                             $suma =0;
                             $cont=0;
@@ -137,7 +214,7 @@ $resselperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                         ?>
 
 
-                    </table>
+
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>

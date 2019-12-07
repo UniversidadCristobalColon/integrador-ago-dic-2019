@@ -59,6 +59,7 @@ $resultadoperiodo = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion
                         </select>
 
                         <select name='id_periodo' class="chosen-select">
+                            <option>Seleccione un periodo</option>
                             <?php
                             while($row = mysqli_fetch_array($resultadoperiodo)){
                                 echo"

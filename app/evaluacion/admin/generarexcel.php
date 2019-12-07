@@ -5,11 +5,8 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
 
 require __DIR__ . "../../../../vendor/autoload.php";
-$id_eval='1';
-$id_periodo='1';
-$sql = "select * from promedios_por_pregunta where id_evaluado='$id_eval' and id_periodo ='$id_periodo'";
-$resultado = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
-global $suma;
+$id_evaluado='9';
+$id_periodo='2';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -36,26 +33,34 @@ $coordinadaA='A';
 $coordinadaB='B';
 $coordinadaC='C';
 
-while($row = mysqli_fetch_array($resultado)){
-    $sql ="select * from preguntas where id='$row[id_preguntas]'";
-    $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
-    while($row2 = mysqli_fetch_array($resultado2)){
-        $coordinadaA=$coordinadaA . strval((int)$row["id"]+1);
-        $coordinadaB=$coordinadaB . strval((int)$row["id"]+1);
-        $coordinadaC=$coordinadaC . strval((int)$row["id"]+1);
+$sql = "select distinct pe.id_evaluador,e.nombre from promedios_por_evaluado pe join empleados e
+on e.id = pe.id_evaluador
+where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
 
-        $sheet->setCellValue($coordinadaA, $row["id"]);
-        $sheet->setCellValue($coordinadaB, $row2["pregunta"]);
-        $sheet->setCellValue($coordinadaC, $row["puntos"]);
+$resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+while($row2 = mysqli_fetch_array($resultado2)){
+    $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
+                                        on p.id = pe.id_pregunta
+                                        join decalogos_aseveraciones da 
+                                        on da.id = p.id_decalogo_aseveracion
+                                        where pe.id_evaluador = $row2[id_evaluador]
+                                        ";
+    $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+    while($row4 = mysqli_fetch_array($resultado3)){
+        $coordinadaA=$coordinadaA . strval((int)$row4['id']+1);
+        $coordinadaB=$coordinadaB . strval((int)$row4['id']+1);
+
+        $sheet->setCellValue($coordinadaA, 'prueba1');
+        $sheet->setCellValue($coordinadaB, 'prueba2');
 
         $coordinadaA='A';
         $coordinadaB='B';
         $coordinadaC='C';
-    };
+
+    }
 }
-
-#$sheet->setCellValue('C7', '=SUM(C1:C6)');
-
 $nombreDelDocumento = "Mi primer archivo.xlsx";
 /**
  * Los siguientes encabezados son necesarios para que
@@ -63,7 +68,14 @@ $nombreDelDocumento = "Mi primer archivo.xlsx";
  * simple HTML
  * Por cierto: no hagas ningún echo ni cosas de esas; es decir, no imprimas nada
  */
+/*
+ *         $sheet->setCellValue($coordinadaB, $row4["aseveracion"]);
+        $sheet->setCellValue($coordinadaC, $row4["puntos"]);
 
+
+        $coordinadaA=$coordinadaC . strval(1);
+ *
+ */
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
 header('Cache-Control: max-age=0');
