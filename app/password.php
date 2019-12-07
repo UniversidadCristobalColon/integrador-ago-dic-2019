@@ -87,14 +87,8 @@ if($stmt = $conexion->prepare('SELECT EXISTS(SELECT *
                         if($res) {
                             if($stmt = $conexion->prepare('UPDATE password_resets  
                                                            SET status = 0
-                                                           WHERE id   = (SELECT id 
-                                                                         FROM usuarios 
-                                                                         WHERE id 
-
-                                                                         = (SELECT id
-                                                                            FROM empleados
-                                                                            WHERE email = ?))')) {
-                                $stmt->bind_param('s', $email);
+                                                           WHERE token = ?') {
+                                $stmt->bind_param('s', $token);
                                 $res = $stmt->execute();
                                 $stmt->close();
                                 if($res) {
