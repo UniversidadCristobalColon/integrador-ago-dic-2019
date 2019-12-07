@@ -56,7 +56,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     <form>
   <div class="form-group">
     <label for="mailConfigHost">Correo</label>
-    <input type="form-text" class="form-control" id="mailConfigHost" placeholder="<?php echo $_SESSION['usuario']; ?>" readonly disabled>
+    <input type="form-text" class="form-control" id="mailConfigHost" placeholder="<?php echo $_SESSION['usuario']; ?>" readonly>
   </div>
   <div class="form-group">
     <input type="form-text" class="form-control" id="mailConfigPort" value ="" placeholder="Correo Nuevo">
