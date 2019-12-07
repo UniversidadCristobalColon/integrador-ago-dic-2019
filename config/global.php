@@ -17,7 +17,8 @@ if(!confirmar()) {
 */
 
 function getUrl($ruta){
-    require "{$ruta}config/db.php";
+    echo $ruta.'config/db.php';
+    require $ruta.'config/db.php';
 
     $sql = 'SELECT url
             FROM email_conf
