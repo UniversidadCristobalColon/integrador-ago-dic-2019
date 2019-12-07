@@ -44,16 +44,16 @@ $token = @$_GET['token'];
                 <input type="text" value="<?php echo $token ?>" name="token" hidden>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="password" id="inputPassword" class="form-control" placeholder="Password"
+                        <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña"
                                required="required" name="pass">
-                        <label for="inputPassword">Password</label>
+                        <label for="inputPassword">Contraseña</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="form-label-group">
-                        <input type="password" id="inputPassword1" class="form-control" placeholder="Password"
+                        <input type="password" id="inputPassword1" class="form-control" placeholder="Contraseña"
                                required="required" name="pass1">
-                        <label for="inputPassword1">Confirm Password</label>
+                        <label for="inputPassword1">Confirmar Constraseña</label>
                     </div>
                 </div>
                 <input type="submit" value="Cambiar Contraseña" class="btn btn-primary btn-block">
