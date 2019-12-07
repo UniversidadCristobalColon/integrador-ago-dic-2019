@@ -15,8 +15,8 @@ if(!confirmar()) {
 }
 
 */
-
-function getUrl($ruta){
+echo getUrl();
+function getUrl(){
     require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
     $sql = 'SELECT url
             FROM email_conf
