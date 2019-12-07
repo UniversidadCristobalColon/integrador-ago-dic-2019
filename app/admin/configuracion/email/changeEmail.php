@@ -10,7 +10,7 @@ if ($result->num_rows > 0) {
         $host = $row['host'];
         $port = $row['port'];
         $username = $row['username'];
-        $password = $row['password'];
+//      $password = $row['password'];
         $mailName = $row['email_name'];
     }
 }
@@ -68,7 +68,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
   </div>
   <div class="form-group">
     <label for="mailConfigPass">Pass</label>
-    <input type="password" class="form-control" id="mailConfigPass" value ="<?php echo $password;?>" placeholder="Pass">
+    <input type="password" class="form-control" id="mailConfigPass" value ="<?php // echo $password; ?>" placeholder="Pass">
   </div>
   <button type="submit" class="btn btn-primary">Cambiar</button>
 </form>
