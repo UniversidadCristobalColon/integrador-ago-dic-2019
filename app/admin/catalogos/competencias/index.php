@@ -60,13 +60,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     $result = mysqli_query($conexion,$sql) or die('Consulta fallida: ' . mysqli_error());
 
                                     while ($row = mysqli_fetch_array($result)){
+                                        if($row['estado']=='A'){
+                                                $estado = 'Activo';
+                                        }else{
+                                            $estado = 'Inactivo';
+                                        }
                                         echo "<tr>
                                         <td>$row[competencia]</td>
                                         <td>$row[creacion]</td>
                                         <td>$row[actualizacion]</td>
-                                        <td>$row[estado]</td>
-                                        <td class='text-center'><button class='btn' onclick='actualizar($row[id]);'><i class='fas fa-pencil-alt'></i></button>
-                                        <button class='btn' onclick='eliminar($row[id]);'><i class='fas fa-exchange-alt'></i></button></td>
+                                        <td>$estado</td>
+                                        <td class='text-center'><button class='btn btn-light' onclick='actualizar($row[id]);'><i class='fas fa-pencil-alt'></i></button>
+                                        <button class='btn btn-light' onclick='eliminar($row[id]);'><i class='fas fa-exchange-alt'></i></button></td>
                                         </tr>";
                                     }
                                 ob_end_flush();

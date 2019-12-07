@@ -53,23 +53,12 @@ if(isset($_GET['id'])){
                             <div class="form-group">
                                 <label for="competencia">Competencia</label>
                                 <input type="hidden" name="id" value=" <?php echo "$_GET[id]" ?> ">
-                                <input type="text" class="form-control" name="nom_Com" onkeyup="this.value=str_check(this.value)"
+                                <input type="text" class="form-control" name="nom_Com"
                                     <?php if(isset($_GET['id'])) echo "value='$competencia'";?>
                                 >
-                                <script type="text/javascript">
-                                    function str_check(string){
-                                        var out = '';
-                                        var filtro = 'abcdefghijklmnñopqrstuvwxyzáéíóúABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚüÜ';
-
-                                        for (var i=0; i<string.length; i++)
-                                            if (filtro.indexOf(string.charAt(i)) != -1)
-                                                out += string.charAt(i);
-                                        return out;
-                                    }
-                                </script>
                             </div>
                             <div>
-                                <input type="submit" class="btn btn-primary mb-3" value="editar">
+                                <input type="submit" class="btn btn-primary mb-3" value="Editar">
                                 <input type="button" class="btn btn-secondary mb-3" OnClick="location.href='index.php'" value="Cancelar">
                             </div>
                         </form>
