@@ -3,6 +3,7 @@
 $email = @$_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
+require '../config/global.php';
 require '../config/db.php';
 
 /*
@@ -47,12 +48,12 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
         enviarCorreo(
             $email, 
             utf8_decode('Restablecer Contraseña'), 
-            'http://'.$_SERVER['HTTP_HOST'].'/proyecto/app/cambiar.php?email='
+            'http://'.$_SERVER['HTTP_HOST'].'/'.$url.'/app/cambiar.php?email='
             .$email.'&token='.$token,
-            '/proyecto/app/recuperar.php?email='.$email
+            '/'.$url.'/app/recuperar.php?email='.$email
         );
     } else {
-        header('location: /proyecto/app?error=1');
+        header('location: /'.$url.'/app?error=1');
         exit();
     }
 }

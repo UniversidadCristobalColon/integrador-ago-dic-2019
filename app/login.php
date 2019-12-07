@@ -3,9 +3,11 @@
 /*Lógica para autenticar usuarios e iniciar sesión*/
 /*Si contrasena esta vacia no deja iniciar sesion por el md5(str)*/
 
-require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/config.php';
+require '../config/global.php';
 
-echo $email = @$_POST['email'];
+require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/config.php';
+
+$email = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
                             PASSWORD_BCRYPT, 
                             $options);
@@ -32,7 +34,7 @@ if($res) {
 */
 
 function login($email, $password) {
-    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
     if($stmt = $conexion->prepare('SELECT passwd
                                    FROM usuarios
                                    WHERE id = (SELECT id 
@@ -72,7 +74,7 @@ function login($email, $password) {
 }
 
 function logout($email) {
-    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
     if($stmt = $conexion->prepare('UPDATE usuarios 
                                    SET cookie = NULL
                                    WHERE id = (SELECT id
@@ -91,7 +93,7 @@ function logout($email) {
 }
 
 function cookie($email, $cookie) {
-    require $_SERVER['DOCUMENT_ROOT'].'/proyecto/config/db.php';
+    require $_SERVER['DOCUMENT_ROOT'].'/'.$url.'/config/db.php';
     if($stmt = $conexion->prepare('SELECT cookie
                                    FROM usuarios
                                    WHERE id = (SELECT id 
