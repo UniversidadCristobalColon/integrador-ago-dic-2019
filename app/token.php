@@ -1,5 +1,7 @@
 <?php
-
+if(empty($_SESSION)) {
+            session_start();
+}
 $email = empty($_POST['email']) ? $_SESSION['username']: $_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
