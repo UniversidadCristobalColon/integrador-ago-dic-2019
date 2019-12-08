@@ -90,8 +90,9 @@ function getSidebar($ruta = ''){
             <span>Resultados</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
-            <a class="dropdown-item" href="{$dir_base}app/evaluacion/admin/">Individual</a>
-            <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>            
+            <a class="dropdown-item" href="{$dir_base}app/evaluacion/admin/">Decálogo</a>
+            <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>  
+            <a class="dropdown-item" href="{$dir_base}app/consultas/competencias/">Competencias</a>           
         </div>
     </li>  
     
@@ -101,11 +102,16 @@ function getSidebar($ruta = ''){
 </ul>
 EOD;
 
+
     echo $html;
 }
 
 function getNavbar($ruta = ''){
     global $dir_base, $conexion;
+
+    if(empty($conexion)){
+        require_once 'db.php';
+    }
 
     $titulo_notificaciones = '';
     $clase_notificaciones = '';
