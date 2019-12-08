@@ -84,18 +84,7 @@ function validaFormulario(params) {
 });
     mostrarErrores();
 	}
-    if (
-		$('select[name="estatus"]').val() == 'Selecciona un estatus'
-	) {
-        errores = true;
-
-		Swal.fire({
-        icon: 'error',
-        title: 'Error...',
-        text: 'Debes elegir un estatus'
-});
-    mostrarErrores();
-	}
+   
     $('#agregar').submit();
     }
 
@@ -106,7 +95,7 @@ function validaFormulario(params) {
 $buscar=mysqli_query($conexion,"SELECT * FROM organizaciones WHERE id='$id'");
 $fila=mysqli_fetch_array($buscar);
 $organizacion=$fila['organizacion'];
-$estatus=$fila['estatus'];
+
 
 
 ?>
@@ -149,19 +138,7 @@ $estatus=$fila['estatus'];
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Estatus:</label>
-                                <select id="estatus" name="estatus" class="form-control">
-                                    <option>Selecciona un estatus</option>
-                                    <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
-                                    <option value="Inactivo" <?php if ($estatus=="Inactivo"){echo 'selected';} ?>>Inactivo</option>
-                                   
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                 
 
                     <div class="row">
                         <div class="col-md-12">

@@ -45,27 +45,24 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 
 
 
-// Query to check if the organization already exist
-$checarDepa = "SELECT * FROM departamentos WHERE departamento = '$_POST[departamento]' ";
-// Variable $result hold the connection data and the query
-$result = $conexion-> query($checarDepa);
-// Variable $count hold the result of the query
-$count = mysqli_num_rows($result);
-// If count == 1 that means the organization is already on the database
-if ($count == 1) {
-echo "<div class='alert alert-warning mt-4' role='alert'>
-                <h3>El departamento ya existe.</h3>
-                <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
-            </div>";
-} else {	
-
-/*
-If the organization don't exist, the data from the form is sended to the
-database and the account is created
-*/
-$organizacion = $_POST['organizacion'];
-$estatus = $_POST['estatus'];
-$departamento = $_POST['departamento'];
+                $organizacion = $_POST['organizacion'];
+                $departamento = $_POST['departamento'];
+                $estatus = $_POST['estatus'];
+                $buscar=mysqli_query($conexion, "SELECT * FROM organizaciones WHERE id = '$organizacion'");
+                $fila=mysqli_fetch_array($buscar);
+                $nombreOrg=$fila['organizacion'];         
+                $checarDepto = "SELECT * FROM departamentos WHERE organizaciones_id = '$organizacion' AND departamento = '$departamento'";
+                // Variable $result hold the connection data and the query
+                $result = $conexion-> query($checarDepto);
+                // Variable $count hold the result of the query
+                $count = mysqli_num_rows($result);
+                // If count == 1 that means the organization is already on the database
+                if ($count == 1) {
+                    echo "<div class='alert alert-warning mt-4' role='alert'>
+                    <h3>El departamento $departamento ya existe en la organización $nombreOrg</h3>
+                                    <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
+                                </div>";
+                    } else {	
 
 // Query to send Name, Email and Password hash to the database
 $query = "INSERT INTO departamentos (departamento, organizaciones_id, ultima_actualizacion, estatus) VALUES ('$departamento', '$organizacion', NOW(), '$estatus')";

@@ -43,7 +43,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <hr>
             <?php
                 
-
+                $organizacion = $_POST['organizacion'];
+                $estatus = $_POST['estatus'];
 
 // Query to check if the organization already exist
 $checarOrganizacion = "SELECT * FROM organizaciones WHERE organizacion = '$_POST[organizacion]' ";
@@ -54,7 +55,7 @@ $count = mysqli_num_rows($result);
 // If count == 1 that means the organization is already on the database
 if ($count == 1) {
 echo "<div class='alert alert-warning mt-4' role='alert'>
-                <h3>La organización ya existe.</h3>
+                <h3>La organización $organizacion ya existe.</h3>
                 <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
             </div>";
 } else {	
@@ -63,8 +64,6 @@ echo "<div class='alert alert-warning mt-4' role='alert'>
 If the organization don't exist, the data from the form is sended to the
 database and the account is created
 */
-$organizacion = $_POST['organizacion'];
-$estatus = $_POST['estatus'];
 
 // Query to send Name, Email and Password hash to the database
 $query = "INSERT INTO organizaciones (organizacion, creacion, actualizacion, estatus) VALUES ('$organizacion', NOW(), NOW(), '$estatus')";

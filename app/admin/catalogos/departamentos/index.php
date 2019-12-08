@@ -54,12 +54,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </thead>
 
                             <tbody>
-                           
-                            <?php foreach ($conexion->query('SELECT * from departamentos') as $row){ ?> 
-                            
+                        
+                            <?php foreach ($conexion->query('SELECT departamento, organizacion, ultima_actualizacion, departamentos.estatus, departamentos.id from departamentos INNER JOIN organizaciones on organizaciones_id = organizaciones.id') as $row){ ?> 
+                                    
+                
                             <tr>
                                 <td><?php echo $row['departamento'] ?></td>
-                                <td><?php echo $row['organizaciones_id']  ?></td>
+                                <td><?php echo $row['organizacion'] ?></td>
                                 <td><?php echo $row['ultima_actualizacion'] ?></td>
                                 <td><?php echo $row['estatus'] ?></td>
                                 <td class="text-center">
@@ -79,7 +80,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 </td>
                             </tr>
 <?php
-}
+} 
 ?>
                             </tbody>
 
