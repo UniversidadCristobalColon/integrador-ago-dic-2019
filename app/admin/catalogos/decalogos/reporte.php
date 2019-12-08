@@ -5,7 +5,7 @@ $idevaluacion = $_GET['idevaluacion'];
 $idevaluado = $_GET['idevaluado'];
 
 $sql1 = "Select id_evaluador,id_periodo,id_cuestionario, id_aplicacion 
-from promedios_por_evaluado where id_evaluacion=1 group by id_evaluador,id_periodo,id_cuestionario, id_aplicacion;";
+from promedios_por_evaluado where id_evaluacion=$idevaluacion and id_evaluado=$idevaluado group by id_evaluador,id_periodo,id_cuestionario, id_aplicacion;";
 $res1 = $conexion->query($sql1);
 while ($row1 = $res1->fetch_assoc()) {
 $idcuestionario = $row1['id_cuestionario'];
@@ -16,7 +16,7 @@ $sql2 = "SELECT Tdecalogo.decalogo, Tperiodo.periodo, Templeados.nombre,
 Templeados.apellidos,Tpuesto.puesto
 from promedios_por_evaluado ppe
 left join preguntas Tpreguntas on
-Tpreguntas.id_cuestionario=ppe.id_cuestionario
+Tpreguntas.id=ppe.id_pregunta
 left join decalogos_aseveraciones Tdecalogoaseveracion on
 Tdecalogoaseveracion.id=Tpreguntas.id_decalogo_aseveracion
 left join decalogos Tdecalogo on
@@ -24,7 +24,7 @@ Tdecalogo.id = Tdecalogoaseveracion.id_decalogo
 left join evaluaciones Tevaluacion on
 Tevaluacion.id=ppe.id_evaluacion
 left join periodos Tperiodo on
-Tperiodo.id=Tevaluacion.id_periodo
+Tperiodo.id=ppe.id_periodo
 left join empleados Templeados on
 Templeados.id=ppe.id_evaluado
 left join puestos Tpuesto on
@@ -109,28 +109,26 @@ $nivelpuestoevaluador = utf8_encode($row3['nivel_puesto']);
 
 <?php
 $sql4 = "select Tdecalogoaseveracion.aseveracion, 
-res.puntos 
+ppe.puntos 
 from promedios_por_evaluado ppe
-left join aplicaciones app on
-ppe.id_evaluador=app.id_evaluador 
 left join resultados res on
-res.id_aplicacion=app.id
+res.id_aplicacion=ppe.id_aplicacion
 left join preguntas pre on 
-pre.id=res.id_pregunta
+pre.id=ppe.id_pregunta
 left join decalogos_aseveraciones Tdecalogoaseveracion on
 Tdecalogoaseveracion.id=pre.id_decalogo_aseveracion
-where ppe.id_cuestionario = $idcuestionario and ppe.id_evaluacion=$idevaluacion 
-and ppe.id_evaluador=$idevaluador and res.id_aplicacion=$idaplicacion
+where ppe.id_evaluacion=$idevaluacion and ppe.id_evaluado=$idevaluado
+and ppe.id_evaluador=$idevaluador and ppe.id_aplicacion=$idaplicacion
 group by Tdecalogoaseveracion.aseveracion, 
-res.puntos";
+ppe.puntos";
 $res4 = $conexion->query($sql4);
 if ($res4) {
     ?>
     <div>
         <table class="tabla3">
             <tr>
-                <th class="th2" colspan="2">decalogo <?php $decalogo ?></th>
-                <th class="th3">Calificacion</th>
+                <th class="th2" colspan="2">dec<?php echo utf8_encode("á")?>logo <?php $decalogo ?></th>
+                <th class="th3">Calificaci<?php echo utf8_encode("ó")?>n</th>
             </tr>
             <?php
             $contar = 1;
@@ -152,7 +150,7 @@ if ($res4) {
     <?php
 } ?>
 <?php
-$sql5 = "Select Te.nivel1_etiqueta,Te.nivel1_descripcion,
+$sql5 = "Select Te.id, Te.nivel1_etiqueta,Te.nivel1_descripcion,
 Te.nivel1_inferior,Te.nivel1_superior,
 Te.nivel2_etiqueta,Te.nivel2_descripcion,
 Te.nivel2_inferior,Te.nivel2_superior,
@@ -162,16 +160,16 @@ Te.nivel4_etiqueta,Te.nivel4_descripcion,
 Te.nivel4_inferior,Te.nivel4_superior,
 Te.nivel5_etiqueta,Te.nivel5_descripcion,
 Te.nivel5_inferior,Te.nivel5_superior
-from evaluaciones Teva 
+from promedios_por_evaluado ppe
 LEFT JOIN preguntas Tpre ON
-Tpre.id_cuestionario=Teva.id_cuestionario
+Tpre.id=ppe.id_pregunta
 LEFT JOIN decalogos_aseveraciones Tda ON
 Tda.id=Tpre.id_decalogo_aseveracion
 LEFT JOIN decalogos Td ON
 Td.id=Tda.id_decalogo
 LEFT JOIN escalas Te ON
 Te.id=Td.id_escala 
-where Teva.id=1 GROUP BY Te.nivel1_etiqueta,Te.nivel1_descripcion,
+where ppe.id_evaluacion=$idevaluacion and ppe.id_evaluado=$idevaluado GROUP BY Te.id,Te.nivel1_etiqueta,Te.nivel1_descripcion,
 Te.nivel1_inferior,Te.nivel1_superior,
 Te.nivel2_etiqueta,Te.nivel2_descripcion,
 Te.nivel2_inferior,Te.nivel2_superior,
@@ -180,15 +178,14 @@ Te.nivel3_inferior,Te.nivel3_superior,
 Te.nivel4_etiqueta,Te.nivel4_descripcion,
 Te.nivel4_inferior,Te.nivel4_superior,
 Te.nivel5_etiqueta,Te.nivel5_descripcion,
-Te.nivel5_inferior,Te.nivel5_superior;";
+Te.nivel5_inferior,Te.nivel5_superior";
 $res5 = $conexion->query($sql5);
 $row5 = mysqli_fetch_array($res5, MYSQLI_ASSOC);
 ?>
-//:0
 <div>
     <table class="tabla4">
         <tr>
-            <th colspan="3" class="th1">Escala de calificacion</th>
+            <th colspan="3" class="th1">Escala de calificaci<?php echo utf8_encode("ó")?>n</th>
         </tr>
         <tr>
             <td class="td5"><?php echo intval($row5['nivel1_inferior']) . "-" . intval($row5['nivel1_superior']) ?></td>
