@@ -72,7 +72,7 @@ if(isset($_POST['editar'])){
                 Swal.fire({
                     icon: 'error',
                     title: 'Error...',
-                    text: 'Debes introducir el Puesto'
+                    text: 'Debes Seleccionar el Puesto'
                 });
                 mostrarErrores();
             }
@@ -121,27 +121,23 @@ if(isset($_POST['editar'])){
                     </div>
 
                     <div class="card-body">
-                        <form id="agregar" action="guardar_Editar.php" method="post">
+                        <form id="agregar" action="guardar_editar.php" method="post">
     <?php foreach ($conexion->query('SELECT * from puestos WHERE id ='.$id) as $row){  ?>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Puesto Actual:</label>
-                                        <input type="text" name="id" class="form-control" value="<?php echo $row['puesto']; ?> " readonly>
+                                        <input type="text" class="form-control" value="<?php echo $row['puesto']; ?> " readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Puestos:</label>
-                                        <select name="idpuesto" class="form-control">
-                                            <?php
-                                            foreach ($conexion->query('SELECT * from puestos') as $row){
-                                                ?>
-                                                <option value="<?php echo $row['id'];?>"><?php echo $row['puesto'];?></option>
-                                            <?php }?>
-                                        </select>
+                                        <label>Puesto Nuevo:</label>
+                                        <input type="text" name="puesto_nuevo" class="form-control">
+                                        <input type="hidden" name="id" value=<?php echo $id;?>>
+
                                     </div>
                                 </div>
                             </div>
@@ -149,12 +145,12 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Niveles de Puestos:</label>
-                                        <select name="idpuesto" class="form-control">
+                                        <label>Nivel de Puesto:</label>
+                                        <select name="nivel_puesto" class="form-control">
                                             <?php
                                             foreach ($conexion->query('SELECT id, nivel_puesto from niveles_puesto') as $row){
                                                 ?>
-                                                <option value="<?php echo $row['id'];?>"><?php echo $row['nivel_puesto'];?></option>
+                                                <option><?php echo $row['nivel_puesto'];?></option>
                                             <?php }?>
                                         </select>
                                     </div>

@@ -104,7 +104,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <input type="text" name="puesto" class="form-control" placeholder="Introduce el Puesto">
                                 </div>
                             </div>
-                        </div>
 
                         <div class="card-body">
                             <form id="agregar" action="guardar.php" method="post">
@@ -116,7 +115,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                             <?php
                                             foreach ($conexion->query('SELECT id, nivel_puesto from niveles_puesto') as $row){
                                             ?>
-                                                <option value="<?php echo $row['id'];?>"><?php echo $row['nivel_puesto'];?></option>
+                                             <option value="<?php echo $row['id'];?>"><?php echo $row['nivel_puesto'];?></option>
                                             <?php }?>
                                             </select>
                                         </div>

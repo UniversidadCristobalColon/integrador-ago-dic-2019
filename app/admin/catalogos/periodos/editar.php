@@ -130,11 +130,12 @@ if(isset($_POST['editar'])){
 
                     <div class="card-body">
                         <form id="agregar" action="guardar_Editar.php" method="post">
+    <?php foreach ($conexion->query('SELECT * from periodos WHERE id ='.$id) as $row){  ?>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>ID:</label>
-                                        <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
+                                        <label>Periodo Actual:</label>
+                                        <input type="text" name="id" class="form-control" value="<?php echo $row['id']; ?> " readonly>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +169,7 @@ if(isset($_POST['editar'])){
                                     </div>
                                 </div>
                             </div>
-
+    <?php } ?>
 
                         </form>
                     </div>

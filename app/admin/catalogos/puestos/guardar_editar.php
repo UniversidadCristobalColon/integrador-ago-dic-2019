@@ -43,13 +43,20 @@ define('RUTA_INCLUDE', '../../../../');
             If the period don't exist, the data from the form is sended to the
             database and the account is created
             */
-            @$puesto = $_POST['puesto'];
-            @$estado = $_POST['estado'];
-            @$idpuesto = $_POST['idpuesto'];
-            @$id = $_POST['id'];
+            $puesto = $_POST['puesto_nuevo'];
+            $estado = $_POST['estado'];
+            $nivel = $_POST['nivel_puesto'];
+            $id = $_POST['id'];
 
+            $sql = "SELECT id FROM niveles_puesto WHERE nivel_puesto='$nivel'";
+            $result = $conexion->query($sql);
+            while($row = $result->fetch_assoc())
+            {
+            $id2=$row['id'];
+            }
+            
             // Query to send Name, Email and Password hash to the database
-            $query= "UPDATE puestos SET puesto='$puesto', creacion=NOW(),'$idpuesto', estado='$estado' WHERE id='$id'";
+            $query= "UPDATE puestos SET puesto='$puesto', estado='$estado', id_nivel_puesto = $id2 WHERE id=$id";
             if (mysqli_query($conexion, $query)) {
                 /* header('location:index.php');
                   ob_flush();

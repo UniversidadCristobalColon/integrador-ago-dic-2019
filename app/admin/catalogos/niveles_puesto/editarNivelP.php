@@ -122,7 +122,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>ID:</label>
+                                        <label>Nivel Actual (ID):</label>
                                         <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
                                     </div>
                                 </div>
