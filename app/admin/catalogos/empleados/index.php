@@ -24,6 +24,94 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <div id="wrapper">
 
     <?php getSidebar() ?>
+    <?php 
+    if(isset($_GET["confirm"])){
+        if($_GET["confirm"] == 1){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se ha agregado un nuevo empleado',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 2){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se ha actualizado el empleado',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 3){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Error al ingresar empleado',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 4){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Error al actualizar empleado',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 5){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se cambió a activo',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 6){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se cambió a inactivo',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+}
+    ?>
 
     <div id="content-wrapper">
 
@@ -44,13 +132,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <tr>
                                 <th class="text-center">Número de empleado</th>
                                 <th class="text-center">Nombre</th>
-                                <th class="text-center">Apellidos</th>
                                 <th class="text-center">Email</th>
-                                <th class="text-center">Creado en</th>
-                                <th class="text-center">Actualizado en</th>
                                 <th class="text-center">Departamento</th>
                                 <th class="text-center">Puesto</th>
                                 <th class="text-center">Estados</th>
+                                <th class="text-center">Actualizado en</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                             </thead>
@@ -74,18 +160,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             ?>
                                 <tr>
                                 <td class="text-center"><?php  echo $row["num_empleado"] ?></td>
-                                <td class="text-center"><?php  echo $row["nombre"] ?></td>
-                                <td class="text-center"><?php  echo $row["apellidos"] ?></td>
+                                <td class="text-center"><?php  echo $row["nombre"]." ".$row["apellidos"] ?></td>
                                 <td class="text-center"><?php  echo $row["email"] ?></td>
-                                <td class="text-center"><?php  echo $row["creacion"] ?></td>
-                                <td class="text-center"><?php  echo $row["actualizacion"] ?></td>
                                 <td class="text-center"><?php  echo $row["departamento"] ?></td>
                                 <td class="text-center"><?php  echo $row["puesto"] ?></td>
+                                
                                 
                                 <?php
                                     if($row["estado"] == 'B'){
                                 ?>
                                 <td class="text-center">Inactivo</td>
+                                <td class="text-center"><?php  echo $row["actualizacion"] ?></td>
                                 <td class="text-center align-middle">
                                     <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i class="fas fa-pencil-alt text-center mx-auto"></i>
@@ -94,6 +179,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     }else{
                                 ?>
                                 <td class="text-center">Activo</td>
+                                <td class="text-center"><?php  echo $row["actualizacion"] ?></td>
                                 <td class="text-center align-middle">
                                     <button  style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>

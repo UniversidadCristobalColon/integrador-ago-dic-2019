@@ -2,6 +2,7 @@
 ob_start();
 require_once '../../../../config/global.php';
 require_once("../../../../config/db.php");
+require_once '../../../../config/config.php';
     $enable = "";
     $name = "";
     $lastname = "";
@@ -11,77 +12,57 @@ require_once("../../../../config/db.php");
     $submitted = false;
     $idEdited = "";
 
+if(isset($_POST['delete'])){
+    $deleteId =  $_POST["delete"];
+    $status ="";
 
-?>
+    $sql = "SELECT * from usuarios where id = $deleteId ";
+            $result = $conexion->query($sql);
+                                
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $status = $row["estado"];
+                    if($status == "B"){
+                        $sqlDelete = "UPDATE usuarios SET 
+        estado = 'A'
+        WHERE id = $deleteId ";
 
-<?php
-ob_start();
-require_once '../../../../config/global.php';
-require_once("../../../../config/db.php");
-    $enable = "";
-    $name = "";
-    $lastname = "";
-    $email = "";
-    $department = "";
-    $job = "";
-    $submitted = false;
-    $idEdited = "";
+        if ($conexion->query($sqlDelete) === TRUE) {
+            header("location: index.php?confirm=5");
+            ob_flush();
+        } else {
+            echo "Error updating record: " . $conexion->error;
+        }
+                    }else{
+                        $sqlDelete = "UPDATE usuarios SET 
+                        estado = 'B'
+                        WHERE id = $deleteId ";
 
-    if(isset($_POST['delete'])){
-        $deleteId =  $_POST["delete"];
-        $status ="";
-    
-        $sql = "SELECT * from usuarios where id = $deleteId ";
-                $result = $conexion->query($sql);
-                                    
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        $status = $row["estado"];
-                        if($status == "B"){
-                            $sqlDelete = "UPDATE usuarios SET 
-            estado = 'A'
-            WHERE id = $deleteId ";
-    
-            if ($conexion->query($sqlDelete) === TRUE) {
-                header("location: index.php");
-                ob_flush();
-            } else {
-                echo "Error updating record: " . $conexion->error;
-            }
-                        }else{
-                            $sqlDelete = "UPDATE usuarios SET 
-                            estado = 'B'
-                            WHERE id = $deleteId ";
-    
-                            if ($conexion->query($sqlDelete) === TRUE) {
-                                header("location: index.php");
-                                ob_flush();
-                            } else {
-                                echo "Error updating record: " . $conexion->error;
-                            }
+                        if ($conexion->query($sqlDelete) === TRUE) {
+                            header("location: index.php?confirm=6");
+                            ob_flush();
+                        } else {
+                            echo "Error updating record: " . $conexion->error;
                         }
                     }
                 }
-    }
+            }
+}
 
 if(isset($_POST['edit'])){
     $idEdited =  $_POST['edit'];
     $submitted = true;
     $enable = "disabled";
 
-    $sql = "SELECT E.id, num_empleado, nombre, apellidos, email, E.creacion, 
-            actualizacion, departamento, puesto, E.estado 
-            FROM empleados E left JOIN departamentos D on E.id_departamento = D.id 
-            left JOIN puestos P on E.id_puesto = P.id where E.id = $idEdited";
+    $sql = "SELECT usuarios.id, email, passwd, usuarios.estado ,usuarios.creacion, usuarios.actualizacion 
+    FROM `usuarios` left join empleados on usuarios.id = empleados.id 
+    where usuarios.id = $idEdited";
             $result = $conexion->query($sql);
                                 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $name = $row["nombre"];
-                    $lastname = $row["apellidos"];
                     $email = $row["email"];
-                    $department = $row["departamento"];
-                    $job = $row["puesto"];
+                    $password = $row["passwd"];
                 }
             }
 }else{
@@ -139,96 +120,87 @@ if(isset($_GET["error"])){
                     Catálogo: Empleados
                 </div>
                 <div class="card-body">
-                    
-                    <form method="POST" action="" onsubmit= "return checked()">
+                    <?php
+                        if($idEdited){
+                    ?>
+                    <form method="POST" action="" onsubmit= "return checkedPassword()" class="formUser">
+                    <?php 
+                        }else{
+                    ?>
+                    <form method="POST" action="" onsubmit= "return checked()" class="formUser">
+                    <?php
+                        }
+                    ?>
+                    <div class="form-group">
+                    <label for="names">Seleccione el empleado</label>
+                    <select class="form-control" name="user" id="email" >
+                                <?php
+                                if($email || $email != ""){
+                                ?>
+                                    <option value="<?php echo $idEdited; ?>"><?php echo $email; ?></option>
+                                <?php
+                                } 
+                                $sql = "SELECT email, empleados.id FROM `empleados` where empleados.id not in (SELECT usuarios.id from usuarios)";
+
+                                $result = $conexion->query($sql);
+                                
+                                if ($result->num_rows > 0) {
+                                    while($row = $result->fetch_assoc()) {
+                                        if($email){
+                                ?>
+                                <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
+                                <?php
+                                        }else{
+
+                                            ?>
+                                <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
+                                            <?php
+                                        }
+                                    }
+                                }else{
+                                    echo "No hay resultados";
+                                }
+                                
+                                ?>
+                        </select>
+                        </div>           
+                        <?php
+                            if($idEdited){    
+                        ?>
+                             <div class="form-check">
+                             <input type="checkbox" class="form-check-input" name="newpassword" id="newpassword" aria-describedby="newpasswordHelp">
+                            <label class="form-check-label labeluser" for="gridCheck1">
+                            Cambiar contraseña
+                            </label>
+                            </div>
+                            <script src="newPassword.js"></script>
+                        <?php
+                            }else{
+                        ?>
+
                         <div class="form-group">
-                            <label for="names">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="name" aria-describedby="nameHelp" placeholder="Ingresa tu nombre" value = <?php echo $name; ?>>
+                            <label for="names">Contraseña</label>
+                            <input type="password" class="form-control" name="password" id="password" aria-describedby="nameHelp" placeholder="Ingresa contraseña" value = <?php echo $name; ?>>
                         </div>
                         <div class="form-group">
-                            <label for="lastnames">Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos" id="lastname" aria-describedby="lastnameHelp" placeholder="Ingresa tus apellidos" value = <?php echo $lastname; ?>>
+                            <label for="names">Repite Contraseña</label>
+                            <input type="password" class="form-control" name="rpassword" id="rpassword" aria-describedby="nameHelp" placeholder="Ingresa contraseña" value = <?php echo $name; ?>>
                         </div>
-                        <div class="form-group">
-                            <label for="emails">Correo Electrónico</label>
-                            <?php
-                            if($enable == "disabled"){
-                            ?>
-                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
-                            <?php
-                            }else{ 
-                            ?>
-                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
-                            <?php
+                        <script src="check.js"></script>
+                                <?php
                             }
                             ?>
-                            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                        </div>
-                        <div class="form-group">
-                            <label for="departments">Departamento</label>
-                            <select class="form-control" id="department" name="departamento" ?>>
-                                <?php
 
-
-                                $sql = "SELECT departamento FROM `departamentos` order by departamento";
-
-                                $result = $conexion->query($sql);
-                                
-                                if ($result->num_rows > 0) {
-                                    while($row = $result->fetch_assoc()) {
-                                        if($row["departamento"] == $department){
-                                ?>
-                                <option selected value="<?php echo $row['departamento']; ?>"><?php echo $row['departamento']; ?></option>
-                                <?php
-                                        }else{
-                                            ?>
-                                <option value="<?php echo $row['departamento']; ?>"><?php echo $row['departamento']; ?></option>
-                                            <?php
-                                        }
-                                    }
-                                }else{
-                                    echo "No hay resultados";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="jobs">Puesto</label>
-                            <select class="form-control" name="puesto" id="job" >
-                                <?php 
-                                $sql = "SELECT puesto FROM `puestos` order by puesto";
-
-                                $result = $conexion->query($sql);
-                                
-                                if ($result->num_rows > 0) {
-                                    while($row = $result->fetch_assoc()) {
-                                        if($row["puesto"] == $job){
-                                ?>
-                                <option selected value="<?php echo $row["puesto"]; ?>"><?php echo $row["puesto"]; ?></option>
-                                <?php
-                                        }else{
-
-                                            ?>
-                                <option value="<?php echo $row["puesto"]; ?>"><?php echo $row["puesto"]; ?></option>
-                                            <?php
-                                        }
-                                    }
-                                }else{
-                                    echo "No hay resultados";
-                                }
-                                
-                                ?>
-                            </select>
-                        </div>
                         <div class="form-group">
                         <?php
                             if($submitted){
                         ?>
-                        <button name="update" type="submit" class="btn btn-primary" value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        <button name="update" type="submit" class="btn btn-primary btn-lg btn-block" value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        
                         <?php
                             }else{
                         ?>
-                        <button name="insert" type="submit" class="btn btn-primary">Crear</button>
+                        <button name="insert" type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
                         <?php
                             }
                         ?>
@@ -263,98 +235,74 @@ if(isset($_GET["error"])){
         color:red;
     }
 </style>
-<script src="check.js"></script>
+
 
 <?php
     if(isset($_POST["update"])){
-        $nombre = $_POST["nombre"];
-        $apellidos = $_POST["apellidos"];
-        $correo = $_POST["correo"];
-        $departamento = $_POST["departamento"];
-        $puesto = $_POST["puesto"];
-        $id_departamento = "";
-        $id_puesto = "";
-        $idUpdated = $_POST["update"];
-        $ahora = "";
+        $now = "";
 
-        $sqlDepartment = "SELECT id FROM departamentos where departamento = '$departamento'";
-            $result2 = $conexion->query($sqlDepartment);
-                                
-            if ($result2->num_rows > 0) {
-                while($row = $result2->fetch_assoc()) {
-                    $id_departamento = $row["id"];
-                    echo $id_departamento;
+        $iduser = $_POST["user"];
+
+        if($_POST["newpassword"] == "on"){
+            $password = $_POST["password"];
+            $hashed  =  password_hash($password, 
+                            PASSWORD_BCRYPT, 
+                            $options);
+            
+            $sqlNow = "SELECT NOW()";
+            $result = $conexion->query($sqlNow);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $now = $row["NOW()"];
                 }
             }
-        $sqlJob = "SELECT id FROM puestos where puesto = '$puesto'";
-            $result3 = $conexion->query($sqlJob);
-                                
-            if ($result3->num_rows > 0) {
-                while($row = $result3->fetch_assoc()) {
-                    $id_puesto = $row["id"];
-                }
+    
+                $sqlUpdate = "UPDATE usuarios SET 
+                id=$iduser,
+                actualizacion= '$now',
+                passwd = '$hashed'
+                WHERE id = $iduser";
+    
+            if ($conexion->query($sqlUpdate) === TRUE) {
+                header("location: index.php?confirm=2");
+                ob_flush();
+            } else {
+                echo "Error updating record: " . $conexion->error;
+                header("location: index.php?confirm=4");
             }
 
+        }else{
         $sqlNow = "SELECT NOW()";
-            $result4 = $conexion->query($sqlNow);
-                                
-            if ($result4->num_rows > 0) {
-                while($row = $result4->fetch_assoc()) {
-                    $ahora = $row["NOW()"];
-                }
+        $result = $conexion->query($sqlNow);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $now = $row["NOW()"];
             }
-            echo $ahora;
-            print_r($ahora);
-            $sqlUpdate = "UPDATE empleados SET 
-            nombre='$nombre',
-            apellidos = '$apellidos',
-            -- email = '$correo',
-            id_departamento = $id_departamento,
-            id_puesto = $id_puesto,
-            actualizacion = '$ahora'
-            WHERE id = $idUpdated ";
+        }
+
+            $sqlUpdate = "UPDATE usuarios SET 
+            id=$iduser,
+            actualizacion= '$now'
+            WHERE id = $iduser";
 
         if ($conexion->query($sqlUpdate) === TRUE) {
-            header("location: index.php");
+            header("location: index.php?confirm=1");
             ob_flush();
         } else {
             echo "Error updating record: " . $conexion->error;
+            header("location: index.php?confirm=3");
+            ob_flush();
         }
+    }
     }
     if(isset($_POST["insert"])){
 
-        $nombre = $_POST["nombre"];
-        $apellidos = $_POST["apellidos"];
-        $correo = $_POST["correo"];
-        $departamento = $_POST["departamento"];
-        $puesto = $_POST["puesto"];
-        $id_departamento = "";
-        $id_puesto = "";
-        $ahora = "";
-        $random = "";
+        $password = $_POST["password"];
+        $id = $_POST["user"];
 
-        $sqlEmail = "SELECT email FROM empleados where email = '$correo'";
-        $resultEmail = $conexion->query($sqlEmail);                
-            if ($resultEmail->num_rows > 0) {
-                echo "Ya está utilizado el correo";
-                header("location: employees.php?error=2");
-            }else{
-
-        $sqlDepartment = "SELECT id FROM departamentos where departamento = '$departamento'";
-        $result2 = $conexion->query($sqlDepartment);                
-            if ($result2->num_rows > 0) {
-                while($row = $result2->fetch_assoc()) {
-                    $id_departamento = $row["id"];
-                }
-            }
-        $sqlJob = "SELECT id FROM puestos where puesto = '$puesto'";
-            $result3 = $conexion->query($sqlJob);
-                                
-            if ($result3->num_rows > 0) {
-                while($row = $result3->fetch_assoc()) {
-                    $id_puesto = $row["id"];
-                }
-            }
+        $passwordHashed  =  password_hash($password, 
+                            PASSWORD_BCRYPT, 
+                            $options);
 
         $sqlNow = "SELECT NOW()";
         $result = $conexion->query($sqlNow);
@@ -364,30 +312,24 @@ if(isset($_GET["error"])){
             }
         }
 
-        $sqlRandom = "SELECT FLOOR(RAND()*(1000-100+1)+100) AS 'RANDOM'";
-        $result = $conexion->query($sqlRandom);
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $random = $row["RANDOM"];
-            }
-        }
-
-        $sql = "INSERT INTO empleados
-        VALUES (null, $random,'$nombre','$apellidos','$correo','$ahora',null,$id_departamento,$id_puesto,'A')";
+        $sql = "INSERT INTO usuarios
+        VALUES ($id, '$passwordHashed',null,'A','$ahora',null)";
 
     if ($conexion->query($sql) === TRUE) {
-        header("location: index.php");
+        header("location: index.php?confirm=1");
         ob_flush();
     } else {
     echo "Error: " . $sql . "<br>" . $conexion->error;
+    header("location: index.php?confirm=3");
+    ob_flush();
     }
 
 
     }
-}
+
 ?>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 </body>
 
 </html>

@@ -27,7 +27,7 @@ if(isset($_POST['delete'])){
         WHERE id = $deleteId ";
 
         if ($conexion->query($sqlDelete) === TRUE) {
-            header("location: index.php");
+            header("location: index.php?confirm=5");
             ob_flush();
         } else {
             echo "Error updating record: " . $conexion->error;
@@ -38,7 +38,7 @@ if(isset($_POST['delete'])){
                         WHERE id = $deleteId ";
 
                         if ($conexion->query($sqlDelete) === TRUE) {
-                            header("location: index.php");
+                            header("location: index.php?confirm=6");
                             ob_flush();
                         } else {
                             echo "Error updating record: " . $conexion->error;
@@ -47,16 +47,6 @@ if(isset($_POST['delete'])){
                 }
             }
 
-    // $sqlDelete = "UPDATE empleados SET 
-    //     estado = 'B'
-    //     WHERE id = $deleteId ";
-
-    //     if ($conexion->query($sqlDelete) === TRUE) {
-    //         header("location: index.php");
-    //         ob_flush();
-    //     } else {
-    //         echo "Error updating record: " . $conexion->error;
-    //     }
 }
 
 if(isset($_POST['edit'])){
@@ -138,22 +128,22 @@ if(isset($_GET["error"])){
                     <form method="POST" action="" onsubmit= "return checked()">
                         <div class="form-group">
                             <label for="names">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="name" aria-describedby="nameHelp" placeholder="Ingresa tu nombre" value = <?php echo $name; ?>>
+                            <input type="text" class="form-control" name="nombre" id="name" aria-describedby="nameHelp" placeholder="Ingresa nombre" value = <?php echo $name; ?>>
                         </div>
                         <div class="form-group">
                             <label for="lastnames">Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos" id="lastname" aria-describedby="lastnameHelp" placeholder="Ingresa tus apellidos" value = <?php echo $lastname; ?>>
+                            <input type="text" class="form-control" name="apellidos" id="lastname" aria-describedby="lastnameHelp" placeholder="Ingresa apellidos" value = <?php echo $lastname; ?>>
                         </div>
                         <div class="form-group">
                             <label for="emails">Correo Electrónico</label>
                             <?php
                             if($enable == "disabled"){
                             ?>
-                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
+                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa correo electrónico" value = <?php echo $email; ?>>
                             <?php
                             }else{ 
                             ?>
-                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa tu correo electrónico" value = <?php echo $email; ?>>
+                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa correo electrónico" value = <?php echo $email; ?>>
                             <?php
                             }
                             ?>
@@ -161,7 +151,7 @@ if(isset($_GET["error"])){
                         </div>
                         <div class="form-group">
                             <label for="departments">Departamento</label>
-                            <select class="form-control" id="department" name="departamento" ?>>
+                            <select class="form-control" id="department" name="departamento">
                                 <?php
 
 
@@ -219,11 +209,11 @@ if(isset($_GET["error"])){
                         <?php
                             if($submitted){
                         ?>
-                        <button name="update" type="submit" class="btn btn-primary" value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        <button name="update" type="submit" class="btn btn-primary btn-lg btn-block" value = "<?php echo $idEdited; ?>" >Actualizar</button>
                         <?php
                             }else{
                         ?>
-                        <button name="insert" type="submit" class="btn btn-primary">Crear</button>
+                        <button name="insert" type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
                         <?php
                             }
                         ?>
@@ -310,10 +300,12 @@ if(isset($_GET["error"])){
             WHERE id = $idUpdated ";
 
         if ($conexion->query($sqlUpdate) === TRUE) {
-            header("location: index.php");
+            header("location: index.php?confirm=2");
             ob_flush();
         } else {
             echo "Error updating record: " . $conexion->error;
+            header("location: index.php?confirm=4");
+            ob_flush();
         }
     }
     if(isset($_POST["insert"])){
@@ -371,10 +363,12 @@ if(isset($_GET["error"])){
         VALUES (null, $random,'$nombre','$apellidos','$correo','$ahora',null,$id_departamento,$id_puesto,'A')";
 
     if ($conexion->query($sql) === TRUE) {
-        header("location: index.php");
+        header("location: index.php?confirm=1");
         ob_flush();
     } else {
     echo "Error: " . $sql . "<br>" . $conexion->error;
+    header("location: index.php?confirm=3");
+    ob_flush();
     }
 
 
