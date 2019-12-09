@@ -48,7 +48,8 @@
                 switch ( $estado_aplicacion ) {
                     case 'A':
                         $conexion->query(
-                            'UPDATE aplicaciones SET aplicaciones.estado = "B"'
+                            'UPDATE aplicaciones SET aplicaciones.estado = "B" 
+                            WHERE aplicaciones.id = '.$id_aplicacion.''
                         );
                         break;
                     case 'C':
@@ -190,10 +191,21 @@
 
     
     if ( $_SERVER['REQUEST_METHOD']  ==  'POST' ) {
+        $id_aplicacion = $_POST['id_aplicacion'];
+
+        $sql = $conexion->query(
+            'SELECT 
+                aplicaciones.hash AS EVALUACION_HASH
+            FROM aplicaciones
+            WHERE aplicaciones.id = '.$id_aplicacion.''
+        );
+        $sql = $sql->fetch_assoc();
+        $hash_evaluacion = $sql['EVALUACION_HASH'];
+
         // COMPROBAR QUE TODAS LAS PREGUNTAS TENGAN RESPUESTA
         foreach ($_POST as $key => $value) {
             if ( $value == 'none' || $value == '' ) {
-                $errores .= 'No se han respondido todas las preguntas.<br>';
+                $errores .= 'No se ha respondido la pregunta número '.$key.'<br>';
             }
             if ( $key == 'id_aplicacion' ) {
                 break;
@@ -201,7 +213,6 @@
         }
 
         if ( $errores == '' ) {
-            $id_aplicacion = $_POST['id_aplicacion'];
             // POR CADA VALOR DE $POST COMO $KEY SACAR $VALUE
             foreach ($_POST as $key => $value) {
                 // SI SE LLEGA AL ID_APLICACION QUE NO HAGA NADA
@@ -389,7 +400,6 @@
                         )'
                     );
                 }
-
             } else {
                 $pagina_actualizada = $pagina_actual + 1;
                 $sql = $conexion->query(
@@ -397,15 +407,7 @@
                     SET aplicaciones.pagina = '.$pagina_actualizada.'
                     WHERE aplicaciones.id = '.$id_aplicacion.''
                 );
-                $sql = $conexion->query(
-                    'SELECT 
-                        aplicaciones.hash AS EVALUACION_HASH
-                    FROM aplicaciones
-                    WHERE aplicaciones.id = '.$id_aplicacion.''
-                );
-                $sql = $sql->fetch_assoc();
-                $hash_evaluacion = $sql['EVALUACION_HASH'];
-                // header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
+                header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
             }
 
         }

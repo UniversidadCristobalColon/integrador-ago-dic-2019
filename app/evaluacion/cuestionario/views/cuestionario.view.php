@@ -173,10 +173,13 @@
                                 echo '<div class="alert alert-danger" role="alert">
                                         '.$errores.'
                                     </div>';
+                                echo '<a class="btn btn-secondary btn-block" href="?id='.$hash_evaluacion.'">
+                                        Regresar    
+                                    </a>';
                                 die();
                             }
                         ?>
-                        <!-- MOSTRAR O NO VISTA POST -->
+                            <!-- MOSTRAR O NO VISTA POST -->
                             <h2>¡Gracias por responder!</h2>
                             <h4>Su evaluación ha sido enviada con éxito</h4>
                         </div>
