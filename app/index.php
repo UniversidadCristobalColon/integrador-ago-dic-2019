@@ -30,7 +30,7 @@ if(confirmar()) {
 
 </head>
 
-<body class="bg-dark index-login">
+<body class="index-login">
 <?php 
     $errores[1] = 'No existe la cuenta de usuario.';
     $errores[2] = 'Usuario o contraseña incorrecto.';
@@ -74,13 +74,12 @@ if(confirmar()) {
                         <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña"
                                required="required" name="pass">
                         <label for="inputPassword">Contraseña</label>
+                        <a class="d-block small mt-3" href="recuperar.php">¿Olvidó su contraseña?</a>
                     </div>
                 </div>
                 <input type="submit" value="Ingresar" class="btn btn-primary btn-block">
+                <a href="codigo.php" class="btn btn-secondary btn-block mt-3">Ingresar vía código de evaluación</a>
             </form>
-            <div class="text-center">
-                <a class="d-block small mt-3" href="recuperar.php">¿Olvidó su contraseña?</a>
-            </div>
         </div>
     </div>
 </div>

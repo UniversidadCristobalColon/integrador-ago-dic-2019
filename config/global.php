@@ -78,7 +78,7 @@ function getSidebar($ruta = ''){
      
     <li class="nav-item">
         <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/admin/Evaluaciones/">
-            <i class="fas fa-fw fa-clipboard-check"></i>
+            <i class="fas fa-fw fa-tasks"></i>
             <span>Evaluaciones</span>
         </a>
     </li>
