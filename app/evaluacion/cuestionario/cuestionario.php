@@ -190,7 +190,6 @@
 
     
     if ( $_SERVER['REQUEST_METHOD']  ==  'POST' ) {
-
         // COMPROBAR QUE TODAS LAS PREGUNTAS TENGAN RESPUESTA
         foreach ($_POST as $key => $value) {
             if ( $value == 'none' || $value == '' ) {
@@ -234,7 +233,8 @@
                                 preguntas_respuestas.puntos,
                                 preguntas_respuestas.id_respuesta
                             FROM preguntas_respuestas
-                            WHERE preguntas_respuestas.id_pregunta = '.$key.'';
+                            WHERE preguntas_respuestas.id_pregunta = '.$key.'
+                            AND preguntas_respuestas.id_respuesta = '.$value.'';
                         $sql = $conexion->query( $sql );
                         $sql = $sql->fetch_assoc();
                         $puntos_pregunta = $sql['puntos'];
@@ -405,7 +405,7 @@
                 );
                 $sql = $sql->fetch_assoc();
                 $hash_evaluacion = $sql['EVALUACION_HASH'];
-                header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
+                // header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
             }
 
         }
