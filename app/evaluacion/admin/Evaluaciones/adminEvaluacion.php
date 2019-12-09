@@ -199,10 +199,23 @@ if($res){
                 </div>
             </div>
 
+            <?php
+            $mostrar_boton = false;
+            if($porcentaje > 65){
+                $mostrar_boton = true;
+            }
+
+            $elementos_boton = $mostrar_boton ?"<button class=\"btn btn-primary\" type=\"button\">
+                                                                Calculo de promedio
+                                                               </button>" : "<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"tooltip\" data-placement=\"top\" disabled title=\"La evaluación debe de estar un 65% completada como mínimo\">
+                                                                Calculo de promedio
+                                                               </button>";
+            ?>
+
             <div class="row mb-3">
                 <div class="col">
                     <button class="btn btn-primary" type="button">Envio</button>
-                    <button class="btn btn-primary" type="button">Cálculo de promedio</button>
+                    <?php echo $elementos_boton?>
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalSiguiente">Agregar evaluación</button>
                 </div>
             </div>
@@ -224,18 +237,30 @@ if($res){
                         $apellido_evaluado  = $evaluado['apellidos'];
 
 
-                    $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, niveles_puesto.nivel_puesto, app.estado from aplicaciones app 
-                                            left join empleados emp on app.id_evaluador=emp.id 
-                                            LEFT JOIN puestos ON emp.id_puesto = puestos.id 
-                                            LEFT JOIN niveles_puesto ON niveles_puesto.id = puestos.id_nivel_puesto 
-                                            where app.id_evaluado=$id_evaluado and app.id_evaluacion = $Evaluacion";
+                    $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, roles.rol, app.estado, SUBSTRING(app.hash, 1, 7) as codigo from aplicaciones app 
+                            left join empleados emp on app.id_evaluador=emp.id 
+                            LEFT JOIN puestos ON emp.id_puesto = puestos.id 
+                            LEFT JOIN roles ON roles.id = app.id_rol_evaluador
+                            where app.id_evaluado=$id_evaluado and app.id_evaluacion = $Evaluacion";
                     $resultado2 = $conexion->query($sql1);
 
+                    /*  ESTE SQL ES PARA LO DEL CORREO, TE SACA EL ID, NOMBRE, APELLIDO, CORREO DEL EMPLEADO, ASI COMO SU ESTATUS Y HASH DE LAS PLICACIONES
+                     * select emp.id, emp.nombre,emp.apellidos, emp.email, app.estado, SUBSTRING(app.hash, 1, 7) as codigo from aplicaciones app
+                    left join empleados emp on app.id_evaluador=emp.id where app.id_evaluado=10 and app.id_evaluacion = 1*/
 
+                    $Evaluadores = array();
+                    $mostrar_eliminar = true;
+                        while($row2 = $resultado2 -> fetch_assoc()){
+                            $Evaluadores[] = $row2;
+                            if($row2['estado'] == 'B' || $row2['estado'] == 'C'){
+                                $mostrar_eliminar = false;
+                            }
+                        }
 
-                    $liga_eliminar_registro = $Iniciadas == 0 ?"<a title=\"Eliminar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"eliminar($id_evaluado, $Evaluacion)\">
+                            $liga_eliminar_registro = $mostrar_eliminar ?"<a title=\"Eliminar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"eliminar($id_evaluado, $Evaluacion)\">
                                                                 <i class=\"fa fa-trash\"></i>
                                                                </a>" : '';
+
                     ?>
 
 
@@ -248,6 +273,10 @@ if($res){
                                 </div>
                                 <div class="col-md-2 text-right">
                                     <?php echo $liga_eliminar_registro ?>
+                                    <a class="btn btn-light">
+                                    <i class="fas fa-paper-plane"></i>
+                                    </a>
+
                                 </div>
                             </div>
                         </div>
@@ -257,12 +286,13 @@ if($res){
                                 <div class="col-md-6">
                                     <ul class="list-group list-group-flush">
                                         <?php
-                                        while($row2 = $resultado2 -> fetch_assoc()) {
+                                        foreach ($Evaluadores as $row2) {
                                             $nombre = $row2['nombre'];
                                             $apellido = $row2['apellidos'];
                                             $puesto = $row2['puesto'];
-                                            $npuesto = $row2['nivel_puesto'];
+                                            $rol = $row2['rol'];
                                             $estado = $row2['estado'];
+                                            $codigo = $row2['codigo'];
 
                                             //$estado = $row2['estado'];
                                             //$estado = 'A';
@@ -288,7 +318,8 @@ if($res){
                                                         <i class="fa fa-circle <?php echo $clase ?>"></i>
                                                     </div>
                                                     <div class="col-11">
-                                                        <?php echo "$nombre $apellido<div><small>$puesto $npuesto</small></div>" ?>
+                                                        <?php echo "<h5>$nombre $apellido</h5><div><div>$puesto ($rol)</div></div>
+                                                                     <p>Codigo de la evaluación:<samp> $codigo</samp></p>" ?>
                                                     </div>
                                                 </div>
                                             </li>
@@ -330,11 +361,12 @@ if($res){
                                 <select class="form-control mb-3" name="evaluado" id="evaluado">
                                     <option selected value="">Seleccione una opción</option>
                                     <?php
-                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
+                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto
+                                            LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
+                                            LEFT JOIN empleados ON empleados.id_puesto = puestos.id
+                                            LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
+                                            WHERE empleados.estado = 'A' AND departamentos.id   = $Depa 
+                                            AND empleados.id NOT IN (SELECT aplicaciones.id_evaluado from aplicaciones WHERE id_evaluacion = $Evaluacion)";
                                     $resultado = mysqli_query($conexion,$sql);
                                     if($resultado){
                                         while($fila = mysqli_fetch_assoc($resultado)){
