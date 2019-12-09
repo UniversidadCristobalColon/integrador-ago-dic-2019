@@ -35,6 +35,7 @@ function getUrl(){
 function getSidebar($ruta = ''){
     global $dir_base;
 
+
     $html = <<<EOD
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
@@ -45,12 +46,11 @@ function getSidebar($ruta = ''){
         </a>
     </li>
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle text-dark" href="#" id="catalogosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
             <span>Catálogos</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        <div class="dropdown-menu" aria-labelledby="catalogosDropdown" id="sideGrupoCatalogos">
             <h6 class="dropdown-header">Organización</h6>            
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/organizaciones/">Organizaciones</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/departamentos/">Departamentos</a>
@@ -84,12 +84,12 @@ function getSidebar($ruta = ''){
     </li>
     
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
+        <a class="nav-link dropdown-toggle text-dark" href="#" id="resultadosDropdown" role="button" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
             <span>Resultados</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">                        
+        <div class="dropdown-menu" aria-labelledby="resultadosDropdown" id="sideGrupoResultados">                        
             <a class="dropdown-item" href="{$dir_base}app/evaluacion/admin/">Decálogo</a>
             <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>  
             <a class="dropdown-item" href="{$dir_base}app/consultas/competencias/">Competencias</a>           
@@ -228,7 +228,7 @@ function getTopIncludes($ruta = ''){
 
     <link href="{$ruta}css/estilos.css" rel="stylesheet" type="text/css">
 
-    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>
+    <script src="{$ruta}vendor/jquery/jquery.min.js"></script>   
 EOD;
     echo $html;
 }
