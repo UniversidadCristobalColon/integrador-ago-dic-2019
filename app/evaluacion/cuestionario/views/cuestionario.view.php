@@ -90,7 +90,7 @@
                             <!-- CONTAINER -->
                             <div class="container">
                                 <!-- FORM -->
-                                <form  action="<?php echo htmlspecialchars( htmlentities( $_SERVER['PHP_SELF'] ) ) ?>" method="POST">
+                                <form  class="was-validated" action="<?php echo htmlspecialchars( htmlentities( $_SERVER['PHP_SELF'] ) ) ?>" method="POST">
                                     <?php echo $echo_pregunta ?>
                             </div>
                             <!-- CONTAINER -->
@@ -217,6 +217,8 @@
     </a>
 
     <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+    
+    <script src="js/main.js"></script>
 </body>
 
 </html>
