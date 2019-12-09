@@ -81,7 +81,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                             } ?>
                                         </td>
                                         <td class="text-center">
-                                            <form name="f-el-ed" action="elim-edit.php" method="post">
+                                            <form name="f-ed" action="editar.php" method="post"
+                                                  style="display: inline-block">
                                                 <button
                                                         type="submit" title="Editar registro"
                                                         name="b-edit"
@@ -89,9 +90,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         class="btn btn-xs btn-light">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
+                                            </form>
+                                            <form name="f-cb" action="cambiar.php" method="post"
+                                                  style="display: inline-block">
                                                 <button
                                                         type="submit" title="Cambiar estado"
-                                                        name="b-elim"
+                                                        name="b-camb"
                                                         value="<?php echo $fila['id'] ?>"
                                                         class="btn btn-xs btn-light">
                                                     <i class="fas fa-exchange-alt"></i>
