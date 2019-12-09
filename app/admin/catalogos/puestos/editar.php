@@ -1,116 +1,198 @@
 <?php
+ob_start();
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
-?>
 
-<!DOCTYPE html>
-<html lang="es">
+if(isset($_POST['cambiar'])){
+    $cambiar =  $_POST["cambiar"];
+    $find=mysqli_query($conexion,"SELECT * FROM puestos WHERE id='$cambiar'");
+    $row=mysqli_fetch_array($find);
+    $estado=$row['estado'];
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    if($estado == "Activo"){
+        $sqlCambiar = "UPDATE puestos SET estado = 'Inactivo' WHERE id = '$cambiar' ";
+    }else{
+        $sqlCambiar = "UPDATE puestos SET estado = 'Activo'  WHERE id = '$cambiar' ";
+    }
 
-    <title><?php echo PAGE_TITLE ?></title>
+    if ($conexion->query($sqlCambiar) === TRUE) {
+        header("location: index.php");
+        ob_flush();
+    }else{
+        echo "Error updating record: " . $conexion->error;
+    }
+}
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
-</head>
+if(isset($_POST['editar'])){
+    $id =  $_POST['editar'];
 
-<script>
+    ?>
+    <!DOCTYPE html>
+    <html lang="es">
 
-    $(document).ready(funtion){
-        $("#error").dialog({
-            width: 580,
-            height: 225,
-            autoOpen: false,
-            modal: true
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" href="sweetalert2.min.css">
+
+        <title><?php echo PAGE_TITLE ?></title>
+
+        <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    </head>
+
+    <script>
+        $(document).ready(function(){
+
+            $("#errores").dialog({
+                width: 580,
+                height:225,
+                autoOpen:false,
+                modal:true
+            });
         });
-    });
 
-    function mostrarError(){
-        $("#error").dialog("open");
-    }
-
-    function validarFormulario(params) {
-        event.preventDefault();
-        var error = false;
-
-        if(
-            $('input[name="puesto"]').val() == ''
-        ){
-            error = true;
-            $('#texto-error').text(
-                "Introduce el nombre del Puesto"
-            );
-            mostrarError();
+        function mostrarErrores(){
+            $("#errores").dialog("open");
         }
-        $('#agregar').submit();
-    }
 
-</script>
+        function validaFormulario(params) {
+            event.preventDefault();
+            var errores = false;
+            if (
+                $('input[name="puesto"]').val() == ''
+            ) {
+                errores = true;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Debes Seleccionar el Puesto'
+                });
+                mostrarErrores();
+            }
+            if (
+                $('select[name="estado"]').val() == 'Selecciona un estado'
+            ) {
+                errores = true;
 
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Debes elegir un estado'
+                });
+                mostrarErrores();
+            }
+            $('#agregar').submit();
+        }
 
+    </script>
 
-<body id="page-top">
+    <?php
+    $buscar=mysqli_query($conexion,"SELECT * FROM puestos WHERE id='$id'");
+    $fila=mysqli_fetch_array($buscar);
+    $puesto=$fila['puesto'];
+    @$idpuesto=$fila['id_nivel_puesto'];
+    $estatus=$fila['estado'];
+    ?>
 
-<?php getNavbar() ?>
+    <body id="page-top">
 
-<div id="wrapper">
+    <?php getNavbar() ?>
 
-    <?php getSidebar() ?>
+    <div id="wrapper">
 
-    <div id="content-wrapper">
+        <?php getSidebar() ?>
 
-        <div class="container-fluid">
+        <div id="content-wrapper">
 
-            <!-- DataTables Example -->
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fas fa-table"></i>
-                    Catálogo: Editar Puesto
+            <div class="container-fluid">
+
+                <!-- Page Content -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-table"></i>
+                        Catálogo: Puestos
+                    </div>
+
+                    <div class="card-body">
+                        <form id="agregar" action="guardar_editar.php" method="post">
+    <?php foreach ($conexion->query('SELECT * from puestos WHERE id ='.$id) as $row){  ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Puesto Actual:</label>
+                                        <input type="text" class="form-control" value="<?php echo $row['puesto']; ?> " readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Puesto Nuevo:</label>
+                                        <input type="text" name="puesto_nuevo" class="form-control">
+                                        <input type="hidden" name="id" value=<?php echo $id;?>>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Nivel de Puesto:</label>
+                                        <select name="nivel_puesto" class="form-control">
+                                            <?php
+                                            foreach ($conexion->query('SELECT id, nivel_puesto from niveles_puesto') as $row){
+                                                ?>
+                                                <option><?php echo $row['nivel_puesto'];?></option>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Estado:</label>
+                                        <select id="estado" name="estado" class="form-control">
+                                            <option>Selecciona el estado</option>
+                                            <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
+                                            <option value="Inactivo" <?php if ($estatus=="Inactivo"){echo 'selected';} ?>>Inactivo</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <button type="submit"  class="btn btn-primary" id="boton" onclick="validaFormulario()">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                                    <?php } ?>
+                        </form>
+                    </div>
+                    <div id="errores" title="Error" class="ui-helper-hidden" style="color: red">
+                        <div id="texto-errores">
+                        </div>
+                    </div>
+
                 </div>
 
 
-                <form id="agregar" action="guardar.php" method="post">
-                    <div class="row">
-                        <div class = "col-md-4">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Puesto</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="puesto" placeholder="Introduzca el Puesto">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class = "col-md-4">
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Nivel de Puesto</label>
-                                <input type="text" name="nivel" class="form-control" id="exampleInputPassword1" placeholder="Introduzca ID del nivel de puesto">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" id="boton" onclick="validarFormulario()">Guardar</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <div id="error" title="Error" class="-ui-helper-hidden" style="color: red">
-                    <div id="texto-error">
-                    </div>
-                </div>
             </div>
             <!-- /.container-fluid -->
 
-            <?php getFooter() ?>
 
         </div>
         <!-- /.content-wrapper -->
@@ -126,5 +208,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <?php getModalLogout() ?>
 
     <?php getBottomIncudes( RUTA_INCLUDE ) ?>
-</body>
-</html>
+    <?php getFooter() ?>
+    </body>
+    </html>
+<?php } ?>
