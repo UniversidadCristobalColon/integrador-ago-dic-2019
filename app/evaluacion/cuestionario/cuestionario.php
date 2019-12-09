@@ -2,7 +2,9 @@
     require_once "../../../config/global.php";
     require_once "../../../config/db.php";
     define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
-
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
+    
     $errores = '';
     if ( $_SERVER['REQUEST_METHOD']  ==  'GET' ) {
         if ( isset($_GET['id']) && $_GET['id'] !== '' ) {
@@ -48,7 +50,8 @@
                 switch ( $estado_aplicacion ) {
                     case 'A':
                         $conexion->query(
-                            'UPDATE aplicaciones SET aplicaciones.estado = "B"'
+                            'UPDATE aplicaciones SET aplicaciones.estado = "B" 
+                            WHERE aplicaciones.id = '.$id_aplicacion.''
                         );
                         break;
                     case 'C':
@@ -145,7 +148,7 @@
                         if ( $row['tipo'] == 'A' ) {
                             $echo_pregunta .= '
                             <div class="container">
-                                <input type="text" class="form-control" id="'.$row['id'].'" name="'.$row['id'].'" placeholder="Respuesta">
+                                <input type="text" class="form-control" id="'.$row['id'].'" name="'.$row['id'].'|'.$numero_pregunta.'" placeholder="Respuesta" required>
                             </div>';
                         } else {
                             $sql = 'SELECT respuestas.id ,respuestas.respuesta
@@ -155,27 +158,50 @@
                                     WHERE preguntas_respuestas.id_pregunta = '.$row['id'].'';
                             $sql_respuestas_m = $conexion->query( $sql );
                             $total_rows_sql_respuestas_m = $sql_respuestas_m->num_rows;
-                            $contador_row = 0;
+                            // $contador_row = 0;
                             while ( $row_respuesta = $sql_respuestas_m->fetch_assoc() ) {
-                                $contador_row++;
-                                if ( $contador_row == $total_rows_sql_respuestas_m ) {
-                                    $echo_pregunta .= '
-                                    <div class="form-check ml-4 mr-4">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="'.$row['id'].'" value="'.$row_respuesta['id'].'">
-                                                '.$row_respuesta['respuesta'].'
-                                        </label>
-                                        <input style="visibility: hidden;" type="radio" name="'.$row['id'].'" value="none" checked>
-                                    </div>';
-                                } else {
-                                    $echo_pregunta .= '
-                                    <div class="form-check ml-4 mr-4">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="radio" name="'.$row['id'].'" value="'.$row_respuesta['id'].'">
-                                                '.$row_respuesta['respuesta'].'
-                                        </label>
-                                    </div>';
-                                }
+                                // $contador_row++;
+                                // if ( $contador_row == $total_rows_sql_respuestas_m ) {
+                                //     $echo_pregunta .= '
+                                //     <div class="form-check ml-4 mr-4">
+                                //         <label class="form-check-label">
+                                //             <input class="form-check-input" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="'.$row_respuesta['id'].'" required>
+                                //                 '.$row_respuesta['respuesta'].'
+                                //         </label>
+                                //         <input style="visibility: hidden;" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="none" checked">
+                                //     </div>';
+                                //     // $echo_pregunta .= '
+                                //     // <div class="form-check ml-4 mr-4">
+                                //     //     <label class="form-check-label">
+                                //     //         <input class="form-check-input" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="'.$row_respuesta['id'].'" required>
+                                //     //             '.$row_respuesta['respuesta'].'
+                                //     //     </label>
+                                //     //     <input style="visibility: hidden;" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="none" checked">
+                                //     // </div>';
+                                // } else {
+                                //     $echo_pregunta .= '
+                                //     <div class="form-check ml-4 mr-4">
+                                //         <label class="form-check-label">
+                                //             <input class="form-check-input" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="'.$row_respuesta['id'].'" required>
+                                //                 '.$row_respuesta['respuesta'].'
+                                //         </label>
+                                //     </div>';
+                                // }
+                                $echo_pregunta .= '
+                                <div class="form-check ml-4 mr-4">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="'.$row_respuesta['id'].'" required>
+                                            '.$row_respuesta['respuesta'].'
+                                    </label>
+                                </div>';
+                                // $echo_pregunta .= '
+                                // <div class="form-check ml-4 mr-4">
+                                //     <label class="form-check-label">
+                                //         <input class="form-check-input" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="'.$row_respuesta['id'].'" required>
+                                //             '.$row_respuesta['respuesta'].'
+                                //     </label>
+                                //     <input style="visibility: hidden;" type="radio" name="'.$row['id'].'|'.$numero_pregunta.'" value="none" checked">
+                                // </div>';
                             }
                         }
                         $echo_pregunta .= '</div>';
@@ -190,21 +216,36 @@
 
     
     if ( $_SERVER['REQUEST_METHOD']  ==  'POST' ) {
+        // var_dump( $_POST );
+        $id_aplicacion = $_POST['id_aplicacion'];
+
+        $sql = $conexion->query(
+            'SELECT 
+                aplicaciones.hash AS EVALUACION_HASH
+            FROM aplicaciones
+            WHERE aplicaciones.id = '.$id_aplicacion.''
+        );
+        $sql = $sql->fetch_assoc();
+        $hash_evaluacion = $sql['EVALUACION_HASH'];
 
         // COMPROBAR QUE TODAS LAS PREGUNTAS TENGAN RESPUESTA
         foreach ($_POST as $key => $value) {
-            if ( $value == 'none' || $value == '' ) {
-                $errores .= 'No se han respondido todas las preguntas.<br>';
-            }
             if ( $key == 'id_aplicacion' ) {
-                break;
+                continue;
+            }
+
+            $explode_pregunta = explode ("|",$key);
+            $numero_pregunta = $explode_pregunta[1];
+            if ( $value == 'none' || $value == '' ) {
+                $errores .= 'No se ha respondido la pregunta número '.($numero_pregunta-1).'<br>';
             }
         }
 
         if ( $errores == '' ) {
-            $id_aplicacion = $_POST['id_aplicacion'];
             // POR CADA VALOR DE $POST COMO $KEY SACAR $VALUE
             foreach ($_POST as $key => $value) {
+                $explode_pregunta = explode ("|",$key);
+                $id_pregunta = $explode_pregunta[0];
                 // SI SE LLEGA AL ID_APLICACION QUE NO HAGA NADA
                 if ( $key != 'id_aplicacion' ) {
 
@@ -221,7 +262,7 @@
                         INNER JOIN aplicaciones
                         ON evaluaciones.id = aplicaciones.id_evaluacion
                         WHERE aplicaciones.id = '.$id_aplicacion.'
-                        AND preguntas.id = '.$key.'';
+                        AND preguntas.id = '.$id_pregunta.'';
                     $sql = $conexion->query( $sql );
                     $sql = $sql->fetch_assoc();
                     $tipo_pregunta = $sql['TIPO_PREGUNTA'];
@@ -234,7 +275,8 @@
                                 preguntas_respuestas.puntos,
                                 preguntas_respuestas.id_respuesta
                             FROM preguntas_respuestas
-                            WHERE preguntas_respuestas.id_pregunta = '.$key.'';
+                            WHERE preguntas_respuestas.id_pregunta = '.$id_pregunta.'
+                            AND preguntas_respuestas.id_respuesta = '.$value.'';
                         $sql = $conexion->query( $sql );
                         $sql = $sql->fetch_assoc();
                         $puntos_pregunta = $sql['puntos'];
@@ -245,7 +287,7 @@
                             SELECT resultados.id
                             FROM resultados
                             WHERE id_aplicacion = '.$id_aplicacion.'
-                            AND id_pregunta = '.$key.'
+                            AND id_pregunta = '.$id_pregunta.'
                             AND id_respuesta = '.$id_respuesta.'
                             AND orden = '.$orden_pregunta.'
                             AND puntos = '.$puntos_pregunta.'';
@@ -266,7 +308,7 @@
                                 ) VALUES (
                                     NULL,
                                     '.$id_aplicacion.',
-                                    '.$key.',
+                                    '.$id_pregunta.',
                                     '.$id_respuesta.',
                                     '.$orden_pregunta.',
                                     NOW(),
@@ -281,7 +323,7 @@
                             SELECT resultados.id
                             FROM resultados
                             WHERE id_aplicacion = '.$id_aplicacion.'
-                            AND id_pregunta = '.$key.'
+                            AND id_pregunta = '.$id_pregunta.'
                             AND id_respuesta = -1
                             AND orden = '.$orden_pregunta.'
                             AND texto_libre = "'.$value.'"';
@@ -301,7 +343,7 @@
                                 ) VALUES (
                                     NULL,
                                     '.$id_aplicacion.',
-                                    '.$key.',
+                                    '.$id_pregunta.',
                                     -1,
                                     '.$orden_pregunta.',
                                     NOW(),
@@ -389,7 +431,6 @@
                         )'
                     );
                 }
-
             } else {
                 $pagina_actualizada = $pagina_actual + 1;
                 $sql = $conexion->query(
@@ -397,14 +438,6 @@
                     SET aplicaciones.pagina = '.$pagina_actualizada.'
                     WHERE aplicaciones.id = '.$id_aplicacion.''
                 );
-                $sql = $conexion->query(
-                    'SELECT 
-                        aplicaciones.hash AS EVALUACION_HASH
-                    FROM aplicaciones
-                    WHERE aplicaciones.id = '.$id_aplicacion.''
-                );
-                $sql = $sql->fetch_assoc();
-                $hash_evaluacion = $sql['EVALUACION_HASH'];
                 header( 'Location: cuestionario.php?id=' . $hash_evaluacion . '' );
             }
 
