@@ -218,9 +218,9 @@ function formatoFechaCorta($fecha){
                 $mostrar_boton = true;
             }
 
-            $elementos_boton = $mostrar_boton ?"<<a href='calculoPromedio.php?id={$Evaluacion}' class=\"btn btn-primary\">
+            $elementos_boton = $mostrar_boton ?"<a href='calculoPromedio.php?id={$Evaluacion}' class=\"btn btn-primary\">
                                                 Calcular resultados
-                                               </button>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
+                                               </a>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
                                                 Calcular resultados
                                                </button>";
             ?>
