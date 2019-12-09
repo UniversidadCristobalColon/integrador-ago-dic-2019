@@ -7,9 +7,9 @@ if (isset($_POST['bguard'])) {
     if ($_POST['bguard'] == 'Cambiar') {
         $id_bor = $_POST['idbor'];
 
-        if ($_POST['statdec'] == 'A') {
+        if ($_POST['statdec'] == 'Activo') {
             $sql_elim = "UPDATE decalogos SET status='B' WHERE id='$id_bor';";
-        } elseif ($_POST['statdec'] == 'B') {
+        } elseif ($_POST['statdec'] == 'Inactivo') {
             $sql_elim = "UPDATE decalogos SET status='A' WHERE id='$id_bor';";
         }
         $resultado = mysqli_query($conexion, $sql_elim);
@@ -62,7 +62,13 @@ if (isset($_POST['bguard'])) {
     $sqlres = mysqli_query($conexion, $sql_stat);
     if ($sqlres) {
         $fila = mysqli_fetch_assoc($sqlres);
-        $stat_deca = $fila['status'];
+
+        if ($fila['status'] == 'A') {
+            $stat_deca = 'Activo';
+        } elseif ($fila['status'] == 'B') {
+            $stat_deca = 'Inactivo';
+        }
+
     }
 }
 
