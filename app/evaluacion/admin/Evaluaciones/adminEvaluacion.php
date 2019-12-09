@@ -255,7 +255,7 @@ function formatoFechaCorta($fecha){
                     }
 
 
-                    $id_evaluado        = $evaluado['id_empleado'];
+                    $id_evaluado        = $evaluado['id'];
                     $nombre_evaluado    = $evaluado['nombre'];
                     $apellido_evaluado  = $evaluado['apellidos'];
 
