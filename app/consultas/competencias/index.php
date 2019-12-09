@@ -56,7 +56,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             FROM empleados a
             LEFT JOIN departamentos b
             ON a.id_departamento = b.id
-            WHERE a.id = 9";
+            WHERE a.id = $id_evaluado";
 
 
     $res = mysqli_query($conexion, $sql);
