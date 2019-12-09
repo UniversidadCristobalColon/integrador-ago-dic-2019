@@ -22,8 +22,21 @@
 
 <body class="index-login">
 <?php 
-    if(isset($_GET['email'])) {
-        echo '<div class="alert alert-success">Se ha enviado un correo a '.$_GET['email'].'.</div>';
+    if(!empty($_GET['error'])) {
+        $error = $_GET["error"];
+        $texto = '';
+        switch ($error){
+            case '1':
+                $texto = 'La evaluación ha concluido';
+                break;
+            case '2':
+                $texto = 'Código de evaluación no encontrado';
+                break;
+            case '3':
+                $texto = 'Código incorrecto';
+                break;
+        }
+        echo '<div class="alert alert-danger">'.$texto.'.</div>';
     }
 ?>
 <div class="container">
@@ -31,18 +44,15 @@
         <div class="card-header">Evaluación 360</div>
         <div class="card-body">
             <div class="text-center mb-4">
-                <h4>¿Olvidó su contraseña?</h4>
-                <p>Se enviará un correo electrónico con instrucciones para recuperar el acceso a su cuenta.</p>
+                <h4>Acceder a una evaluación</h4>
             </div>
-            <form method="post" action="token.php" 
-                onsubmit="document.getElementById('submit').disabled = true;">
+            <form method="post" action="procesar_codigo.php" onsubmit="document.getElementById('submit').disabled = true;">
                 <div class="form-group">
-                    <div class="form-label-group">
-                        <input type="email" id="inputEmail" class="form-control" placeholder="Correo electrónico" required="required" autofocus="autofocus" name="email">
-                        <label for="inputEmail">Correo electrónico</label>
-                    </div>
+                    <label for="inputCodigo">Código de evaluación</label>
+                    <input type="text" id="inputCodigo" class="form-control" maxlength="7" placeholder="#######" required="required" autofocus="autofocus" name="codigo">
+                    <small>¿Dudas? contacte al personal encargado de la evaluación</small>
                 </div>
-                <input type="submit" class="btn btn-primary btn-block" value="Recuperar" id="submit">
+                <input type="submit" class="btn btn-primary btn-block" value="Continuar" id="submit">
             </form>
             <div class="text-center">
                 <a class="d-block small mt-3" href="index.php">Página de inicio</a>
