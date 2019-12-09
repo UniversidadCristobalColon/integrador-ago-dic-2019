@@ -29,7 +29,6 @@ $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
 $cont2=0;
 
-
 //$sql = "";
 
     /*$escala[0]["etiqueta"] = 'malo'

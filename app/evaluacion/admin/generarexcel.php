@@ -5,11 +5,41 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
 
 require __DIR__ . "../../../../vendor/autoload.php";
-$id_evaluado='9';
-$id_periodo='2';
+$id_evaluado='10';
+$id_periodo='1';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+$sql = "select * from escalas ";
+$resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+$escala[5] = array();
+while($row = mysqli_fetch_array($resesacalas)){
+    $escala[0]['etiqueta']=$row['nivel1_etiqueta'];
+    $escala[0]['inferior']=$row['nivel1_inferior'];
+    $escala[0]['superior']=$row['nivel1_superior'];
+
+    $escala[1]['etiqueta']=$row['nivel2_etiqueta'];
+    $escala[1]['inferior']=$row['nivel2_inferior'];
+    $escala[1]['superior']=$row['nivel2_superior'];
+
+    $escala[2]['etiqueta']=$row['nivel3_etiqueta'];
+    $escala[2]['inferior']=$row['nivel3_inferior'];
+    $escala[2]['superior']=$row['nivel3_superior'];
+
+    $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
+    $escala[3]['inferior']=$row['nivel3_inferior'];
+    $escala[3]['superior']=$row['nivel3_superior'];
+
+    $escala[4]['etiqueta']=$row['nivel4_etiqueta'];
+    $escala[4]['inferior']=$row['nivel4_inferior'];
+    $escala[4]['superior']=$row['nivel4_superior'];
+
+    $escala[5]['etiqueta']=$row['nivel5_etiqueta'];
+    $escala[5]['inferior']=$row['nivel5_inferior'];
+    $escala[5]['superior']=$row['nivel5_superior'];
+}
 
 $documento = new Spreadsheet();
 $documento
@@ -22,22 +52,28 @@ $documento
     ->setKeywords('etiquetas o palabras clave separadas por espacios')
     ->setCategory('La categoría');
 
-$documento->getActiveSheet()->getColumnDimension('B')->setWidth(10);
-$sheet = $documento->getActiveSheet();
+#$sheet = $documento->getActiveSheet();
 
-$sheet->setCellValue('A1', 'ID');
+/*$sheet->setCellValue('A1', 'ID');
 $sheet->setCellValue('B1', 'Pregunta');
-$sheet->setCellValue('C1', 'Calificación');
+$sheet->setCellValue('C1', 'Calificación');*/
 
 $coordinadaA='A';
 $coordinadaB='B';
 $coordinadaC='C';
+$coordinadaD='D';
+$coordinadaE='E';
+$coordinadaF='F';
+$coordinadaG='G';
 
-$sql = "select distinct pe.id_evaluador,e.nombre from promedios_por_evaluado pe join empleados e
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
 on e.id = pe.id_evaluador
+join roles r on pe.id_rol_evaluador = r.id
 where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
 
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+$cont=2;
+$contusuarios=0;
 
 while($row2 = mysqli_fetch_array($resultado2)){
     $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
@@ -48,34 +84,138 @@ while($row2 = mysqli_fetch_array($resultado2)){
                                         ";
     $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
-    while($row4 = mysqli_fetch_array($resultado3)){
-        $coordinadaA=$coordinadaA . strval((int)$row4['id']+1);
-        $coordinadaB=$coordinadaB . strval((int)$row4['id']+1);
+    $sheet=$documento->createSheet();
+    $sheet->setTitle($row2['rol']);
+    $sheet = $documento->getSheetByName($row2['rol']);
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('A')->setWidth(5);
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('B')->setWidth(50);
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('C')->setWidth(5);
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('D')->setWidth(30);
 
-        $sheet->setCellValue($coordinadaA, 'prueba1');
-        $sheet->setCellValue($coordinadaB, 'prueba2');
+    #$sheet = $documento->getActiveSheet();
+    $sheet->setCellValue('A1', 'ID');
+    $sheet->setCellValue('B1', 'Pregunta');
+    $sheet->setCellValue('C1', 'Calificación');
+
+    while($row4 = mysqli_fetch_array($resultado3)){
+
+        $coordinadaA=$coordinadaA . strval($cont);
+        $coordinadaB=$coordinadaB . strval($cont);
+        $coordinadaC=$coordinadaC . strval($cont);
+        $coordinadaD=$coordinadaD . strval($cont);
+
+        $sheet->setCellValue($coordinadaA, strval($cont));
+        $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
+        $sheet->setCellValue($coordinadaC, $row4['puntos']);
+        foreach($escala as $e){
+            if($row4['puntos'] >= $e['inferior'] && $row4['puntos'] <= $e['superior']){
+                $sheet->setCellValue($coordinadaD, $e['etiqueta']);
+                break;
+            }
+        }
 
         $coordinadaA='A';
         $coordinadaB='B';
         $coordinadaC='C';
-
+        $coordinadaD='D';
+        $cont++;
     }
+    $cont=2;
 }
+
+
+
+//TABULADOR
+
+$sheet=$documento->createSheet();
+$sheet->setTitle('Tabulador');
+$sheet = $documento->getSheetByName('Tabulador');
+$documento->getSheetByName('Tabulador')->getColumnDimension('A')->setWidth(5);
+$documento->getSheetByName('Tabulador')->getColumnDimension('B')->setWidth(50);
+$documento->getSheetByName('Tabulador')->getColumnDimension('C')->setWidth(5);
+$documento->getSheetByName('Tabulador')->getColumnDimension('D')->setWidth(30);
+
+
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
+on e.id = pe.id_evaluador
+join roles r on pe.id_rol_evaluador = r.id
+where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
+
+$resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+
+while($row2 = mysqli_fetch_array($resultado2)){
+    $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
+                                        on p.id = pe.id_pregunta
+                                        join decalogos_aseveraciones da 
+                                        on da.id = p.id_decalogo_aseveracion
+                                        where pe.id_evaluador = $row2[id_evaluador]
+                                        ";
+    $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+    $documento->getSheetByName('Tabulador')->getColumnDimension('A')->setWidth(5);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('B')->setWidth(50);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('C')->setWidth(20);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('D')->setWidth(20);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('E')->setWidth(20);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('F')->setWidth(20);
+    $documento->getSheetByName('Tabulador')->getColumnDimension('G')->setWidth(20);
+
+    $sheet->setCellValue('A1', 'ID');
+    $sheet->setCellValue('B1', 'Pregunta');
+
+    $coordinadaBusqueda='';
+    $coordinadaBusqueda2='';
+    if($contusuarios=='0'){
+        $sheet->setCellValue('C1', $row2['rol']);
+        $coordinadaBusqueda='C';
+        $coordinadaBusqueda2='C';
+    }elseif ($contusuarios=1){
+        $sheet->setCellValue('D1', $row2['rol']);
+        $coordinadaBusqueda='D';
+        $coordinadaBusqueda2='D';
+    }elseif ($contusuarios==2){
+        $sheet->setCellValue('E1', $row2['rol']);
+        $coordinadaBusqueda='E';
+        $coordinadaBusqueda2='E';
+    }elseif ($contusuarios==3){
+        $sheet->setCellValue('F1', $row2['rol']);
+        $coordinadaBusqueda='F';
+        $coordinadaBusqueda2='F';
+    }
+    $contusuarios++;
+    $promedio=0;
+    while($row4 = mysqli_fetch_array($resultado3)){
+        $coordinadaA=$coordinadaA . strval($cont);
+        $coordinadaB=$coordinadaB . strval($cont);
+        $coordinadaBusqueda=$coordinadaBusqueda . strval($cont);
+
+        $sheet->setCellValue($coordinadaA, strval($cont-1));
+        $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
+        $sheet->setCellValue($coordinadaBusqueda, $row4['puntos']);
+
+
+        $coordinadaA='A';
+        $coordinadaB='B';
+        $coordinadaC='C';
+        $coordinadaBusqueda=$coordinadaBusqueda2;
+        $cont++;
+        $promedio += (int)$row4['puntos'];
+    }
+    $promedio=$promedio /($cont -2);
+    $sheet->setCellValue($coordinadaB. strval($cont), 'Promedio');
+    $sheet->setCellValue($coordinadaBusqueda.strval($cont), $promedio);
+    $cont=2;
+}
+
+
+
+
+
+$documento->removeSheetByIndex(0);
+
 $nombreDelDocumento = "Mi primer archivo.xlsx";
-/**
- * Los siguientes encabezados son necesarios para que
- * el navegador entienda que no le estamos mandando
- * simple HTML
- * Por cierto: no hagas ningún echo ni cosas de esas; es decir, no imprimas nada
- */
-/*
- *         $sheet->setCellValue($coordinadaB, $row4["aseveracion"]);
-        $sheet->setCellValue($coordinadaC, $row4["puntos"]);
 
-
-        $coordinadaA=$coordinadaC . strval(1);
- *
- */
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
 header('Cache-Control: max-age=0');
