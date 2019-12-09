@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
 
@@ -6,6 +7,8 @@ if(empty($_GET['id_evaluacion'])){
     exit('ID no establecido');
 }
 $Evaluacion = $_GET['id_evaluacion'];
+$mostrar_msg_resultados = !empty($_GET['resultados']) && $_GET['resultados'] == '1';
+
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 $sql = "select * from evaluaciones where id = $Evaluacion";
@@ -17,6 +20,11 @@ if($res){
     }
     $Depa   = $f['id_departamento'];
     $Nombre = $f['descripcion'];
+}
+
+function formatoFechaCorta($fecha){
+    setlocale(LC_TIME, 'es_MX');
+    return !empty($fecha) ? strftime("%e %b %G, %r", strtotime($fecha)) : '';
 }
 ?>
 <!DOCTYPE html>
@@ -31,15 +39,9 @@ if($res){
 
     <title><?php echo PAGE_TITLE ?></title>
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
-    <script src="../../../../vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="../../../../vendor/datepicker/css/bootstrap-datepicker.standalone.min.css">
-
     <script>
         $(document).ready(function () {
-            $('#F-inicio').datepicker();
-        });
-        $(document).ready(function () {
-            $('#F-fin').datepicker();
+            $('[data-toggle="tooltip"]').tooltip()
         });
 
         function guardar() {
@@ -64,7 +66,7 @@ if($res){
                 return false;
             }
             if (evaluadorS == "") {
-                alert("Seleccione al personal superior que sera el evaluardor");
+                alert("Seleccione al personal jefe que sera el evaluardor");
                 return false;
             }
             if (evaluadorP1 == "") {
@@ -80,7 +82,7 @@ if($res){
                 return false;
             }
             if (evaluado == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador superior");
+                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador jefe");
                 return false;
             }
             if (evaluado == evaluadorP1){
@@ -96,19 +98,19 @@ if($res){
                 return false;
             }
             if (evaluadorS == evaluadorP1){
-                alert("No se puede seleccionar el mismo evaluador superior en otro campo de evaluador, verificar al evaluador par");
+                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par");
                 return false;
             }
             if (evaluadorS == evaluadorP2){
-                alert("No se puede seleccionar el mismo evaluador superior en otro campo de evaluador, verificar al evaluador par");
+                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par");
                 return false;
             }
             if (evaluadorS == evaluadorC){
-                alert("No se puede seleccionar el mismo evaluador superior en otro campo de evaluador, verificar al evaluador cliente");
+                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador cliente");
                 return false;
             }
             if (evaluadorP1 == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador superior");
+                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe");
                 return false;
             }
             if (evaluadorP1 == evaluadorP2){
@@ -120,7 +122,7 @@ if($res){
                 return false;
             }
             if (evaluadorP2 == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador superior");
+                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe");
                 return false;
             }
             if (evaluadorP2 == evaluadorP1){
@@ -132,7 +134,7 @@ if($res){
                 return false;
             }
             if (evaluadorC == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador superior");
+                alert("No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador jefe");
                 return false;
             }
             if (evaluadorC == evaluadorP1){
@@ -158,13 +160,24 @@ if($res){
     <?php getSidebar() ?>
 
     <div id="content-wrapper">
-
         <div class="container-fluid">
+            <?php
+            if($mostrar_msg_resultados) {
+                ?>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="fas fa-check-circle fa-1x"></i> Se han calculado los resultados de la evaluación
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+            }
+            ?>
 
             <!-- Page Content -->
             <h1><?php echo $Nombre?></h1>
             <hr>
-            <h6>Progreso general de la evaluacion</h6>
+            <h6>Participación general</h6>
             <?php
                 $total = 0;
                 $Iniciadas = 0;
@@ -191,7 +204,7 @@ if($res){
                 $porcentaje = $Correctas > 0 && $total > 0 ? floor(($Correctas*100)/$total) : 0;
             ?>
 
-            <div class="row mb-5">
+            <div class="row mb-4">
                 <div class="col">
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $porcentaje ?>%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><?php echo $porcentaje ?>%</div>
@@ -201,43 +214,53 @@ if($res){
 
             <?php
             $mostrar_boton = false;
-            if($porcentaje > 65){
+            if($porcentaje >= 65){
                 $mostrar_boton = true;
             }
 
-            $elementos_boton = $mostrar_boton ?"<button class=\"btn btn-primary\" type=\"button\">
-                                                                Calculo de promedio
-                                                               </button>" : "<button type=\"button\" class=\"btn btn-primary\" data-toggle=\"tooltip\" data-placement=\"top\" disabled title=\"La evaluación debe de estar un 65% completada como mínimo\">
-                                                                Calculo de promedio
-                                                               </button>";
+            $elementos_boton = $mostrar_boton ?"<<a href='calculoPromedio.php?id={$Evaluacion}' class=\"btn btn-primary\">
+                                                Calcular resultados
+                                               </button>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
+                                                Calcular resultados
+                                               </button>";
             ?>
 
             <div class="row mb-3">
                 <div class="col">
-                    <button class="btn btn-primary" type="button">Envio</button>
-                    <?php echo $elementos_boton?>
                     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalSiguiente">Agregar evaluación</button>
+                    <?php echo $elementos_boton?>
                 </div>
             </div>
 
-            <div class="form-group">
-                <?php
-                $sql = "SELECT b.id, b.nombre, b.apellidos FROM aplicaciones a, empleados b WHERE a.id_evaluado = b.id and a.id_evaluacion = $Evaluacion GROUP BY b.id, b.nombre, b.apellidos";
-                $resultado = mysqli_query($conexion,$sql);
-                $evaluados = array();
-                if($resultado){
-                    while($fila = mysqli_fetch_assoc($resultado)){
-                        $evaluados[]=$fila;
-                    }
+            <?php
+            $sql = "SELECT b.id, b.nombre, b.apellidos 
+                    FROM aplicaciones a, empleados b 
+                    WHERE a.id_evaluado = b.id 
+                    and a.id_evaluacion = $Evaluacion
+                    
+                    GROUP BY b.id, b.nombre, b.apellidos";
+
+            $resultado = mysqli_query($conexion,$sql);
+            $evaluados = array();
+            if($resultado){
+                while($fila = mysqli_fetch_assoc($resultado)){
+                    $evaluados[]=$fila;
                 }
-                if (!empty($evaluados)) {
-                    foreach ($evaluados as $evaluado) {
-                        $id_evaluado        = $evaluado['id'];
-                        $nombre_evaluado    = $evaluado['nombre'];
-                        $apellido_evaluado  = $evaluado['apellidos'];
+            }
+            if (!empty($evaluados)) {
+                $columnas = 0;
+                foreach ($evaluados as $evaluado) {
+                    if($columnas == 0){
+                        echo '<div class="row">';
+                    }
 
 
-                    $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, roles.rol, app.estado, SUBSTRING(app.hash, 1, 7) as codigo from aplicaciones app 
+                    $id_evaluado        = $evaluado['id_empleado'];
+                    $nombre_evaluado    = $evaluado['nombre'];
+                    $apellido_evaluado  = $evaluado['apellidos'];
+
+
+                    $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, roles.rol, app.estado, SUBSTRING(app.hash, 1, 7) as codigo, app.finalizado from aplicaciones app 
                             left join empleados emp on app.id_evaluador=emp.id 
                             LEFT JOIN puestos ON emp.id_puesto = puestos.id 
                             LEFT JOIN roles ON roles.id = app.id_rol_evaluador
@@ -257,19 +280,19 @@ if($res){
                             }
                         }
 
-                            $liga_eliminar_registro = $mostrar_eliminar ?"<a title=\"Eliminar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"eliminar($id_evaluado, $Evaluacion)\">
-                                                                <i class=\"fa fa-trash\"></i>
-                                                               </a>" : '';
+                    $liga_eliminar_registro = $mostrar_eliminar ?"<a title=\"Eliminar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"eliminar($id_evaluado, $Evaluacion)\">
+                                                            <i class=\"fa fa-trash\"></i>
+                                                           </a>" : '';
 
-                    ?>
+                ?>
 
 
-
+                <div class="col-md-6">
                     <div class="card mb-3">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-10">
-                                    <?php echo "<h3>$nombre_evaluado $apellido_evaluado</h3>"; ?>
+                                    <?php echo "<small>Evaluado</small><h4>$nombre_evaluado $apellido_evaluado</h4>"; ?>
                                 </div>
                                 <div class="col-md-2 text-right">
                                     <?php echo $liga_eliminar_registro ?>
@@ -283,61 +306,75 @@ if($res){
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <ul class="list-group list-group-flush">
                                         <?php
-                                        foreach ($Evaluadores as $row2) {
-                                            $nombre = $row2['nombre'];
-                                            $apellido = $row2['apellidos'];
-                                            $puesto = $row2['puesto'];
-                                            $rol = $row2['rol'];
-                                            $estado = $row2['estado'];
-                                            $codigo = $row2['codigo'];
+                                        if(!empty($Evaluadores)) {
+                                            foreach ($Evaluadores as $row2) {
+                                                $nombre = $row2['nombre'];
+                                                $apellido = $row2['apellidos'];
+                                                $puesto = $row2['puesto'];
+                                                $rol = $row2['rol'];
+                                                $estado = $row2['estado'];
+                                                $codigo = $row2['codigo'];
 
-                                            //$estado = $row2['estado'];
-                                            //$estado = 'A';
+                                                $clase          = '';
+                                                $finalizado   = '';
+                                                switch ($estado) {
+                                                    case 'A':
+                                                        $clase = 'text-danger';
+                                                        break;
+                                                    case 'B':
+                                                        $clase = 'text-warning';
+                                                        break;
+                                                    case 'C':
+                                                        $clase = 'text-success';
+                                                        $finalizado = formatoFechaCorta($row2['finalizado']);
+                                                        break;
+                                                }
 
-                                            $clase = '';
-                                            switch($estado){
-                                                case 'A':
-                                                    $clase = 'text-danger';
-                                                    break;
-                                                case 'B':
-                                                    $clase = 'text-warning';
-                                                    break;
-                                                case 'C':
-                                                    $clase = 'text-success';
-                                                    break;
 
+                                                ?>
+
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-1 text-center">
+                                                            <i class="fa fa-circle <?php echo $clase ?>"></i>
+                                                        </div>
+                                                        <div class="col-md-11">
+
+                                                            <?php
+                                                                if(!empty($finalizado)){
+                                                                    echo "<small class='float-right text-right'>Finalizó el <br>{$finalizado}</small>";
+                                                                }
+                                                                echo "<h5>$nombre $apellido</h5><div>$puesto ($rol)</div>
+                                                                     <div>Código de la evaluación:<samp> $codigo</samp></div>"
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <?php
                                             }
-                                            ?>
-
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-1 text-center">
-                                                        <i class="fa fa-circle <?php echo $clase ?>"></i>
-                                                    </div>
-                                                    <div class="col-11">
-                                                        <?php echo "<h5>$nombre $apellido</h5><div><div>$puesto ($rol)</div></div>
-                                                                     <p>Codigo de la evaluación:<samp> $codigo</samp></p>" ?>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <?php
-                                        }?>
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                        <?php
+                </div>
+                    <?php
+                    if(++$columnas >= 2){
+                        echo '</div>'; //row
+                        $columnas = 0;
                     }
-                } else {
-                    echo '<h2>No hay registros</h2>';
                 }
-                ?>
+            } else {
+                echo '<div class="row"><div class="col"><h4>No hay registros</h4></div>';
+            }
+            ?>
 
-            </div>
+
         </div>
         <!-- /.container-fluid -->
 
@@ -375,92 +412,73 @@ if($res){
                                     }
                                     ?>
                                 </select>
-                                <input type="checkbox" name="auto" value="1"> El evaluado se auto-evalúa
+                                <label><input type="checkbox" name="auto" value="1"> Se auto-evalúa</label>
                                 <hr/>
                             </fieldset>
 
-                            <fieldset><legend>Evaluadores</legend>
-                                <div class="form-group">
-                                    <label for="evaluadorS">Superior</label>
-                                    <select class="form-control mb-3" name="evaluadorS" id="evaluadorS">
-                                        <option selected value="">Seleccione al trabajador</option>
-                                        <?php
-                                        $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
+                            <?php
+                            $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
                                                                     LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
                                                                     LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
                                                                     LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
                                                                     WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                        $resultado = mysqli_query($conexion,$sql);
-                                        if($resultado){
-                                            while($fila = mysqli_fetch_assoc($resultado)){
-                                                echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                            $resultado = mysqli_query($conexion,$sql);
+                            $lista_empleados = array();
+
+                            if($resultado) {
+                                while ($fila = mysqli_fetch_assoc($resultado)) {
+                                    $lista_empleados[] = $fila;
+                                }
+                            }
+
+                            if(!empty($lista_empleados)) {
+                                ?>
+                                <fieldset>
+                                    <legend>Evaluadores</legend>
+                                    <div class="form-group">
+                                        <label for="evaluadorS">Jefe</label>
+                                        <select class="form-control mb-3" name="evaluadorS" id="evaluadorS">
+                                            <option selected value="">Seleccione una opción</option>
+                                            <?php
+                                            foreach ($lista_empleados as $fila) {
+                                                echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto])</option>";
                                             }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <p>Par 1</p>
+                                    <select class="form-control mb-3" name="evaluadorP1" id="evaluadorP1">
+                                        <option selected value="">Seleccione una opción</option>
+                                        <?php
+                                        foreach ($lista_empleados as $fila) {
+                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto])</option>";
                                         }
                                         ?>
                                     </select>
-                                </div>
-                                <p>Par 1</p>
-                                <select class="form-control mb-3" name="evaluadorP1" id="evaluadorP1">
-                                    <option selected value="">Seleccione al trabajador</option>
-                                    <?php
-                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                    $resultado = mysqli_query($conexion,$sql);
-                                    if($resultado){
-                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                    <p>Par 2</p>
+                                    <select class="form-control mb-3" name="evaluadorP2" id="evaluadorP2">
+                                        <option selected value="">Seleccione una opción</option>
+                                        <?php
+                                        foreach ($lista_empleados as $fila) {
+                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto])</option>";
                                         }
-                                    }
-                                    ?>
-                                </select>
-                                <p>Par 2</p>
-                                <select class="form-control mb-3" name="evaluadorP2" id="evaluadorP2">
-                                    <option selected value="">Seleccione al trabajador</option>
-                                    <?php
-                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                    $resultado = mysqli_query($conexion,$sql);
-                                    if($resultado){
-                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                        ?>
+                                    </select>
+                                    <p>Cliente</p>
+                                    <select class="form-control mb-3" name="evaluadorC" id="evaluadorC">
+                                        <option selected value="">Seleccione una opción</option>
+                                        <?php
+                                        foreach ($lista_empleados as $fila) {
+                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto])</option>";
                                         }
-                                    }
-                                    ?>
-                                </select>
-                                <p>Cliente</p>
-                                <select class="form-control mb-3" name="evaluadorC" id="evaluadorC">
-                                    <option selected value="">Seleccione al trabajador</option>
-                                    <?php
-                                    $sql = "SELECT empleados.id, empleados.nombre, empleados.apellidos, puestos.puesto, niveles_puesto.nivel_puesto FROM niveles_puesto 
-                                                                LEFT JOIN puestos ON puestos.id_nivel_puesto = niveles_puesto.id 
-                                                                LEFT JOIN empleados ON empleados.id_puesto = puestos.id 
-                                                                LEFT JOIN departamentos ON departamentos.id = empleados.id_departamento 
-                                                                WHERE empleados.estado = 'A' AND departamentos.id =".$Depa;
-                                    $resultado = mysqli_query($conexion,$sql);
-                                    /*if($resultado){
-                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                            echo "<div class='form-check'>
-                                            <input class='form-check-input' type='checkbox' value='$fila[id]' id='$fila[id]' name='empleado[]'>
-                                            <label class='form-check-label' for='$fila[id]'>
-                                            $fila[nombre] $fila[apellidos]
-                                            </label>
-                                            </div>";
-                                        }
-                                    }*/
-                                    if($resultado){
-                                        while($fila = mysqli_fetch_assoc($resultado)){
-                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
-                                        }
-                                    }
-                                    ?>
-                                </select>
-                            </fieldset>
+                                        ?>
+                                    </select>
+                                </fieldset>
+                                <?php
+                            }else{
+                                echo '<h5>No hay trabajadores en el departamento seleccionado</h5>';
+                            }
+                            ?>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -488,6 +506,8 @@ if($res){
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+
+<script type="text/javascript" src="../../../../vendor/bootstrap/js/popper.min.js"></script>
 </body>
 
 </html>
