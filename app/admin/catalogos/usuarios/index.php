@@ -25,6 +25,94 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <div id="wrapper">
 
     <?php getSidebar() ?>
+    <?php 
+    if(isset($_GET["confirm"])){
+        if($_GET["confirm"] == 1){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se ha agregado un nuevo usuario',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 2){
+        ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Se ha actualizado el usuario',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        </script>
+        <?php
+        }
+        if($_GET["confirm"] == 3){
+            ?>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+            <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Error al ingresar usuario',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            </script>
+            <?php
+            }
+            if($_GET["confirm"] == 4){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Error al actualizar usuario',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                </script>
+                <?php
+                }
+            if($_GET["confirm"] == 5){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Se cambió a activo',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                </script>
+                <?php
+                }
+            if($_GET["confirm"] == 6){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Se cambió a inactivo',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                </script>
+                <?php
+                }
+}
+    ?>
 
     <div id="content-wrapper">
 
