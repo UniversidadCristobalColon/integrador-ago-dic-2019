@@ -38,13 +38,7 @@ function getSidebar($ruta = ''){
 
     $html = <<<EOD
 <!-- Sidebar -->
-<ul class="sidebar navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link text-dark" href="{$ruta}index.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Inicio</span>
-        </a>
-    </li>
+<ul class="sidebar navbar-nav">    
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-dark" href="#" id="catalogosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
@@ -128,7 +122,7 @@ function getNavbar($ruta = ''){
     $html = <<<EOD
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">    
 
-    <a class="navbar-brand mr-1" href="{$ruta}index.php">Evaluación 360</a>
+    <a class="navbar-brand mr-1" href="{$dir_base}app/main.php">Evaluación 360</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
