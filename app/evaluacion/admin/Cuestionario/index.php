@@ -17,10 +17,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <script>
         function eliminar(id){
-            var respuesta=confirm('¿Está seguro de que desea eliminar este cuestionario?');
-            if(respuesta===true){
-                window.location='deshabilitar.php?id='+id;
-            }
+            location.href="deshabilitar.php?id="+id;
         }
     </script>
 
@@ -51,20 +48,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <div class="table-responsive">
                         <?php
-                        if(!empty($_GET["error"])){
-                            $error=$_GET["error"];
-                            if($error==1){
-                                echo
-                                '<div class="alert alert-success" role="alert">
-                                    El cuestionario ha sido eliminado
-                                </div>';
-                            }else if($error==2){
-                                echo
-                                '<div class="alert alert-danger" role="alert">
-                                    El cuestionario no se puede eliminar porque ya ha sido utilizado en una evaluación.
-                                </div>';
-                            }
-                        }
+
                         //Para llenar la tabla
                         $sql = "SELECT * FROM cuestionarios";
                         $resultado = $conexion -> query($sql);
@@ -75,6 +59,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <thead>
                             <tr>
                                 <th>Cuestionario</th>
+                                <th>Estado</th>
                                 <th>Creacion</th>
                                 <th>Actualizacion</th>
                                 <th></th>
@@ -88,7 +73,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 ?>
                                 <tr>
                                     <?php $id = $row['id'] ?>
+                                    <?php if($row['estado']=='A'){
+                                        $estado="Activo";
+                                    }else if($row['estado']=='B'){
+                                        $estado="Inactivo";
+                                    } ?>
                                     <td><?php echo $row['cuestionario'] ?></td>
+                                    <td><?php echo $estado ?></td>
                                     <td><?php echo $row['creacion'] ?></td>
                                     <td><?php echo $row['actualizacion'] ?></td>
                                     <td>
@@ -96,7 +87,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
                                         <button title="Eliminar registro"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
-                                        <i class="fa fa-trash" ></i>
+                                        <i class='fas fa-exchange-alt'></i>
                                         </button>
 
                                     </td>
