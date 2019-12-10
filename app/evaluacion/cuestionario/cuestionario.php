@@ -387,7 +387,8 @@
             if ( $pagina_actual == $total_paginas ) {
                 $conexion->query(
                     'UPDATE aplicaciones
-                    SET aplicaciones.estado = "C"
+                    SET aplicaciones.estado = "C",
+                        aplicaciones.finalizado = NOW()
                     WHERE aplicaciones.id = '.$id_aplicacion.''
                 );
 
