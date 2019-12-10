@@ -4,10 +4,12 @@ require_once '../../../config/global.php';
 define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
 
-require __DIR__ . "../../../../vendor/autoload.php";
+require __DIR__ . "../../../vendor/autoload.php";
 
-$id_evaluado=(int)$_POST['id_evaluado'];
-$id_periodo=(int)$_POST['id_periodo'];
+$id_evaluado = $_GET['id_evaluado'];
+$id_periodo =  $_GET['id_periodo'];
+
+$id_escala = 1; //calcular el id de la escuela correcta
 
 
 use PhpOffice\PhpSpreadsheet\Chart\Chart;
@@ -20,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Chart\Title;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-$sql = "select * from escalas where id='1' ";
+$sql = "select * from escalas where id= $id_escala";
 $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
 $escala[5] = array();
