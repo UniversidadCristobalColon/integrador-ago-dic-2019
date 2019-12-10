@@ -96,11 +96,10 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                             </div>
 
                         </div>
-
                         <div class="col">
                             <div class="form-group">
                             <label>Departamento</label>
-                            <select class="browser-default custom-select" id="departamentos" name="departamento" onmousedown="if(this.options.length>10){this.size=10;}"  onchange='this.size=0;' onblur="this.size=0;" required>
+                            <select class="form-control" id="departamentos" name="departamento" required>
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
                                 $sql="SELECT id, departamento FROM departamentos";
@@ -118,7 +117,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                            <label>Empleados</label>
-                            <select class="browser-default custom-select" id="empleados" name="empleado" onmousedown="if(this.options.length>10){this.size=10;}"  onchange='this.size=0;' onblur="this.size=0;" required>
+                            <select class="form-control" id="empleados" name="empleado" required>
                             </select>
                             </div>
                         </div>
@@ -151,13 +150,13 @@ $anterior = null;
                                    $sql = "SELECT (SELECT periodo FROM periodos WHERE id = p.id_periodo) AS \"Periodo\", 
                                 (SELECT nombre FROM empleados WHERE id = p.id_evaluado) AS \"Nombre de Evaluado\", 
                                 (SELECT apellidos FROM empleados WHERE id = p.id_evaluado) AS \"Apellido de Evaluado\", 
-                                (SELECT nivel_puesto FROM niveles_puesto WHERE id = p.id_evaluador_nivel) AS \"Nivel de Puesto\", 
+                                (SELECT rol FROM roles WHERE id = p.id_rol_evaluador) AS \"Nivel de Puesto\", 
                                 (SELECT aseveracion FROM decalogos_aseveraciones WHERE id = (SELECT id_decalogo_aseveracion FROM preguntas WHERE id = p.id_pregunta)) AS \"Aseveraciones\", 
                                 puntos AS \"Puntos\",
                                 (SELECT p.id_pregunta) AS \"Id Pregunta\"
                                 FROM promedios_por_evaluado AS p
                                 WHERE id_evaluado = " . $_GET["empleado"]."
-                                ORDER BY p.id_evaluador_nivel
+                                ORDER BY id_evaluacion desc, p.id_rol_evaluador asc
                                 ";
 
                                     $res = $conexion->query($sql);
@@ -218,7 +217,7 @@ $anterior = null;
                                                 <?php
                                             }
                                         } else{
-                                            echo "<br><br><H3 class=\"text-center cd-flex p-2\">NO HAY RESULTADOS </H3>";
+                                            echo '<div class="alert alert-danger">No hay resultados</div>';
                                         }//ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
 
                                 ?>
@@ -243,10 +242,13 @@ $anterior = null;
                                 ;
                             }//ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
                         } else{
-                            echo '<script type="text/javascript">',
-                            'msg(\'No se seleccionó periodo\');',
-                            '</script>'
-                            ;
+                            if(!empty($_GET['empleado'])){
+                                echo '<script type="text/javascript">',
+                                'msg(\'No se seleccionó periodo\');',
+                                '</script>'
+                                ;
+                            }
+
                         }//ESTE ES EL IF DE SELECCIONAR PERIODO
 
 
