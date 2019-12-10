@@ -55,7 +55,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Creación</th>
                                 <th>Actualización</th>
                                 <th hidden>id_escala</th>
-                                <th class="text-center">Estado</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -73,7 +73,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td><?php echo $fila['creacion'] ?></td>
                                         <td><?php echo $fila['actualizacion'] ?></td>
                                         <td hidden><?php echo $fila['id_escala'] ?></td>
-                                        <td class="text-center">
+                                        <td>
                                             <?php if ($fila['status'] == 'A') {
                                                 echo 'Activo';
                                             } elseif ($fila['status'] == 'B') {
