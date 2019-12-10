@@ -17,7 +17,7 @@ if(!confirmar()) {
 */
 
 function getUrl(){
-    require '../config/db.php';
+    require 'db.php';
     $sql = 'SELECT url
             FROM email_conf
             WHERE id = 1';
@@ -35,10 +35,12 @@ function getUrl(){
 function getSidebar($ruta = ''){
     global $dir_base;
 
+    $hay_cookie = !empty($_COOKIE['sidebar-state']) ? $_COOKIE['sidebar-state'] : '';
+    $toggled = $hay_cookie == 'true' ? 'toggled' : '';
 
     $html = <<<EOD
 <!-- Sidebar -->
-<ul class="sidebar navbar-nav">    
+<ul class="sidebar navbar-nav $toggled">    
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-dark" href="#" id="catalogosDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
@@ -188,12 +190,12 @@ function getModalLogout($ruta = ''){
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">¿Desea salir del sistema?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">¿Deseas salir del sistema?</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">De clic en el botón <b>salir</b> para terminar su sesión.</div>
+            <div class="modal-body">Da clic en el botón <b>salir</b> para terminar tu sesión.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-primary" href="{$dir_base}app/logout.php">Salir</a>
@@ -223,6 +225,8 @@ function getTopIncludes($ruta = ''){
     <link href="{$ruta}css/estilos.css" rel="stylesheet" type="text/css">
 
     <script src="{$ruta}vendor/jquery/jquery.min.js"></script>   
+
+    <script src="{$ruta}vendor/js-cookie/js.cookie-2.2.1.min.js"></script>
 EOD;
     echo $html;
 }
@@ -237,17 +241,12 @@ function getBottomIncudes($ruta = ''){
     <!-- Core plugin JavaScript-->
     <script src="{$ruta}vendor/jquery-easing/jquery.easing.min.js"></script>
     
-    <!-- Page level plugin JavaScript-->
-    <script src="{$ruta}vendor/chart.js/Chart.min.js"></script>
+    <!-- Page level plugin JavaScript-->    
     <script src="{$ruta}vendor/datatables/jquery.dataTables.js"></script>
     <script src="{$ruta}vendor/datatables/dataTables.bootstrap4.js"></script>
         
     <!-- Custom scripts for all pages-->
-    <script src="{$ruta}js/sb-admin.min.js"></script>
-
-    <script src="{$ruta}js/demo/chart-area-demo.js"></script>
-    <script src="{$ruta}js/demo/chart-bar-demo.js"></script>
-    <script src="{$ruta}js/demo/chart-pie-demo.js"></script>
+    <script src="{$ruta}js/sb-admin.js"></script>
 
     <script>
         var dir_base = '$dir_base';

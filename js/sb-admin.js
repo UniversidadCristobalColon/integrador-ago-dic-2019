@@ -6,7 +6,25 @@
     e.preventDefault();
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
+
+
+
+    if(Cookies){
+      Cookies.set('sidebar-state', $(".sidebar").hasClass('toggled'));
+      console.log($(".sidebar").hasClass('toggled'));
+    }
   });
+
+  /*$('document').ready(function(){
+    if(Cookies){
+      var toggled = Cookies.set('sidebar-state');
+      if(toggled){
+        $('.sidebar').addClass('toggled');
+      }else{
+        $('.sidebar').removeClass('toggled');
+      }
+    }
+  })*/
 
   // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
   $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
