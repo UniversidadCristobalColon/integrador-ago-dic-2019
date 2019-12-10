@@ -109,7 +109,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 }
             }).on("change", function() {
                 console.log("Entro");
-                $('#Limite').text("Se cambio");
+                moment().format("MM-DD-YYYY");
+                $('#Limite').val(calcularLimite());
             });
         });
 
@@ -117,14 +118,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             $('#F-limite').datepicker();
         });
 
-
-
-        $( "#Fin" ).change(function() {
-            $('#Limite').text("Se cambio");
-            console.log("Entro");
-            /*var final = $('#Fin').val();
-            return moment(final).add(7, 'd');*/
-        });
     </script>
 </head>
 
