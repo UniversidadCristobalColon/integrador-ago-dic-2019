@@ -11,7 +11,7 @@
     $Periodo = $_POST["Periodo"];
     $ip =  $_SERVER['REMOTE_ADDR'];
     $Actualizar = $_POST["actualizar"];
-    $Evalucion = $_POST["id_evaluacion"];
+    $Evaluacion = $_POST["id_evaluacion"];
     $Iniciadas = 0;
 
     function convertirFecha($fecha){
@@ -20,12 +20,8 @@
     }
 
     if($Actualizar==1) {
-        $total = 0;
-        $Iniciadas = 0;
-        $Correctas = 0;
-
         $sqlc = "select estado from aplicaciones where id_evaluacion = $Evaluacion";
-        $resc = mysqli_query($conexion,$sql);
+        $resc = mysqli_query($conexion,$sqlc);
         if($resc){
             while($filac = mysqli_fetch_assoc($resc)){
                 $estado = $filac['estado'];
@@ -36,26 +32,24 @@
             }
         }
     }
-var_dump($Iniciadas);
-    exit();
     if($Actualizar == 1) {
         if($Iniciadas>0) {
-            $updateli = "UPDATE evaluaciones set limite = '$Limite', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
+            $updateli = "UPDATE evaluaciones set limite = '$Limite', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evaluacion'";
 
             $resultadoli = mysqli_query($conexion, $updateli);
             if ($resultadoli) {
-                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$Evalucion");
+                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$Evaluacion");
 
             } else {
                 echo 'No se guardo' . mysqli_error($conexion);
             }
         } else {
             $update = "UPDATE evaluaciones set id_cuestionario = '$Cuestionario', id_departamento = '$Depa', id_periodo = '$Periodo', inicio = '$Inicio',
-                    fin = '$Fin', limite = '$Limite', descripcion = '$Descripcion', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
+                    fin = '$Fin', limite = '$Limite', descripcion = '$Descripcion', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evaluacion'";
 
             $resultado = mysqli_query($conexion, $update);
             if ($resultado) {
-                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$Evalucion");
+                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$Evaluacion");
 
             } else {
                 echo 'No se guardo' . mysqli_error($conexion);
