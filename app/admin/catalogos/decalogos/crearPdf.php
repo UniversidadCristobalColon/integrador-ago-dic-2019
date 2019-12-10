@@ -10,7 +10,7 @@ use Dompdf\Dompdf;
 
 // Introducimos HTML de prueba :0
 
-$html = file_get_contents_curl("http://localhost/Integrador2/integrador-ago-dic-2019/app/admin/catalogos/decalogos/reporte.php?idevaluacion=$idevaluacion&idevaluado=$idevaluado");
+$html = file_get_contents_curl("http://localhost/Integrador/app/admin/catalogos/decalogos/reporte.php?idevaluacion=$idevaluacion&idevaluado=$idevaluado");
 
 
 // Instanciamos un objeto de la clase DOMPDF.

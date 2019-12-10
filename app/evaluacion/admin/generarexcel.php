@@ -5,8 +5,9 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
 
 require __DIR__ . "../../../../vendor/autoload.php";
-$id_evaluado='10';
-$id_periodo='1';
+
+$id_evaluado=(int)$_POST['id_evaluado'];
+$id_periodo=(int)$_POST['id_periodo'];
 
 
 use PhpOffice\PhpSpreadsheet\Chart\Chart;
@@ -19,7 +20,7 @@ use PhpOffice\PhpSpreadsheet\Chart\Title;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-$sql = "select * from escalas ";
+$sql = "select * from escalas where id='1' ";
 $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
 $escala[5] = array();
@@ -73,7 +74,7 @@ $coordinadaD='D';
 $coordinadaE='E';
 $coordinadaF='F';
 $coordinadaG='G';
-
+$contusuarios=0;
 $sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
 on e.id = pe.id_evaluador
 join roles r on pe.id_rol_evaluador = r.id
@@ -81,7 +82,7 @@ where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
 
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 $cont=2;
-$contusuarios=0;
+
 
 while($row2 = mysqli_fetch_array($resultado2)){
     $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
@@ -121,7 +122,6 @@ while($row2 = mysqli_fetch_array($resultado2)){
                 break;
             }
         }
-
         $coordinadaA='A';
         $coordinadaB='B';
         $coordinadaC='C';
@@ -130,8 +130,6 @@ while($row2 = mysqli_fetch_array($resultado2)){
     }
     $cont=2;
 }
-
-
 
 //TABULADOR
 $dataSeriesLabels=[];
@@ -159,7 +157,7 @@ while($row2 = mysqli_fetch_array($resultado2)){
                                         on p.id = pe.id_pregunta
                                         join decalogos_aseveraciones da 
                                         on da.id = p.id_decalogo_aseveracion
-                                        where pe.id_evaluador = $row2[id_evaluador]
+                                        where pe.id_evaluador = $row2[id_evaluador] and pe.id_evaluado ='$id_evaluado' and pe.id_periodo ='$id_periodo';
                                         ";
     $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
@@ -184,24 +182,30 @@ while($row2 = mysqli_fetch_array($resultado2)){
         $new = array_push($dataSeriesValues,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Tabulador!$C$2:$C$11', null, 12));
         $coordinadaBusqueda='C';
         $coordinadaBusqueda2='C';
-    }elseif ($contusuarios=1){
+    }elseif ($contusuarios=='1'){
         $sheet->setCellValue('D1', $row2['rol']);
         $new = array_push($dataSeriesLabels,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Tabulador!$D$1', null, 1)); // 2011)
         $new = array_push($dataSeriesValues,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Tabulador!$D$2:$D$11', null, 12));
         $coordinadaBusqueda='D';
         $coordinadaBusqueda2='D';
-    }elseif ($contusuarios==2){
+    }elseif ($contusuarios=='2'){
         $sheet->setCellValue('E1', $row2['rol']);
         $new = array_push($dataSeriesLabels,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Tabulador!$E$1', null, 1)); // 2011)
         $new = array_push($dataSeriesValues,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Tabulador!$E$2:$E$11', null, 12));
         $coordinadaBusqueda='E';
         $coordinadaBusqueda2='E';
-    }elseif ($contusuarios==3){
+    }elseif ($contusuarios=='3'){
         $sheet->setCellValue('F1', $row2['rol']);
         $new = array_push($dataSeriesLabels,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Tabulador!$F$1', null, 1)); // 2011)
         $new = array_push($dataSeriesValues,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Tabulador!$F$2:$F$11', null, 12));
         $coordinadaBusqueda='F';
         $coordinadaBusqueda2='F';
+    }elseif ($contusuarios=='4'){
+        $sheet->setCellValue('G1', $row2['rol']);
+        $new = array_push($dataSeriesLabels,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Tabulador!$G$1', null, 1)); // 2011)
+        $new = array_push($dataSeriesValues,new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Tabulador!$G$2:$G$11', null, 12));
+        $coordinadaBusqueda='G';
+        $coordinadaBusqueda2='G';
     }
     $contusuarios++;
     $promedio=0;
@@ -213,11 +217,16 @@ while($row2 = mysqli_fetch_array($resultado2)){
         $sheet->setCellValue($coordinadaA, strval($cont-1));
         $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
         $sheet->setCellValue($coordinadaBusqueda, $row4['puntos']);
+        $sheet->setCellValue('h1', $contusuarios);
 
 
         $coordinadaA='A';
         $coordinadaB='B';
         $coordinadaC='C';
+        $coordinadaC='D';
+        $coordinadaC='E';
+        $coordinadaC='F';
+        $coordinadaC='G';
         $coordinadaBusqueda=$coordinadaBusqueda2;
         $cont++;
         $promedio += (int)$row4['puntos'];
@@ -227,8 +236,6 @@ while($row2 = mysqli_fetch_array($resultado2)){
     $sheet->setCellValue($coordinadaBusqueda.strval($cont), $promedio);
     $cont=2;
 }
-
-#
 
 #require __DIR__ . '/../Header.php';
 
