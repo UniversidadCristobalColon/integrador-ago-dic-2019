@@ -38,8 +38,9 @@ define('RUTA_INCLUDE', '../../'); //ajustar a necesidad
                     Data Table Example
                 </div>
                 <div class="card-body">
-                    
-                    <button class="btn btn-primary mb-3">Nuevo</button>
+                    <form action="exportEmployees.php" method="post">
+                      <input type="submit" value = "Guardar" class="btn btn-primary mb-3">
+
                     
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -55,30 +56,50 @@ define('RUTA_INCLUDE', '../../'); //ajustar a necesidad
                             </tr>
                             </thead>
                             <tbody>
+
                             <?php
-                                $sql = 'select * from empleados_temp';
-                                $union = 'select * from departamentos  d inner join empleados_temp e where d.id=e.id_departamento';
-                                $result = mysqli_query($conexion,$sql);
-                                $resultado = mysqli_query($conexion,$union);
-                                $result2 = mysqli_query($conexion, "SELECT * FROM puestos ");
-                                while ($row = mysqli_fetch_array($result)) {
-                                    echo "
-                                        <tr>
-                                            <td>$row[num_empleado]</td>
-                                            <td>$row[nombre]</td>
-                                            <td>$row[apellidos]</td>
-                                            <td>$row[telefono]</td>
-                                            <td>$row[email]</td> 
-                                    ";
-                                    while ($row2 = mysqli_fetch_array($resultado)) {
-                                        echo "<td>$row2[departamento]</td>";
-                                        break;
+                            $contador = 1;
+                            $sql = "SELECT * FROM empleados_temp";
+                            $result = $conexion->query($sql);
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $no_empleado = $row['num_empleado'];
+                                    $nombre_empleado = $row['nombre'];
+                                    $apellido_empleado = $row['apellidos'];
+                                    $telefono_empleado = $row['telefono'];
+                                    $email_empleado = $row['email'];
+                                    $depa_empleado = $row['id_departamento'];
+                                    $query2 = "SELECT departamento from departamentos where id = $depa_empleado";
+                                    $result2 = $conexion->query($query2);
+                                    $row2 = $result2->fetch_assoc();
+                                    $depa_empleado = $row2['departamento'];
+                                    echo("<tr><td>" . $no_empleado . "</td>
+                                  <td>" . $nombre_empleado . "</td>
+                                  <td>" . $apellido_empleado . "</td>
+                                  <td>" . $telefono_empleado . "</td>
+                                  <td>" . $email_empleado . "</td>
+                                  <td>" . $depa_empleado . "</td>
+                                  <td style='display:none;'>
+                                  <input type='hidden' name='id$contador' value=".$row['id']."></td>");
+
+                                    echo("<td><select class='form-control' id='puesto' name='puesto$contador'>");
+                                    echo("<option value='11'>No especificado</option>");
+                                    $query3 = "SELECT * from puestos";
+                                    $result3 = $conexion->query($query3);
+                                    while ($row3 = $result3->fetch_assoc()) {
+                                        echo('<option value="' . $row3['id'] . '">' . $row3['puesto'] . '</option>');
                                     }
+                                    echo("</select></td>");
+                                    echo("</tr>");
+                                    $contador++;
                                 }
+                            }
                             ?>
                             </tbody>
                         </table>
+
                     </div>
+                </form>
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
