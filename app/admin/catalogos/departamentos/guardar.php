@@ -47,7 +47,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                 $organizacion = $_POST['organizacion'];
                 $departamento = $_POST['departamento'];
-                $estatus = $_POST['estatus'];
                 $buscar=mysqli_query($conexion, "SELECT * FROM organizaciones WHERE id = '$organizacion'");
                 $fila=mysqli_fetch_array($buscar);
                 $nombreOrg=$fila['organizacion'];         
@@ -65,7 +64,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     } else {	
 
 // Query to send Name, Email and Password hash to the database
-$query = "INSERT INTO departamentos (departamento, organizaciones_id, ultima_actualizacion, estatus) VALUES ('$departamento', '$organizacion', NOW(), '$estatus')";
+$query = "INSERT INTO departamentos (departamento, organizaciones_id, ultima_actualizacion, estatus) VALUES ('$departamento', '$organizacion', NOW(), 'Activo')";
 if (mysqli_query($conexion, $query)) {
   /* header('location:index.php');
     ob_flush();

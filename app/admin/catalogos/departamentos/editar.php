@@ -134,18 +134,13 @@ $departamento=$fila['departamento'];
          
                 <div class="card-body">
                 <form id="agregar" action="guardarEditar.php" method="post">
-                <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>ID:</label>
-                                <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
-                            </div>
-                        </div>
-                    </div>
+            
+                                
+                        
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Departamento:</label>
+                                <label>Departamento</label>
                                 <input type="text" name="departamento" class="form-control" value="<?php echo $departamento; ?>">
                             </div>
                         </div>
@@ -154,7 +149,7 @@ $departamento=$fila['departamento'];
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Organización:</label>
+                                <label>Organización</label>
                                 <select id="organizacion" name="organizacion" class="form-control">
                                 <option value="0">Selecciona una organización</option>
                                     <?php
@@ -178,6 +173,7 @@ $departamento=$fila['departamento'];
                         </div>
                     </div>
     
+                    <input type="hidden" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
                     
                 </form>
                </div>

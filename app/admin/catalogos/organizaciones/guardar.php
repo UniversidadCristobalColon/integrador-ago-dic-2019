@@ -44,7 +44,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <?php
                 
                 $organizacion = $_POST['organizacion'];
-                $estatus = $_POST['estatus'];
 
 // Query to check if the organization already exist
 $checarOrganizacion = "SELECT * FROM organizaciones WHERE organizacion = '$_POST[organizacion]' ";
@@ -66,7 +65,7 @@ database and the account is created
 */
 
 // Query to send Name, Email and Password hash to the database
-$query = "INSERT INTO organizaciones (organizacion, creacion, actualizacion, estatus) VALUES ('$organizacion', NOW(), NOW(), '$estatus')";
+$query = "INSERT INTO organizaciones (organizacion, creacion, actualizacion, estatus) VALUES ('$organizacion', NOW(), NOW(), 'Activo')";
 if (mysqli_query($conexion, $query)) {
   /* header('location:index.php');
     ob_flush();

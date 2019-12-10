@@ -53,7 +53,7 @@ $id = $_POST['id'];
  if ($count == 1) {
  echo "<form action='editar.php' method='post'>
         <div class='alert alert-warning mt-4' role='alert'>
-                 <h3>Este nombre de organización ya está ocupado</h3>
+                 <h3>Este nombre de organización ya está registrado</h3>
                  <button class='btn btn-outline-danger' type='submit' name='editar' value='$id'>Intentalo de nuevo</button>
              </div>
              </form>";
