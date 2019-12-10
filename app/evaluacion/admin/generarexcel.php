@@ -28,26 +28,32 @@ while($row = mysqli_fetch_array($resesacalas)){
     $escala[0]['etiqueta']=$row['nivel1_etiqueta'];
     $escala[0]['inferior']=$row['nivel1_inferior'];
     $escala[0]['superior']=$row['nivel1_superior'];
+    $escala[0]['descripcion']=$row['nivel1_descripcion'];
 
     $escala[1]['etiqueta']=$row['nivel2_etiqueta'];
     $escala[1]['inferior']=$row['nivel2_inferior'];
     $escala[1]['superior']=$row['nivel2_superior'];
+    $escala[1]['descripcion']=$row['nivel2_descripcion'];
 
     $escala[2]['etiqueta']=$row['nivel3_etiqueta'];
     $escala[2]['inferior']=$row['nivel3_inferior'];
     $escala[2]['superior']=$row['nivel3_superior'];
+    $escala[2]['descripcion']=$row['nivel3_descripcion'];
 
     $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
     $escala[3]['inferior']=$row['nivel3_inferior'];
     $escala[3]['superior']=$row['nivel3_superior'];
+    $escala[3]['descripcion']=$row['nivel3_descripcion'];
 
     $escala[4]['etiqueta']=$row['nivel4_etiqueta'];
     $escala[4]['inferior']=$row['nivel4_inferior'];
     $escala[4]['superior']=$row['nivel4_superior'];
+    $escala[4]['descripcion']=$row['nivel4_descripcion'];
 
     $escala[5]['etiqueta']=$row['nivel5_etiqueta'];
     $escala[5]['inferior']=$row['nivel5_inferior'];
     $escala[5]['superior']=$row['nivel5_superior'];
+    $escala[5]['descripcion']=$row['nivel5_descripcion'];
 }
 
 $documento = new Spreadsheet();
@@ -75,14 +81,30 @@ $coordinadaE='E';
 $coordinadaF='F';
 $coordinadaG='G';
 $contusuarios=0;
-$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol,p.puesto,pe.creacion from promedios_por_evaluado pe join empleados e
 on e.id = pe.id_evaluador
 join roles r on pe.id_rol_evaluador = r.id
+join puestos p on e.id_puesto = p.id
 where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
 
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
-$cont=2;
 
+$sql = "select e.nombre,e.apellidos,p.puesto from promedios_por_evaluado pe join empleados e
+on e.id = '$id_evaluado'
+join puestos p 
+on p.id=e.id_puesto
+";
+$evaluado= mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+$nomeval ='';
+$apellidoeval='';
+$puesto='';
+while($row2 = mysqli_fetch_array($evaluado)) {
+    $nomeval = $row2['nombre'];
+    $apellidoeval=$row2['apellidos'];
+    $puesto = $row2['puesto'];
+}
+
+$cont=2;
 
 while($row2 = mysqli_fetch_array($resultado2)){
     $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
@@ -96,15 +118,123 @@ while($row2 = mysqli_fetch_array($resultado2)){
     $sheet=$documento->createSheet();
     $sheet->setTitle($row2['rol']);
     $sheet = $documento->getSheetByName($row2['rol']);
-    $documento->getSheetByName($row2['rol'])->getColumnDimension('A')->setWidth(5);
-    $documento->getSheetByName($row2['rol'])->getColumnDimension('B')->setWidth(50);
-    $documento->getSheetByName($row2['rol'])->getColumnDimension('C')->setWidth(5);
-    $documento->getSheetByName($row2['rol'])->getColumnDimension('D')->setWidth(30);
+
+    $styleArray = array(
+        'borders' => array(
+            'outline' => array(
+                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_HAIR,
+                'color' => array('argb' => '0000'),
+            ),
+        ),
+    );
+
 
     #$sheet = $documento->getActiveSheet();
-    $sheet->setCellValue('A1', 'ID');
-    $sheet->setCellValue('B1', 'Pregunta');
-    $sheet->setCellValue('C1', 'Calificación');
+    $sheet->mergeCells('F1:I1');
+    $sheet->mergeCells('F2:I2');
+    $sheet->mergeCells('F3:I3');
+    $sheet->mergeCells('F4:I4');
+    $sheet->mergeCells('F5:I5');
+    $sheet->mergeCells('F6:I6');
+    $sheet->mergeCells('J1:M1');
+    $sheet->mergeCells('J2:M2');
+    $sheet->mergeCells('J3:M3');
+    $sheet->mergeCells('J4:M4');
+    $sheet->mergeCells('J5:M6');
+
+    $sheet->getStyle('F1:M10')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('F1:I1')->applyFromArray($styleArray);
+    $sheet->getStyle('F1:I1') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('F1:I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('F1', 'Nombre del evaluado');
+
+    $sheet ->getStyle('F2:I2')->applyFromArray($styleArray);
+    $sheet->setCellValue('F2', $nomeval.' '.$apellidoeval);
+
+    $sheet ->getStyle('F3:I3')->applyFromArray($styleArray);
+    $sheet->getStyle('F3:I3') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('F3:I3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('F3', 'Nombre de quien evalua');
+
+    $sheet ->getStyle('F4:I4')->applyFromArray($styleArray);
+    $sheet->setCellValue('F4', $row2['nombre']. '' .$row2['apellidos']);
+
+
+    $sheet->getStyle('F5:I5') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('F5:I5')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet ->getStyle('F5:I5')->applyFromArray($styleArray);
+    $sheet->setCellValue('F5', 'Fecha');
+
+    $sheet ->getStyle('F6:I6')->applyFromArray($styleArray);
+    $sheet->setCellValue('F6', $row2['creacion']);
+
+
+    $sheet->getStyle('J1:M1')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('J1:M1')->applyFromArray($styleArray);
+    $sheet->getStyle('J1:M1') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('J1:M1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('J1', 'Puesto del evaluado');
+
+    $sheet->getStyle('J2:M2')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('J2:M2')->applyFromArray($styleArray);
+    $sheet->setCellValue('J2', $puesto);
+
+    $sheet->getStyle('J3:M3')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('J3:M3')->applyFromArray($styleArray);
+    $sheet->getStyle('J3:M3') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('J3:M3')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('J3', 'Puesto de quien evalúa');
+
+    $sheet->getStyle('J4:M4')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('J4:M4')->applyFromArray($styleArray);
+    $sheet->setCellValue('J4',$row2['puesto'].'/'.$row2['rol']);
+
+    $sheet->getStyle('J5:M6')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('J5:M6')->applyFromArray($styleArray);
+    $sheet->getStyle('J5:M6') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('J5:M6')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('J5', $row2['rol']);
+
+
+    $sheet->mergeCells('A1:B1');
+    $sheet->mergeCells('C1:D1');
+    $sheet->getStyle('A:F')->getAlignment()->setHorizontal('center');
+    $sheet->setCellValue('A1', 'DECALOGO LIDERAZGO ICAVE');
+    $sheet->setCellValue('C1', 'CALIFICACIÓN');
+    $sheet->getStyle('C1:D1') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('C1:D1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+
+    $contescala=14;
+    $contescalasupp=1;
+    $sheet->mergeCells('A13:H13');
+    $sheet ->getStyle('A13:H13')->applyFromArray($styleArray);
+    $sheet->getStyle('A13:H13') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('A13:H13')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
+    $sheet->setCellValue('A13', 'Escala de clasificación');
+    foreach($escala as $e){
+            $sheet ->getStyle('A'.$contescala)->applyFromArray($styleArray);
+            $sheet ->getStyle('B'.$contescala)->applyFromArray($styleArray);
+            $sheet ->getStyle('C'.strval($contescala).':H'.strval($contescala))->applyFromArray($styleArray);
+
+            $sheet->setCellValue('A'.$contescala, $contescalasupp);
+            //$sheet->mergeCells('B'.strval($contescala).':D'.strval($contescala));
+            $sheet->setCellValue('B'.$contescala, $e['etiqueta']);
+            $sheet->mergeCells('C'.strval($contescala).':H'.strval($contescala));
+            $sheet->setCellValue('C'.$contescala, $e['descripcion']);
+            $contescala++;
+            $contescalasupp++;
+    }
+
+
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('A')->setWidth(10);
+    $sheet->getStyle('A1') ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+    $sheet->getStyle('A1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('009be0');
+    $sheet->getColumnDimension('B')->setAutoSize(true);
+    $documento->getSheetByName($row2['rol'])->getColumnDimension('A')->setWidth(10);
+    $sheet->getColumnDimension('D')->setAutoSize(true);
+
+    $sheet->getStyle('A1:D11')->getAlignment()->setHorizontal('center');
+    $sheet ->getStyle('C1:D1')->applyFromArray($styleArray);
 
     while($row4 = mysqli_fetch_array($resultado3)){
 
@@ -113,15 +243,24 @@ while($row2 = mysqli_fetch_array($resultado2)){
         $coordinadaC=$coordinadaC . strval($cont);
         $coordinadaD=$coordinadaD . strval($cont);
 
-        $sheet->setCellValue($coordinadaA, strval($cont));
+        $sheet->setCellValue($coordinadaA, strval($cont-1));
+        $sheet->getStyle($coordinadaA) ->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+        $sheet->getStyle($coordinadaA)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('009be0');
         $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
+        $sheet->getStyle($coordinadaB)->getAlignment()->setHorizontal('left');
         $sheet->setCellValue($coordinadaC, $row4['puntos']);
+        $sheet ->getStyle($coordinadaA)->applyFromArray($styleArray);
+        $sheet ->getStyle($coordinadaB)->applyFromArray($styleArray);
+        $sheet ->getStyle($coordinadaC)->applyFromArray($styleArray);
+
         foreach($escala as $e){
             if($row4['puntos'] >= $e['inferior'] && $row4['puntos'] <= $e['superior']){
                 $sheet->setCellValue($coordinadaD, $e['etiqueta']);
+                $sheet ->getStyle($coordinadaD)->applyFromArray($styleArray);
                 break;
             }
         }
+
         $coordinadaA='A';
         $coordinadaB='B';
         $coordinadaC='C';
