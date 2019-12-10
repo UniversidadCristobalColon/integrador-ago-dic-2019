@@ -80,7 +80,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+
+                    <?php
+
+                    foreach ($conexion->query('select creacion from respuestas order by creacion desc limit 1') as $fecha){
+                        echo $fecha['creacion'];
+                    }
+                    ?>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->

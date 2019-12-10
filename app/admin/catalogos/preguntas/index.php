@@ -102,7 +102,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             }
                             echo"<td>$actualizacion</td>";
                             ?>
-                            <td>
+                            <td class="text center">
                                 <div class="text center">
                                     <button type='button' class="btn btn-xs btn-light edit" onclick="javascript:editar(<?=$id;?>,'<?=$pregunta;?>');" data-target="#editar" data-toggle="modal">
 
@@ -123,7 +123,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
 
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                    <div class="card-footer small text-muted">Última actualización
+
+                        <?php
+
+                        foreach ($conexion->query('select actualizacion from preguntas order by actualizacion desc limit 1') as $fecha){
+                            echo $fecha['actualizacion'];
+                        }
+                        ?>
+                    </div>
             </div>
         </div>
         <!-- /.container-fluid -->
