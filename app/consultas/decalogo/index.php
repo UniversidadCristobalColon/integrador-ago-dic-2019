@@ -9,7 +9,12 @@ $periodos = array();
 $departamentos = array();
 $empleados = array();
 $periodo = '';
-$sql = "select * from periodos where estado = 'Activo' order by id desc";
+
+$sql = "select * 
+        from periodos 
+        where estado = 'Activo' order by id desc";
+
+
 $res = mysqli_query($conexion, $sql);
 if($res){
     while($f = mysqli_fetch_assoc($res)){
@@ -24,24 +29,25 @@ if($res){
         $departamentos[] = $f;
     }
 }
-$competencias   = array();
+
 $evaluado       = "";
 $departamento   = "";
+
+$id_evaluacion = 1;
+$evaluadores = array();
 if(!empty($id_periodo) && !empty($id_evaluado)) {
-    $sql = "select c.id, c.competencia, AVG(a.puntos) as promedio 
-            from promedios_por_evaluado a, preguntas b, competencias c
-            where a.id_periodo = $id_periodo
-            and a.id_evaluado = $id_evaluado
-            and a.id_pregunta = b.id
-            and b.id_competencia = c.id
-            group by c.id, c.competencia
-            order by promedio desc";
-    $res = mysqli_query($conexion, $sql);
-    if ($res) {
-        while ($f = mysqli_fetch_assoc($res)) {
-            $competencias[] = $f;
-        }
+    $sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol, pe.id_evaluacion, pe.id_rol_evaluador 
+            from promedios_por_evaluado pe join empleados e
+            on e.id = pe.id_evaluador
+            join roles r on pe.id_rol_evaluador = r.id
+            where id_evaluado=$id_evaluado and id_periodo = $id_periodo
+            order by id_evaluacion desc, pe.id_rol_evaluador asc";
+    $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+    while($f = mysqli_fetch_assoc($resultado2)){
+        $evaluadores[] = $f;
     }
+
+
     $sql = "SELECT CONCAT(a.nombre, ' ', a.apellidos) as nombre, b.departamento
             FROM empleados a
             LEFT JOIN departamentos b
@@ -84,11 +90,11 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
         // draws it.
         function drawChart() {
             <?php
-            if(!empty($competencias)){ ///// si no hay datos no inicializar el grafico
+            /*if(!empty($competencias)){ ///// si no hay datos no inicializar el grafico
             $datos = array(array('Competencia', 'Promedio'));
             foreach ($competencias as $c) {
                 $datos[] = array($c["competencia"], (float)number_format($c["promedio"], 2));
-            }
+            }*/
             ?>
             var data = google.visualization.arrayToDataTable(<?php echo json_encode($datos) ?>);
             var options = {
@@ -107,7 +113,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             chart.draw(data, options);
             <?php
-            }
+//            }
             ?>
         }
         $('document').ready(function(){
@@ -187,7 +193,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Competencias
+                    Decálogo
                 </div>
 
                 <div class="card-body">
@@ -233,29 +239,23 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                         </div>
                     </form>
 
-                    <div container></div>
-                    <h5 class="mt-3"><?php echo "<hr>{$periodo}<br>{$evaluado}<br><small class='text-muted'>$departamento</small>" ?></h5>
-                    <form method='POST' action="generarexcel.php">
-                        <input type="hidden" name="id_evaluado" value="<?php echo $id_evaluado?>">
-                        <input type="hidden" name="id_periodo" value="<?php echo $id_periodo?>">
-                        <input type='submit' class= 'btn btn-primary' value="Generar Excel">
-                    </form>
-                    <form method='GET' action="../../admin/catalogos/decalogos/crearPdf.php">
-                        <input type="hidden" name="idevaluado" value="78">
-                        <input type="hidden" name="idevaluacion" value="10">
-                        <input type='submit' class= 'btn btn-primary' value="Generar PDF">
-                    </form>
-                    <?php
-                        if(!empty($competencias)) {
 
+                    <h5 class="mt-3"><?php echo "<hr>{$periodo}<br>{$evaluado}<br><small class='text-muted'>$departamento</small>" ?></h5>
+
+
+
+                    <?php
+
+                        if(!empty($evaluadores)) {
+                            ?>
+
+
+
+                            <?php
                             $suma=0;
                             $cont=0;
 
-                            $sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
-                                on e.id = pe.id_evaluador
-                                join roles r on pe.id_rol_evaluador = r.id
-                                where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
-                            $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
 
 
                             $sql = "select * from escalas where id='1' ";
@@ -296,24 +296,55 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $escala[5]['inferior']=$row['nivel5_inferior'];
                                 $escala[5]['superior']=$row['nivel5_superior'];
                             }
-                            while($row2 = mysqli_fetch_array($resultado2)){
+
+                            $id_evaluacion_aux = 0;
+                            foreach($evaluadores as $row2){
+                                $id_evaluacion = $row2["id_evaluacion"];
+
+                                if($id_evaluacion_aux != $id_evaluacion){
+                                    ?>
+                                    <hr>
+                                    <div class="row mb-5">
+                                        <div class="col-md-6">
+                                            <h4>Aqui va el titulo de la evaluacion</h4>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <a href="generarexcel.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>" class="btn btn-primary" target="_blank">
+                                                Exportar a Excel
+                                            </a>
+
+                                            <a href="../../admin/catalogos/decalogos/crearPdf.php?idevaluado=<?php echo $id_evaluado ?>&idevaluacion=<?php echo $id_evaluacion ?>" class="btn btn-primary" target="_blank">
+                                                Exportar a PDF
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $id_evaluacion_aux = $id_evaluacion;
+                                }
+
                                 /*Se obtienen las preguntas de acuerdo al evaluador, periodo y evaluado*/
-                                $sql = "select da.aseveracion,pe.puntos from promedios_por_evaluado pe join preguntas p 
+                                $sql = "select da.aseveracion,pe.puntos 
+                                        from promedios_por_evaluado pe join preguntas p 
                                         on p.id = pe.id_pregunta
                                         join decalogos_aseveraciones da 
                                         on da.id = p.id_decalogo_aseveracion
-                                        where pe.id_evaluador = $row2[id_evaluador] and pe.id_evaluado ='$id_evaluado' and pe.id_periodo ='$id_periodo';
+                                        where pe.id_evaluador = $row2[id_evaluador] 
+                                        and pe.id_evaluado = '$id_evaluado' 
+                                        and pe.id_evaluacion = $id_evaluacion;                                        
                                         ";
+
+
                                 $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                                 echo "
-                                    <h3>$row2[nombre] $row2[apellidos] / $row2[rol]</h3>
-                                    <table class='table table - bordered' id='dataTable' width='100 % ' cellspacing='0'>
+                                    <h5>$row2[nombre] $row2[apellidos] / $row2[rol]</h5>
+                                    <table class='table mb-5'>
                                     
                                         <thead>
                                         
                                         <tr>
-                                            <th>Pregunta</th>
-                                            <th colspan='2'>Calificación</th>
+                                            <th>Decálogo</th>
+                                            <th>Calificación</th>
+                                            <th>Escala</th>
                                         </tr>
                                         </thead> <tbody>
                                 ";
@@ -321,21 +352,16 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                     $suma +=$row4['puntos'];
                                     $cont++;
                                     echo "
-                                       
-                                        <tr>
                                              <tr>
                                                    <td>$row4[aseveracion]</td>
                                                    <td>$row4[puntos]</td>";
                                     foreach($escala as $e){
                                         if($row4['puntos'] >= $e['inferior'] && $row4['puntos'] <= $e['superior']){
-                                            echo "
-                                                                <td>$e[etiqueta]</td>
-                                                            ";
+                                            echo "<td>$e[etiqueta]</td>";
                                             break;
                                         }
                                     }
-                                    echo"
-                                                        </tr> 
+                                    echo"                                                        
                                                         </tr>
                                                      ";
 
@@ -345,8 +371,8 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 echo "</tbody>
                                         <tfoot>
                                             <tr style='background-color:#d6e5fa'>
-                                                <td>Promedio</td>
-                                                <td>$promedio</td>
+                                                <td><b>Promedio</b></td>
+                                                <td colspan='2'>$promedio</td>
                                            </tr>
                                         </tfoot>
                                         </table>
@@ -354,10 +380,6 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $suma =0;
                                 $cont=0;
                             };
-                            ?>
-                                </tbody>
-                            </table>
-                            <?php
                         }else{
                         if(!empty($id_periodo) && !empty($id_departamento) && !empty($id_evaluado)) {
                             echo "<div class='alert alert-warning'>No hay registros para la persona en el periodo seleccionado</div>";
