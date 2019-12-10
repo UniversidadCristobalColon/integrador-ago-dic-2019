@@ -116,11 +116,11 @@ $Iniciadas = 0;
                 alert("Seleccione el fin de la evaluación");
                 return false;
             }
-            if (!moment(fin).isBefore(limite)){
+            if (moment(fin).isAfter(limite)){
                 alert("La fecha de fin no puede ser mayor a la fecha de limite");
                 return false;
             }
-            if (!moment(inicio).isBefore(fin)){
+            if (moment(inicio).isAfter(fin)){
                 alert("La fecha de inicio no puede ser mayor a la fecha de fin");
                 return false;
             }
