@@ -3,32 +3,93 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/PHPMailer/Exception.php';
-require '../vendor/PHPMailer/PHPMailer.php';
-require '../vendor/PHPMailer/SMTP.php';
+function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
-$mail = new PHPMailer;
+    require '../config/db.php';
 
-$mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = 'smtp.mailgun.org';                     // Specify main and backup SMTP servers
-$mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = 'postmaster@sandboxf3371239bc584456a287d274073a0b3f.mailgun.org';   // SMTP username
-$mail->Port = 587;
-$mail->Password = '4424dc68cb38e2ed51647ddce1e262ee-1df6ec32-305b58a9';                           // SMTP password
-$mail->SMTPSecure = 'tls';                            // Enable encryption, only 'tls' is accepted
+    require '../vendor/PHPMailer/Exception.php';
+    require '../vendor/PHPMailer/PHPMailer.php';
+    require '../vendor/PHPMailer/SMTP.php';
 
-$mail->From = 'postmaster@sandboxf3371239bc584456a287d274073a0b3f.mailgun.org';
-$mail->FromName = 'Mailer';
-$mail->addAddress('foo1024bar@outlook.com');                 // Add a recipient
+    $sql = 'SELECT host, port, username, password, email_name 
+            FROM email_conf
+            WHERE id = 1';
 
-$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+    $res = $conexion->query($sql);
 
-$mail->Subject = 'Hello';
-$mail->Body    = 'Testing some Mailgun awesomness';
+    if($res) {
+        $assoc = $res->fetch_assoc();
 
-if(!$mail->send()) {
-    echo 'Message could not be sent.';
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
-} else {
-    echo 'Message has been sent';
+        $mail = new PHPMailer;
+        $mail->isSMTP();                       // Set mailer to use SMTP
+        $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
+        $mail->Port = $assoc['port'];
+        $mail->SMTPAuth = true;                // Enable SMTP authentication
+        $mail->Username = $assoc['username'];  // SMTP username
+        $mail->Password = $assoc['password'];  // SMTP password
+        $mail->SMTPSecure = 'tls';             // Enable encryption, only 'tls' is accepted
+        $mail->From = $assoc['username'];
+        $mail->FromName = utf8_decode($assoc['email_name']);
+        $mail->addAddress($para);              // Add a recipient
+
+        $mail->WordWrap = 50;                  // Set word wrap to 50 characters
+        $mail->Subject = $asunto;
+        $mail->Body = $mensaje;
+
+        if(!$mail->send()) {
+            //echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            header('location: index.php?error=6');
+            exit();
+        } else {
+            //echo 'Message has been sent';
+            if(isset($redirect)) {
+                header('location: '.$redirect);
+                exit();
+            }
+        }
+    }
+    
 }
+
+function enviarCorreo2($para, $asunto,$token){
+    require '../config/db.php';
+    require '../vendor/PHPMailer/Exception.php';
+    require '../vendor/PHPMailer/PHPMailer.php';
+    require '../vendor/PHPMailer/SMTP.php';
+
+    $sql = 'SELECT host, port, username, password, email_name, content 
+            FROM email_conf
+            WHERE id = 1';
+    $res = $conexion->query($sql);
+    if($res) {
+        $assoc = $res->fetch_assoc();
+        $mail = new PHPMailer;
+        $mail->isSMTP();                       // Set mailer to use SMTP
+        $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
+        $mail->Port = $assoc['port'];
+        $mail->SMTPAuth = true;                // Enable SMTP authentication
+        $mail->Username = $assoc['username'];  // SMTP username
+        $mail->Password = $assoc['password'];  // SMTP password
+        $mail->SMTPSecure = 'tls';             // Enable encryption, only 'tls' is accepted
+        $mail->From = $assoc['username'];
+        $mail->FromName = utf8_decode($assoc['email_name']);
+        $mail->addAddress($para);              // Add a recipient
+        $mail->WordWrap = 50;                  // Set word wrap to 50 characters
+        $mail->Subject = $asunto;
+        $mail->Body = $assoc['content'];
+        $mail->IsHTML(true);
+        if(!$mail->send()) {
+            //echo 'Message could not be sent.';
+            //echo 'Mailer Error: ' . $mail->ErrorInfo;
+            echo "Not sent";
+            exit();
+        } else {
+            //echo 'Message has been sent';
+            echo "Sent";
+            exit();
+        }
+    }
+
+}
+?>

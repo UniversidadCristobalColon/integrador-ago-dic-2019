@@ -1,6 +1,6 @@
 <?php
 require_once '../../../../config/global.php';
-
+require_once '../../../../config/db.php';
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,16 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <title><?php echo PAGE_TITLE ?></title>
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <script>
+        function eliminar(id){
+            var respuesta=confirm('¿Está seguro de que desea eliminar este cuestionario?');
+            if(respuesta===true){
+                window.location='deshabilitar.php?id='+id;
+            }
+        }
+    </script>
+
+    <?php getTopIncludes(RUTA_INCLUDE )?>
 </head>
 
 <body id="page-top">
@@ -34,33 +43,74 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Cuestionarios
+                    Catalogo: Cuestionarios
                 </div>
                 <div class="card-body">
-                   <a href="editar.php"> <button type="button" class="btn btn-primary mb-3">Crear Cuestionario</button></a>
+                    <a href="editar.php"><button class="btn btn-primary mb-3" ">Nuevo</button></a>
+
+
                     <div class="table-responsive">
+                        <?php
+                        if(!empty($_GET["error"])){
+                            $error=$_GET["error"];
+                            if($error==1){
+                                echo
+                                '<div class="alert alert-success" role="alert">
+                                    El cuestionario ha sido eliminado
+                                </div>';
+                            }else if($error==2){
+                                echo
+                                '<div class="alert alert-danger" role="alert">
+                                    El cuestionario no se puede eliminar porque ya ha sido utilizado en una evaluación.
+                                </div>';
+                            }
+                        }
+                        //Para llenar la tabla
+                        $sql = "SELECT * FROM cuestionarios";
+                        $resultado = $conexion -> query($sql);
+                        if($resultado)    {
+                        ?>
+                        <form action="editar.php" method="post">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>Descripción</th>
+                                <th>Cuestionario</th>
+                                <th>Creacion</th>
+                                <th>Actualizacion</th>
+                                <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td>Cuestionario 1</td>
-                            </tr>
+                            <?php
+                            }
+                            while($row = $resultado -> fetch_assoc()) { //esto es para recorrer toda la tabla de mysql
+                                ?>
+                                <tr>
+                                    <?php $id = $row['id'] ?>
+                                    <td><?php echo $row['cuestionario'] ?></td>
+                                    <td><?php echo $row['creacion'] ?></td>
+                                    <td><?php echo $row['actualizacion'] ?></td>
+                                    <td>
+                                        <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button title="Eliminar registro"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
+                                        <i class="fa fa-trash" ></i>
+                                        </button>
 
-
-
-
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
                             </tbody>
                         </table>
 
 
+                        </form>
 
                     </div>
-
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>

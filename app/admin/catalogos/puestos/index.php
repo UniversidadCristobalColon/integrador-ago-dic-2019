@@ -1,8 +1,9 @@
 <?php
-require_once '../../../../../../../../../../../../../config/global.php';
-
-define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a necesidad
+require_once '../../../../config/global.php';
+require_once '../../../../config/db.php';
+define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,6 +13,12 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+
 
     <title><?php echo PAGE_TITLE ?></title>
 
@@ -36,46 +43,71 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
                     <i class="fas fa-table"></i>
                     Catálogo: Puestos
                 </div>
+                <div class="card-body">
+                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Agregar</button>
 
-                 <div class="card-body">
-                     <button class="btn btn-primary mb-3">Nuevo</button>
+                    <div class="table-responsive">
+                        <form id="tableform" action="editar.php" method="post" >
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>Puesto</th>
-                                <th>Ultima Actualización</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tfoot>
-                            <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
-                            </tr>
-                            </tfoot>
-                            <tbody>
-                            <tr>
-                                <td>Puesto 1</td>
-                                <td>07/11/2019 20:33:00</td>
-                                <td>Editar Eliminar</td>
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Puestos</th>
+                                    <th class="text-center">Creación</th>
+                                    <th class="text-center">Nivel de Puesto</th>
+                                    <th class="text-center">Estatus</th>
+                                    <th></th>
                                 </tr>
-                            </tbody>
-                        </table>
+                                </thead>
+
+                                <tbody>
+
+                                <?php foreach ($conexion->query('SELECT * from puestos') as $row){ ?>
+
+                                    <tr>
+                                        <td class="text-center"><?php echo @$row['puesto'] ?></td>
+                                        <td class="text-center"><?php echo $row['creacion'] ?></td>
+                                        <?php foreach ($conexion->query('SELECT * from niveles_puesto where id = '.$row['id_nivel_puesto']) as $row1) { ?>
+                                            <td class="text-center"><?php echo $row1['nivel_puesto'] ?></td>
+                                            <?php
+                                        }
+                                        ?>
+                                        <td class="text-center"><?php echo @$row['estado'] ?></td>
+                                        <td class="text-center">
+
+                                            <button type="submit" title="Editar registro"  name="editar" value="<?php  echo $row["id"]; ?>" id="<?php  echo $row["id"]; ?>"  class="btn btn-xs btn-light edit">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <?php
+                                            ?>
+                                            <button type="submit" title="Cambiar estatus" name="cambiar" value="<?php echo $row['id'] ?>" id="<?php  echo $row["id"]; ?>" class="btn btn-xs btn-light change" >
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </button>
+
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                                </tbody>
+
+                            </table>
+                        </form>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+
+                    <?php
+
+                    foreach ($conexion->query('SELECT creacion from puestos order by creacion desc limit 1') as $fecha){
+                        echo $fecha['creacion'];
+                    }
+                    ?>
+                </div>
             </div>
 
         </div>
         <!-- /.container-fluid -->
-
-        <?php getFooter() ?>
 
     </div>
     <!-- /.content-wrapper -->
@@ -91,6 +123,66 @@ define('RUTA_INCLUDE', '../../../../../../../../../../../../../'); //ajustar a n
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+
+<script>
+
+    /*
+    function borrar(){
+        $(document).ready(function(){
+            console.log("kdsabk")
+            var tabla = $('#dataTable').DataTable();
+            $('#dataTable tbody').on( 'click', '.delete', function (e){
+            e.preventDefault();
+            var id = $(this).attr('id');
+
+        Swal.fire({
+                title: 'Are you sure?',
+                text: "It will be deleted permanently!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+
+                preConfirm: function() {
+                  return new Promise(function(resolve) {
+
+                     $.ajax({
+                        url:"eliminar.php",
+                        method:'POST',
+                        data:{id:id}
+
+                     })
+
+                     .done(function(response){
+                         Swal.fire('Deleted!', response.message, response.status);
+
+                         tabla
+                            .row( $(this).parents('tr') )
+                            .remove()
+                            .draw();
+
+                            console.log(id);
+                     })
+
+                     .fail(function(){
+                         Swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+                     });
+                  });
+                },
+                allowOutsideClick: true
+            });
+
+
+    });
+    });
+    }*/
+
+</script>
+
+<?php getFooter() ?>
+
 </body>
 
 </html>
