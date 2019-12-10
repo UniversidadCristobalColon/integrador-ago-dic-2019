@@ -41,6 +41,16 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                 }
             }).change();
         });
+
+        function msg(txt){
+            if(txt==='') return false;
+            $('#msg').text(txt).slideDown();
+            setTimeout(function(){
+                $('#msg').slideUp();
+            }, 3500);
+        }
+
+
     </script>
 </head>
 
@@ -55,6 +65,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
     <div id="content-wrapper">
 
         <div class="container-fluid">
+            <div class="alert alert-danger" style="display: none" id="msg"></div>
 
             <!-- DataTables Example -->
             <div class="card mb-3">
@@ -77,7 +88,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                                     $res=$conexion->query($sql);
                                     while ($row = $res->fetch_assoc()) {
                                     ?>
-                                    <li><label class="checkbox"><input type="checkbox" name="periodo[]" value="<?php echo $row['periodo']; ?>"><?php echo $row['periodo']; ?></label></li>
+                                        <li><label class="checkbox list-group-item-action"><input type="checkbox" name="periodo[]" value="<?php echo $row['periodo']; ?>"><?php echo " ".$row['periodo']; ?></label></li>
                                      <?php
                                     }
                                     ?>
@@ -89,7 +100,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                             <label>Departamento</label>
-                            <select class="browser-default custom-select" id="departamentos" name="departamento">
+                            <select class="browser-default custom-select" id="departamentos" name="departamento" onmousedown="if(this.options.length>10){this.size=10;}"  onchange='this.size=0;' onblur="this.size=0;" required>
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
                                 $sql="SELECT id, departamento FROM departamentos";
@@ -107,7 +118,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                            <label>Empleados</label>
-                            <select class="browser-default custom-select" id="empleados" name="empleado" >
+                            <select class="browser-default custom-select" id="empleados" name="empleado" onmousedown="if(this.options.length>10){this.size=10;}"  onchange='this.size=0;' onblur="this.size=0;" required>
                             </select>
                             </div>
                         </div>
@@ -180,7 +191,7 @@ $anterior = null;
                                             $res = $conexion->query($sql);
                                             while ($row = $res->fetch_assoc()) {
                                                 ?>
-                                                <?php if($row['Nivel de Puesto'] != $anterior) {echo "<tr><td colspan='5'><b>".$row['Nivel de Puesto']."</b></tr></td>"; } $anterior = $row['Nivel de Puesto']; ?>
+                                                <?php if($row['Nivel de Puesto'] != $anterior) {echo "<tr><td colspan=25><b>".$row['Nivel de Puesto']."</b></tr></td>"; } $anterior = $row['Nivel de Puesto']; ?>
 
                                                 <tr>
                                                     <td><?php echo $row['Aseveraciones']; ?></td>
@@ -206,7 +217,9 @@ $anterior = null;
 
                                                 <?php
                                             }
-                                        } //ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
+                                        } else{
+                                            echo "<br><br><H3 class=\"text-center cd-flex p-2\">NO HAY RESULTADOS </H3>";
+                                        }//ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
 
                                 ?>
                                 </tbody>
@@ -214,12 +227,33 @@ $anterior = null;
                                 </div>
                                 <?php
 
-                            }
 
-                                } //ESTE ES EL IF DE SELECCIONAR PERIODO
-                            } //ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
-                        } //ESTE ES EL IF DE SELECCIONAR EMPLEADO
+                                    }
+                                } else {
+                                    echo '<script type="text/javascript">',
+                                    'msg(\'No se seleccionó empleado\');',
+                                    '</script>'
+                                    ;
+
+                                }//ESTE ES EL IF DE SELECCIONAR EMPLEADO
+                            } else {
+                                echo '<script type="text/javascript">',
+                                'msg(\'No se seleccionó departamento\');',
+                                '</script>'
+                                ;
+                            }//ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
+                        } else{
+                            echo '<script type="text/javascript">',
+                            'msg(\'No se seleccionó periodo\');',
+                            '</script>'
+                            ;
+                        }//ESTE ES EL IF DE SELECCIONAR PERIODO
+
+
                     ?>
+
+
+
 
                 <!--
                     <div class="table-responsive">
@@ -249,7 +283,15 @@ $anterior = null;
                 -->
                 </div>
 
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Actualizado en <?php
+                    date_default_timezone_set("America/Mexico_City");
+                    echo date("Y/m/d")
+                    ?>
+                    a las
+                    <?php
+                    echo date("h:ia");
+                    ?>
+                </div>
             </div>
 
         </div>
