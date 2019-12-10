@@ -47,8 +47,7 @@ require '../../../../config/db.php';
 
                             <div class="form-group">
                                 <label>Decálogo</label>
-                                <input type="text" class="form-control" name="nuevodeca"
-                                       placeholder="Escribe aquí el nombre del nuevo decálogo">
+                                <input type="text" class="form-control" name="nuevodeca">
                             </div>
 
                             <div class="form-group">
