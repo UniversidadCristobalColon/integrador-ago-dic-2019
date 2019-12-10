@@ -8,11 +8,12 @@ if (isset($_POST['bguard'])) {
 
     $id_pt_bg = $_POST['idpost'];
 
-    if ($_POST['statesc'] == 'A') {
+    if ($_POST['statesc'] == 'Activo') {
         $sql_elim = "UPDATE escalas SET status='B' WHERE id='$id_pt_bg';";
-    } elseif ($_POST['statesc'] == 'B') {
+    } elseif ($_POST['statesc'] == 'Inactivo') {
         $sql_elim = "UPDATE escalas SET status='A' WHERE id='$id_pt_bg';";
     }
+
     $resultado = mysqli_query($conexion, $sql_elim);
     if ($resultado) {
         header("location: index.php");
@@ -68,7 +69,11 @@ if (isset($_POST['b-camb'])) {
     $sqlres = mysqli_query($conexion, $sql_stat);
     if ($sqlres) {
         $fila = mysqli_fetch_assoc($sqlres);
-        $stat_esc = $fila['status'];
+        if ($fila['status'] == 'A') {
+            $stat_esc = 'Activo';
+        } elseif ($fila['status'] == 'B') {
+            $stat_esc = 'Inactivo';
+        }
     }
 
 }
@@ -304,7 +309,7 @@ if (isset($_POST['b-camb'])) {
                             <div class="form-group mt-5">
                                 <label><b>¿Estás seguro que deseas cambiar el estado del registro seleccionado?</b></label><br>
                                 <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Estado actual:</label>
+                                    <label class="col-sm-2 col-form-label">Estado actual</label>
                                     <div class="col-sm-2">
                                         <input type="hidden" value="<?php echo $stat_esc ?>"
                                                name="statesc"><!--/*estado actual de la escala seleccionada*/-->
