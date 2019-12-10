@@ -234,19 +234,29 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                     </form>
 
                     <div container></div>
-                    <h5 class="mt-3"><?php echo "<hr>{$periodo}<br>{$evaluado}<br><small class='text-muted'>$departamento</small>" ?></h5>
-                    <form method='POST' action="generarexcel.php">
-                        <input type="hidden" name="id_evaluado" value="<?php echo $id_evaluado?>">
-                        <input type="hidden" name="id_periodo" value="<?php echo $id_periodo?>">
-                        <input type='submit' class= 'btn btn-primary' value="Generar Excel">
-                    </form>
-                    <form method='GET' action="../../admin/catalogos/decalogos/crearPdf.php">
-                        <input type="hidden" name="idevaluado" value="78">
-                        <input type="hidden" name="idevaluacion" value="10">
-                        <input type='submit' class= 'btn btn-primary' value="Generar PDF">
-                    </form>
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="mt-3"><?php echo "<hr>{$periodo}<br>{$evaluado}<br><small class='text-muted'>$departamento</small>" ?></h5>
+                        </div>
                     <?php
+                        echo "
+                            <div class='col'>
+                                <form method='POST' action='generarexcel.php'>
+                                    <input type='hidden' name='id_evaluado' value='$id_evaluado'>
+                                    <input type='hidden' name='id_periodo' value='$id_periodo'>
+                                    <input type='submit' class= 'btn btn-primary' value='Generar Excel'>
+                                </form>
+                                
+                                <form method='POST' action='../../admin/catalogos/decalogos/crearPdf.php'>
+                                    <input type='hidden' name='idevaluado' value='78'>
+                                    <input type='hidden' name='idevaluacion' value='10'>
+                                    <input type='submit' class= 'btn btn-primary' value='Generar PDF'>
+                                </form>
+                            </div>  
+                    </div>    
+                    ";
                         if(!empty($competencias)) {
+
 
                             $suma=0;
                             $cont=0;
@@ -283,7 +293,6 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $escala[2]['inferior']=$row['nivel3_inferior'];
                                 $escala[2]['superior']=$row['nivel3_superior'];
 
-
                                 $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
                                 $escala[3]['inferior']=$row['nivel3_inferior'];
                                 $escala[3]['superior']=$row['nivel3_superior'];
@@ -307,6 +316,8 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                                 echo "
                                     <h3>$row2[nombre] $row2[apellidos] / $row2[rol]</h3>
+                                    
+                                    
                                     <table class='table table - bordered' id='dataTable' width='100 % ' cellspacing='0'>
                                     
                                         <thead>
