@@ -55,21 +55,6 @@ function validaFormulario(params) {
         title: 'Error...',
         text: 'Debes introducir un nombre para la organización'
 });
-    mostrarErrores();
-	}
-
-    if (
-		$('select[name="estatus"]').val() == 'Selecciona un estatus'
-	) {
-        errores = true;
-
-		Swal.fire({
-        icon: 'error',
-        title: 'Error...',
-        text: 'Debes elegir un estatus'
-});
-    mostrarErrores();
-	}
 
     $('#agregar').submit();
     }
@@ -103,24 +88,12 @@ function validaFormulario(params) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Organización:</label>
-                                <input type="text" name="organizacion" class="form-control" placeholder="Introduce el nombre de la organización">
+                                <label>Organización</label>
+                                <input type="text" name="organizacion" class="form-control">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Estatus:</label>
-                                <select id="estatus" name="estatus" class="form-control">
-                                    <option>Selecciona un estatus</option>
-                                    <option value="Activo">Activo</option>
-                                    <option value="Inactivo">Inactivo</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-12">

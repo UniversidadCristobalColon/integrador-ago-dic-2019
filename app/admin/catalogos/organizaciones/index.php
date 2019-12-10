@@ -46,7 +46,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Organizaciones
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Agregar</button>
+                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Nueva</button>
 
                     <div class="table-responsive">
                     <form id="tableform" action="editar.php" method="post">

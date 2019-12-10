@@ -121,18 +121,10 @@ $organizacion=$fila['organizacion'];
          
                 <div class="card-body">
                 <form id="agregar" action="guardarEditar.php" method="post">
-                <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>ID:</label>
-                                <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Organización:</label>
+                                <label>Organización</label>
                                 <input type="text" name="organizacion" class="form-control" value="<?php echo $organizacion; ?>">
                             </div>
                         </div>
@@ -149,6 +141,8 @@ $organizacion=$fila['organizacion'];
                     </div>
     
                     
+                                <input type="hidden" name="id" class="form-control" value="<?php echo $id; ?> " >
+                         
                 </form>
                </div>
                 <div id="errores" title="Error" class="ui-helper-hidden" style="color: red">
