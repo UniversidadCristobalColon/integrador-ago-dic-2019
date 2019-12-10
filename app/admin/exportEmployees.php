@@ -27,7 +27,7 @@ $conexion->query($query);
 }
 $query = "truncate empleados_temp";
 $conexion->query($query);
-header("Location: empleados_temp.php");
+header("Location: import.php");
 }
 
 
