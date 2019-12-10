@@ -52,18 +52,20 @@ require '../../../../config/db.php';
                             </div>
 
                             <div class="form-group">
-                                <label>id_escala</label>
+                                <label>Escala</label>
                                 <select class="form-control" id="orden" name="select_e">
                                     <option disabled selected>Elige una escala para el decálogo</option>
                                     <?php
-                                    $sql_id = "SELECT id FROM escalas;";
+                                    $sql_id = "SELECT id, nivel1_etiqueta, nivel2_etiqueta, nivel3_etiqueta, nivel4_etiqueta, nivel5_etiqueta FROM escalas";
                                     $resultado = mysqli_query($conexion, $sql_id);
                                     if ($resultado) {
                                         while ($fila = mysqli_fetch_assoc($resultado)) {
-                                            echo "<option>$fila[id]</option>";
+                                            $fid = fila['id'];
+                                            $arr_escala[] = $fid;
+                                            echo "<option>$fila[nivel1_etiqueta],$fila[nivel2_etiqueta],$fila[nivel3_etiqueta],$fila[nivel4_etiqueta],$fila[nivel5_etiqueta]</option>";
                                         }
                                     } else {
-                                        echo "Error: " . $sql . "<br>" . mysqli_error($conexion);
+                                        echo("Error description: " . mysqli_error($conexion));
                                     }
                                     ?>
                                 </select>
@@ -81,8 +83,24 @@ require '../../../../config/db.php';
                         if (isset($_POST['bguard'])) {
                             if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != '') {
                                 if (isset($_POST['select_e'])) {
-                                    $n_deca = $_POST['nuevodeca'];
+
                                     $s_esc = $_POST['select_e'];
+                                    $porciones = explode(",", $s_esc);
+                                    $pn1 = $porciones[0];
+                                    $pn2 = $porciones[1];
+                                    $pn3 = $porciones[2];
+                                    $pn4 = $porciones[3];
+                                    $pn5 = $porciones[4];
+                                    $sql_id = "SELECT id FROM escalas WHERE nivel1_etiqueta='$pn1' AND nivel2_etiqueta='$pn2' AND nivel3_etiqueta='$pn3' AND nivel4_etiqueta='$pn4' AND nivel5_etiqueta='$pn5'";
+                                    $resultado = mysqli_query($conexion, $sql_id);
+                                    if ($resultado) {
+                                        $fila = mysqli_fetch_assoc($resultado);
+                                        $s_esc = $fila['id'];
+                                    } else {
+                                        echo("Error description: " . mysqli_error($conexion));
+                                    }
+
+                                    $n_deca = $_POST['nuevodeca'];
                                     //$act = date("Y-m-d H:i:s");
                                     $act = "";
                                     $sql2 = "SELECT now()";
@@ -94,7 +112,7 @@ require '../../../../config/db.php';
                                         if (mysqli_query($conexion, $sql)) {
                                             header("location: index.php");
                                         } else {
-                                            echo "Error";
+                                            echo("Error description: " . mysqli_error($conexion));
                                         }
 
                                     }
@@ -105,7 +123,6 @@ require '../../../../config/db.php';
                                 echo "<p style='color: red'>**Por favor llene los campos solicitados**</p>";
                             }
                             ob_end_flush();
-                            mysqli_close($conexion);
                         }
                         ?>
 

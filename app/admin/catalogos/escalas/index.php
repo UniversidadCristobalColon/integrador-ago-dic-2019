@@ -55,7 +55,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>nivel4</th>
                                 <th>nivel5</th>
                                 <th>actualización</th>
-                                <th class="text-center">Estado</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -75,23 +75,29 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td><?php echo $fila['nivel4_etiqueta'] ?></td>
                                         <td><?php echo $fila['nivel5_etiqueta'] ?></td>
                                         <td><?php echo $fila['actualizacion'] ?></td>
-                                        <td class="text-center"><?php echo $fila['status'] ?></td>
-                                        <td class="text-center row">
-                                            <form name="f-ed" action="editar.php"  method="post">
+                                        <td>
+                                            <?php if ($fila['status'] == 'A') {
+                                                echo 'Activo';
+                                            } elseif ($fila['status'] == 'B') {
+                                                echo 'Inactivo';
+                                            } ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <form name="f-ed" action="editar.php"  method="post" style="display: inline-block">
                                                 <button
                                                         type="submit" title="Editar registro"
                                                         name="b-edit"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn mr-1 ml-4">
+                                                        class="btn btn-xs btn-light">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
                                             </form>
-                                            <form name="f-cb" action="cambiar.php" method="post">
+                                            <form name="f-cb" action="cambiar.php" method="post" style="display: inline-block">
                                                 <button
                                                         type="submit" title="Cambiar estado"
                                                         name="b-camb"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn mr-2 ml-1">
+                                                        class="btn btn-xs btn-light">
                                                     <i class="fas fa-exchange-alt"></i>
                                                 </button>
                                             </form>

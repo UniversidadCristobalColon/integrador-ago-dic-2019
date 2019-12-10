@@ -73,21 +73,31 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td><?php echo $fila['creacion'] ?></td>
                                         <td><?php echo $fila['actualizacion'] ?></td>
                                         <td hidden><?php echo $fila['id_escala'] ?></td>
-                                        <td class="text-center"><?php echo $fila['status'] ?></td>
                                         <td class="text-center">
-                                            <form name="f-el-ed" action="elim-edit.php" method="post">
+                                            <?php if ($fila['status'] == 'A') {
+                                                echo 'Activo';
+                                            } elseif ($fila['status'] == 'B') {
+                                                echo 'Inactivo';
+                                            } ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <form name="f-ed" action="editar.php" method="post"
+                                                  style="display: inline-block">
                                                 <button
                                                         type="submit" title="Editar registro"
                                                         name="b-edit"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn">
+                                                        class="btn btn-xs btn-light">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </button>
+                                            </form>
+                                            <form name="f-cb" action="cambiar.php" method="post"
+                                                  style="display: inline-block">
                                                 <button
                                                         type="submit" title="Cambiar estado"
-                                                        name="b-elim"
+                                                        name="b-camb"
                                                         value="<?php echo $fila['id'] ?>"
-                                                        class="btn">
+                                                        class="btn btn-xs btn-light">
                                                     <i class="fas fa-exchange-alt"></i>
                                                 </button>
                                             </form>
