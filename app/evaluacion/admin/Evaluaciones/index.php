@@ -16,14 +16,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <title><?php echo PAGE_TITLE ?></title>
 
-    <script>
-        function eliminar(id){
-            var respuesta=confirm('¿Está seguro de que desea eliminar este cuestionario?');
-            if(respuesta===true){
-                window.location='deshabilitar.php?id='+id;
-            }
-        }
-    </script>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
 </head>
@@ -48,21 +40,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </div>
                 <div class="card-body">
                     <a href="nuevaEvaluacion.php"><button class="btn btn-primary mb-3">Nuevo</button></a>
-                    <?php
-                        if(!empty($_GET["error"])){
-                            $error=$_GET["error"];
-                            if($error==1){
-                                echo
-                                '<div class="alert alert-success" role="alert">
-                                    El cuestionario ha sido eliminado
-                                </div>';
-                            }else if($error==2){
-                                echo
-                                '<div class="alert alert-danger" role="alert">
-                                    El cuestionario no se puede eliminar porque ya ha sido utilizado en una evaluación.
-                                </div>';
-                            }
-                        }?>
+
                     <div class="table-responsive">
                         <?php
                         $sql = "SELECT eval.id, p.periodo, d.departamento, eval.descripcion 
@@ -97,7 +75,38 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <td><?php echo $row['periodo'] ?></td>
                                     <td><?php echo $row['departamento'] ?></td>
                                     <td><?php echo $row['descripcion'] ?></td>
-                                    <td>Aquí va la barra</td>
+                                    <td>
+                                        <?php
+                                        $total = 0;
+                                        $Iniciadas = 0;
+                                        $Correctas = 0;
+
+                                        $sql = "select estado from aplicaciones where id_evaluacion = $id";
+                                        $res = mysqli_query($conexion,$sql);
+                                        if($res){
+                                            while($fila = mysqli_fetch_assoc($res)){
+                                                $estado = $fila['estado'];
+
+                                                if($estado != 'A'){
+                                                    $Iniciadas++;
+                                                }
+
+                                                if($estado == 'C'){
+                                                    $Correctas++;
+                                                }
+
+                                                $total++;
+                                            }
+                                        }
+
+                                        $porcentaje = $Correctas > 0 && $total > 0 ? floor(($Correctas*100)/$total) : 0;
+                                        ?>
+                                        <div class="progress-bar bg-success"
+                                             role="progressbar"
+                                             style="width: <?php echo $porcentaje ?>%;"
+                                             aria-valuenow="0" aria-valuemin="0"
+                                             aria-valuemax="100"><?php echo $porcentaje ?>%</div>
+                                    </td>
                                     <td>
                                         <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
@@ -115,7 +124,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </form>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
 
         </div>
