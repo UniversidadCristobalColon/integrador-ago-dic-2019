@@ -273,13 +273,16 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $escala[0]['inferior']=$row['nivel1_inferior'];
                                 $escala[0]['superior']=$row['nivel1_superior'];
 
+
                                 $escala[1]['etiqueta']=$row['nivel2_etiqueta'];
                                 $escala[1]['inferior']=$row['nivel2_inferior'];
                                 $escala[1]['superior']=$row['nivel2_superior'];
 
+
                                 $escala[2]['etiqueta']=$row['nivel3_etiqueta'];
                                 $escala[2]['inferior']=$row['nivel3_inferior'];
                                 $escala[2]['superior']=$row['nivel3_superior'];
+
 
                                 $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
                                 $escala[3]['inferior']=$row['nivel3_inferior'];
@@ -293,8 +296,6 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 $escala[5]['inferior']=$row['nivel5_inferior'];
                                 $escala[5]['superior']=$row['nivel5_superior'];
                             }
-
-
                             while($row2 = mysqli_fetch_array($resultado2)){
                                 /*Se obtienen las preguntas de acuerdo al evaluador, periodo y evaluado*/
                                 $sql = "select da.aseveracion,pe.puntos from promedios_por_evaluado pe join preguntas p 
