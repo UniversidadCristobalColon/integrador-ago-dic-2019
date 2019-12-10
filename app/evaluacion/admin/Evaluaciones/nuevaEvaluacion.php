@@ -9,7 +9,7 @@ $Cuestionario = "";
 $Periodo = "";
 $Inicio = "";
 $Fin = "";
-$limite = "";
+$Limite = "";
 function convertirFecha($fecha){
     $outs = explode('-',$fecha);
     return "$outs[1]/$outs[2]/$outs[0]";
@@ -17,7 +17,7 @@ function convertirFecha($fecha){
 if (!empty($_GET['id'])){
     $Actualizar = 1;
     $Evaluacion = $_GET['id'];
-    $sql = "SELECT cuestionarios.id as id_cuestionario , departamentos.id as id_departamento, periodos.id as id_periodo, evaluaciones.inicio, evaluaciones.fin, evaluaciones.descripcion from evaluaciones
+    $sql = "SELECT cuestionarios.id as id_cuestionario , departamentos.id as id_departamento, periodos.id as id_periodo, evaluaciones.inicio, evaluaciones.fin, evaluaciones.limite, evaluaciones.descripcion from evaluaciones
             LEFT JOIN cuestionarios ON cuestionarios.id = evaluaciones.id_cuestionario
             LEFT JOIN departamentos ON departamentos.id = evaluaciones.id_departamento
             LEFT JOIN periodos ON periodos.id = evaluaciones.id_periodo
@@ -32,12 +32,14 @@ if (!empty($_GET['id'])){
         $Periodo = $fila['id_periodo'];
         $Inicio = convertirFecha($fila['inicio']);
         $Fin = convertirFecha($fila['fin']);
+        $Limite = convertirFecha($fila['limite']);
     }
 }
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 
 <?php
+$Iniciadas = 0;
     if($Actualizar==1){
         $total = 0;
         $Iniciadas = 0;
@@ -89,6 +91,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             var periodo = $('#Periodo').val();
             var inicio = $('#Inicio').val();
             var fin = $('#Fin').val();
+            var limite = $('#Limite').val();
             if (descripcion == "") {
                 alert("Escriba un nombre para la evaluación");
                 return false;
@@ -111,6 +114,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             }
             if (fin == "") {
                 alert("Seleccione el fin de la evaluación");
+                return false;
+            }
+            if (!moment(fin).isBefore(limite)){
+                alert("La fecha de fin no puede ser mayor a la fecha de limite");
                 return false;
             }
             if (!moment(inicio).isBefore(fin)){
@@ -248,7 +255,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <div class="col">
                                 <label>Limite</label>
                                 <div class="input-group date" id="F-limite">
-                                    <input type="text" class="form-control mb-3" name="Limite" id="Limite" readonly value="<?php echo $limite ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                    <input type="text" class="form-control mb-3" name="Limite" id="Limite" readonly value="<?php echo $Limite ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                         </div>
