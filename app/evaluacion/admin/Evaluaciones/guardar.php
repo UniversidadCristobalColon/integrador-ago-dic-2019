@@ -36,7 +36,8 @@
             }
         }
     }
-
+var_dump($Iniciadas);
+    exit();
     if($Actualizar == 1) {
         if($Iniciadas>0) {
             $updateli = "UPDATE evaluaciones set limite = '$Limite', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
