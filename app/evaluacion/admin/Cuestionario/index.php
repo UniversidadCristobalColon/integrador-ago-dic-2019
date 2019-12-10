@@ -86,7 +86,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-                                        <button title="Eliminar registro"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
+                                        <button title="Cambiar estado"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
                                         <i class='fas fa-exchange-alt'></i>
                                         </button>
 
@@ -103,7 +103,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Última actualización
+
+                    <?php
+
+                    foreach ($conexion->query('SELECT actualizacion from cuestionarios order by actualizacion desc limit 1') as $fecha){
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
 
         </div>

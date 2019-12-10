@@ -15,7 +15,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="author" content="">
 
     <title><?php echo PAGE_TITLE ?></title>
-
+    <script>
+        function editar(id){
+            location.href="nuevaEvaluacion.php?id="+id;
+        }
+    </script>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
 </head>
@@ -101,19 +105,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                                         $porcentaje = $Correctas > 0 && $total > 0 ? floor(($Correctas*100)/$total) : 0;
                                         ?>
-                                        <div class="progress-bar bg-success"
-                                             role="progressbar"
-                                             style="width: <?php echo $porcentaje ?>%;"
-                                             aria-valuenow="0" aria-valuemin="0"
-                                             aria-valuemax="100"><?php echo $porcentaje ?>%</div>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $porcentaje ?>%;" aria-valuenow="<?php echo $porcentaje ?>" aria-valuemin="0" aria-valuemax="100"><?php echo $porcentaje ?>%</div>
+                                        </div>
+
                                     </td>
                                     <td>
-                                        <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
+                                        <a title="Ver progreso de la evaluación" href="adminEvaluacion.php?id_evaluacion=<?php  echo $row["id"]; ?>" class="btn  btn-xs btn-light"><i class="fas fa-fw fa-eye"></i></a>
+
+                                        <button title="Editar registro" type="button" onclick="editar(<?php  echo $row["id"]; ?>)" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-                                        <button title="Eliminar registro"  type="button" onclick="eliminar(<?php  echo $row["id"]; ?>)" class="btn btn-xs btn-light" ">
-                                        <i class="fa fa-trash" ></i>
-                                        </button>
+
                                     </td>
                                 </tr>
                                 <?php
@@ -123,6 +126,15 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
                         </form>
                     </div>
+                </div>
+                <div class="card-footer small text-muted">Última actualización
+
+                    <?php
+
+                    foreach ($conexion->query('SELECT actualizacion from evaluaciones order by actualizacion desc limit 1') as $fecha){
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
                 </div>
             </div>
 
