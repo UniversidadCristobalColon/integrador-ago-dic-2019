@@ -19,9 +19,9 @@
             $data[]='('.$datos[0].',"'.$datos[1].'","'.$datos[2].'","'.$datos[3].'","'.$datos[4].'","'.$dep.'")';
         }
     }
-    $insert= "insert into empleados_temp values".implode(",",$data);
+    $insert= "insert into empleados_temp (num_empleado, nombre, apellidos, telefono, email, id_departamento) values".implode(",",$data);
     mysqli_query($conexion,$insert);
     fclose($fichero);
-
+    header("location: empleados_temp.php");
 
 ?>
