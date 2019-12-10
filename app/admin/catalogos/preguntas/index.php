@@ -102,12 +102,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             }
                             echo"<td>$actualizacion</td>";
                             ?>
-                            <td class="text center">
-                                <div class="text center">
+                            <td>
+                                <div class="row justify-content-center">
                                     <button type='button' class="btn btn-xs btn-light edit" onclick="javascript:editar(<?=$id;?>,'<?=$pregunta;?>');" data-target="#editar" data-toggle="modal">
 
                                         <i class="fas fa-pencil-alt"></i>
                                     </button>
+                                    &nbsp;
 
                                     <button type='button' class="btn btn-xs btn-light change" onclick="javascript:eliminar(<?=$id;?>);" data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i></button>
 
