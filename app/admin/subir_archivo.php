@@ -16,10 +16,10 @@
     while (($datos=fgetcsv($fichero,1000))!=false){
         $x++;
         if ($x>1){
-            $data[]='('.$datos[0].',"'.$datos[1].'","'.$datos[2].'","'.$datos[3].'","'.$datos[4].'","'.$dep.'")';
+            $data[]='('.$datos[0].',"'.$datos[1].'","'.$datos[2].'","'.$datos[3].'","'.$datos[4].'","'.$dep.'","11")';
         }
     }
-    $insert= "insert into empleados_temp (num_empleado, nombre, apellidos, telefono, email, id_departamento) values ".implode(",",$data);
+    $insert= "insert into empleados_temp (num_empleado, nombre, apellidos, telefono, email, id_departamento, id_puesto_temp) values ".implode(",",$data);
     print_r("<pre>");
     print_r($insert);
     print_r("</pre>");
