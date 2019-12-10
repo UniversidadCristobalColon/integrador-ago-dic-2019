@@ -55,7 +55,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>nivel4</th>
                                 <th>nivel5</th>
                                 <th>actualización</th>
-                                <th class="text-center">Estado</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -75,7 +75,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td><?php echo $fila['nivel4_etiqueta'] ?></td>
                                         <td><?php echo $fila['nivel5_etiqueta'] ?></td>
                                         <td><?php echo $fila['actualizacion'] ?></td>
-                                        <td class="text-center">
+                                        <td>
                                             <?php if ($fila['status'] == 'A') {
                                                 echo 'Activo';
                                             } elseif ($fila['status'] == 'B') {
