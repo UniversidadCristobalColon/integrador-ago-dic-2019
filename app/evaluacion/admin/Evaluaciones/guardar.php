@@ -38,11 +38,11 @@
     }
 
     if($Actualizar == 1) {
-        if($Iniciadas>0){
+        if($Iniciadas>0) {
             $updateli = "UPDATE evaluaciones set limite = '$Limite', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
 
             $resultadoli = mysqli_query($conexion, $updateli);
-            if ($resultado) {
+            if ($resultadoli) {
                 header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$Evalucion");
 
             } else {
