@@ -9,6 +9,7 @@ $Cuestionario = "";
 $Periodo = "";
 $Inicio = "";
 $Fin = "";
+$limite = "";
 function convertirFecha($fecha){
     $outs = explode('-',$fecha);
     return "$outs[1]/$outs[2]/$outs[0]";
@@ -51,6 +52,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
     <script src="../../../../vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="../../../../vendor/moment/moment-with-locales.js"></script>
     <link rel="stylesheet" href="../../../../vendor/datepicker/css/bootstrap-datepicker.standalone.min.css">
 
     <script>
@@ -85,11 +87,16 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 alert("Seleccione el fin de la evaluación");
                 return false;
             }
-            if (inicio > fin){
+            if (!moment(inicio).isBefore(fin)){
                 alert("La fecha de inicio no puede ser mayor a la fecha de fin");
                 return false;
             }
             return true;
+        }
+
+        function calcularLimite(){
+            var final = $('#Fin').val();
+            return moment(final).add(7, 'd');
         }
 
         $(document).ready(function () {
@@ -97,7 +104,26 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         });
 
         $(document).ready(function () {
-            $('#F-fin').datepicker();
+            $('#F-fin').datepicker({
+                onSelect: function() {
+                }
+            }).on("change", function() {
+                console.log("Entro");
+                $('#Limite').text("Se cambio");
+            });
+        });
+
+        $(document).ready(function () {
+            $('#F-limite').datepicker();
+        });
+
+
+
+        $( "#Fin" ).change(function() {
+            $('#Limite').text("Se cambio");
+            console.log("Entro");
+            /*var final = $('#Fin').val();
+            return moment(final).add(7, 'd');*/
         });
     </script>
 </head>
@@ -118,13 +144,19 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <form action="guardar.php" method="post" onsubmit="return validar()">
                 <input type="hidden" name="actualizar" value="<?php echo $Actualizar?>">
                 <input type="hidden" name="id_evaluacion" value="<?php echo $Evaluacion?>">
-                <h1>Nueva Evaluación</h1>
+                <?php
+                if ($Actualizar == 1){
+                    echo "<h1>Actualizar evaluación</h1>";
+                } else {
+                    echo "<h1>Nueva evaluación</h1>";
+                }
+                ?>
                 <hr>
                 <div class="form-group">
-                    <label for="Descripcion">Nombre de la evaluación:</label>
+                    <label for="Descripcion">Nombre de la evaluación</label>
                     <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion" value="<?php echo $Nombre ?>">
 
-                    <label for="Evaluar">Departamento:</label>  <!-- Evaluado -->
+                    <label for="Evaluar">Departamento</label>  <!-- Evaluado -->
                     <select class="form-control mb-3" id="Departamento" name="Departamento">
                         <option value="">Seleccione una opción</option>
                         <?php
@@ -139,7 +171,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         ?>
                     </select>
 
-                    <label for="Cuestionario">Cuestionario:</label>
+                    <label for="Cuestionario">Cuestionario</label>
                     <select class="form-control mb-3" id="Cuestionario" name="Cuestionario">
                         <option selected value="">Seleccione una opción</option>
                         <?php
@@ -154,7 +186,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         ?>
                     </select>
 
-                    <label for="Periodo">Periodo:</label>
+                    <label for="Periodo">Periodo</label>
                     <select class="form-control mb-3" id="Periodo" name="Periodo">
                         <option selected value="">Seleccione una opción</option>
                         <?php
@@ -173,15 +205,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     <div class="input-group mb-3">
                         <div class="row">
                             <div class="col">
-                                <label>Inicia:</label>
+                                <label>Inicia</label>
                                 <div class="input-group date" id="F-inicio">
                                     <input type="text" class="form-control mb-3" name="Inicio" id="Inicio" readonly value="<?php echo $Inicio ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                             <div class="col">
-                                <label>Termina:</label>
+                                <label>Termina</label>
                                 <div class="input-group date" id="F-fin">
                                     <input type="text" class="form-control mb-3" name="Fin" id="Fin" readonly value="<?php echo $Fin ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label>Limite</label>
+                                <div class="input-group date" id="F-limite">
+                                    <input type="text" class="form-control mb-3" name="Limite" id="Limite" readonly value="<?php echo $limite ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                         </div>

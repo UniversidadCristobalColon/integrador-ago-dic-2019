@@ -66,19 +66,19 @@ function formatoFechaCorta($fecha){
                 return false;
             }
             if (evaluadorS == "") {
-                alert("Seleccione al personal jefe que sera el evaluardor");
+                alert("Seleccione al personal jefe que será el evaluador");
                 return false;
             }
             if (evaluadorP1 == "") {
-                alert("Seleccione al personal par que sera el evaluardor");
+                alert("Seleccione al personal par que será el evaluador");
                 return false;
             }
             if (evaluadorP2 == "") {
-                alert("Seleccione al personal par que sera el evaluardor");
+                alert("Seleccione al personal par que será el evaluador");
                 return false;
             }
             if (evaluadorC == "") {
-                alert("Seleccione al cliente que sera el evaluardor");
+                alert("Seleccione al cliente que será el evaluador");
                 return false;
             }
             if (evaluado == evaluadorS){
