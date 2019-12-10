@@ -11,6 +11,7 @@
     $ip =  $_SERVER['REMOTE_ADDR'];
     $Actualizar = $_POST["actualizar"];
     $Evalucion = $_POST["id_evaluacion"];
+    $Limite = $_POST["Limite"];
 
     function convertirFecha($fecha){
         $outs = explode('/',$fecha);
@@ -19,7 +20,7 @@
 
     if($Actualizar == 1){
         $update = "UPDATE evaluaciones set id_cuestionario = '$Cuestionario', id_departamento = '$Depa', id_periodo = '$Periodo', inicio = '$Inicio',
-                    fin = '$Fin', descripcion = '$Descripcion', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
+                    fin = '$Fin', limite = '$Limite', descripcion = '$Descripcion', actualizacion = NOW(), actulizacion_ip = '$ip' where id = '$Evalucion'";
 
         $resultado = mysqli_query($conexion, $update);
         if ($resultado) {
@@ -44,7 +45,7 @@
                             '$Periodo',
                             '$Inicio',
                             '$Fin',
-                            NULL,
+                            '$Limite',
                             '$Descripcion',
                             NOW(),
                             '$ip'
