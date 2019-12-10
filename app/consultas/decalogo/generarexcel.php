@@ -4,7 +4,7 @@ require_once '../../../config/global.php';
 define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
 
-require __DIR__ . "../../../../vendor/autoload.php";
+require __DIR__ . "../../../vendor/autoload.php";
 
 $id_evaluado = $_GET['id_evaluado'];//78;
 $id_periodo =  $_GET['id_periodo'];;
