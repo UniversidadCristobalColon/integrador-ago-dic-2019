@@ -86,7 +86,7 @@ function getSidebar($ruta = ''){
             <span>Resultados</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="resultadosDropdown" id="sideGrupoResultados">                        
-            <a class="dropdown-item" href="{$dir_base}app/evaluacion/admin/">Decálogo</a>
+            <a class="dropdown-item" href="{$dir_base}app/consultas/decalogo/">Decálogo</a>
             <a class="dropdown-item" href="{$dir_base}app/consultas/historico/">Histórico</a>  
             <a class="dropdown-item" href="{$dir_base}app/consultas/competencias/">Competencias</a>           
         </div>
