@@ -1,6 +1,6 @@
 <?php
 
-define('PAGE_TITLE', 'Evaluación 360');
+define('PAGE_TITLE', 'Evaluación 360°');
 $php_self       = dirname($_SERVER['PHP_SELF']);
 $pos_inicial    = strpos($php_self,'app');
 $dir_base       = substr($php_self,0,$pos_inicial);
