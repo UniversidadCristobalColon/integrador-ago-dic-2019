@@ -21,7 +21,7 @@
                     ( SELECT CONCAT(empleados.nombre, " " , empleados.apellidos) FROM empleados WHERE empleados.id = notificaciones.id_evaluado ) AS NOMBRE_EVALUADO, 
                     ( SELECT CONCAT(empleados.nombre, " " , empleados.apellidos) FROM empleados WHERE empleados.id = notificaciones.id_evaluador ) AS NOMBRE_EVALUADOR 
                 FROM notificaciones 
-                ORDER BY notificaciones.fecha_creacion
+                ORDER BY notificaciones.fecha_creacion DESC
                 LIMIT '.$inicio.','.$notificaciones_por_pagina.'';
         $sql = $conexion->query( $sql );
 
@@ -35,6 +35,9 @@
         // Armar HTML
         $html_notificaciones = '';
         while ( $row = $sql->fetch_assoc() ) {
+            if ( $row['NOMBRE_EVALUADO'] == NULL || $row['NOMBRE_EVALUADOR'] == NULL ) {
+                continue;
+            }
             if ( $row['estado_visto'] == 0 ) {
                 // Cambiar estado a visto para que puedan contar solo las que el usuario no ha visto
                 $sql_update = '
