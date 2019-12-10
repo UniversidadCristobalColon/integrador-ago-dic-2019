@@ -49,29 +49,25 @@ require '../../../../config/db.php';
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Etiqueta</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="en1" class="form-control" placeholder="ej. marginal"
-                                               required>
+                                        <input required type="text" name="en1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="dn1" class="form-control"
-                                               placeholder="ej. rara vez muestra el comportamiento esperado">
+                                        <input required type="text" name="dn1" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Inferior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="in1" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="in1" step="0.01" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Superior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="sn1" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="sn1" step="0.01" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -81,29 +77,25 @@ require '../../../../config/db.php';
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Etiqueta</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="en2" class="form-control"
-                                               placeholder="ej. mínimo aceptable">
+                                        <input required type="text" name="en2" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="dn2" class="form-control"
-                                               placeholder="ej. comportamiento inconsistente">
+                                        <input required type="text" name="dn2" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Inferior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="in2" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="in2" step="0.01" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Superior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="sn2" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="sn2" step="0.01" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -113,29 +105,25 @@ require '../../../../config/db.php';
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Etiqueta</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="en3" class="form-control"
-                                               placeholder="ej. satisfactorio">
+                                        <input required type="text" name="en3" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="dn3" class="form-control"
-                                               placeholder="ej. comportamiento esperado">
+                                        <input required type="text" name="dn3" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Inferior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="in3" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="in3" step="0.01" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Superior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="sn3" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="sn3" step="0.01" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -145,29 +133,25 @@ require '../../../../config/db.php';
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Etiqueta</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="en4" class="form-control"
-                                               placeholder="ej. notable">
+                                        <input required type="text" name="en4" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="dn4" class="form-control"
-                                               placeholder="ej. comportamiento superior a lo esperado">
+                                        <input required type="text" name="dn4" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Inferior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="in4" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="in4" step="0.01" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Superior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="sn4" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="sn4" step="0.01" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -177,33 +161,28 @@ require '../../../../config/db.php';
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Etiqueta</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="en5" class="form-control"
-                                               placeholder="ej. excelente">
+                                        <input required type="text" name="en5" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Descripción</label>
                                     <div class="col-sm-10">
-                                        <input required type="text" name="dn5" class="form-control"
-                                               placeholder="ej. comportamiento que trasciende su área...">
+                                        <input required type="text" name="dn5" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Inferior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="in5" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="in5" step="0.01" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row mr-0">
                                     <label class="col-sm-2 col-form-label">Superior</label>
                                     <div class="col-sm-10">
-                                        <input required type="number" name="sn5" step="0.01" class="form-control"
-                                               placeholder="ej. 0.00">
+                                        <input required type="number" name="sn5" step="0.01" class="form-control">
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="form-group mt-5">
                                 <input type="submit" class="btn btn-primary mb-3" name="bguard" value="Guardar">
