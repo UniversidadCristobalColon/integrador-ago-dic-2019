@@ -36,6 +36,32 @@ if (!empty($_GET['id'])){
 }
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
+
+<?php
+    if($Actualizar==1){
+        $total = 0;
+        $Iniciadas = 0;
+        $Correctas = 0;
+
+        $sql = "select estado from aplicaciones where id_evaluacion = $Evaluacion";
+        $res = mysqli_query($conexion,$sql);
+        if($res){
+            while($fila = mysqli_fetch_assoc($res)){
+                $estado = $fila['estado'];
+
+                if($estado == 'B' || $estado == 'C'){
+                    $Iniciadas++;
+                }
+            }
+        }
+    }
+
+    if($Iniciadas>0){
+        $disable = "disabled";
+    } else {
+        $disable = "";
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -100,18 +126,28 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         }
 
         $(document).ready(function () {
-            $('#F-inicio').datepicker();
+            <?php
+                if($Actualizar==1){
+                    echo "";
+                } else {
+                    echo "$('#F-inicio').datepicker();";
+                }
+            ?>
         });
 
         $(document).ready(function () {
-            $('#F-fin').datepicker({
+            <?php
+            if($Actualizar==1){
+                echo "";
+            } else {
+                echo "$('#F-fin').datepicker({
                 onSelect: function() {
                 }
-            }).on("change", function() {
-                console.log("Entro");
-                moment().format("MM-DD-YYYY");
-                $('#Limite').val(calcularLimite());
-            });
+            }).on(\"change\", function() {
+                $('#Limite').val(moment(calcularLimite()).format(\"MM/DD/YYYY\"));
+            });";
+            }
+            ?>
         });
 
         $(document).ready(function () {
@@ -147,10 +183,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <hr>
                 <div class="form-group">
                     <label for="Descripcion">Nombre de la evaluación</label>
-                    <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion" value="<?php echo $Nombre ?>">
+                    <input class="form-control mb-3" type="text" id="Descripcion" name="Descripcion" <?php echo $disable ?> value="<?php echo $Nombre ?>">
 
                     <label for="Evaluar">Departamento</label>  <!-- Evaluado -->
-                    <select class="form-control mb-3" id="Departamento" name="Departamento">
+                    <select class="form-control mb-3" id="Departamento" name="Departamento" <?php echo $disable ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from departamentos";
@@ -165,7 +201,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     </select>
 
                     <label for="Cuestionario">Cuestionario</label>
-                    <select class="form-control mb-3" id="Cuestionario" name="Cuestionario">
+                    <select class="form-control mb-3" id="Cuestionario" name="Cuestionario" <?php echo $disable ?>>
                         <option selected value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from cuestionarios";
@@ -180,7 +216,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     </select>
 
                     <label for="Periodo">Periodo</label>
-                    <select class="form-control mb-3" id="Periodo" name="Periodo">
+                    <select class="form-control mb-3" id="Periodo" name="Periodo" <?php echo $disable ?>>
                         <option selected value="">Seleccione una opción</option>
                         <?php
                         $sql = "select * from periodos";
