@@ -64,7 +64,7 @@ function getSidebar($ruta = ''){
     </li>
     
     <li class="nav-item">
-        <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/cuestionario/">
+        <a class="nav-link text-dark" href="{$dir_base}app/evaluacion/admin/Cuestionario/">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Cuestionarios</span>
         </a>
