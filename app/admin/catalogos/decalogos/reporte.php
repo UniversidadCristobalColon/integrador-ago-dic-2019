@@ -42,24 +42,23 @@ $nombreevaluado = utf8_encode($row2['nombre']);
 $apellidosevaluado = utf8_encode($row2['apellidos']);
 $puestoevaluado = utf8_encode($row2['puesto']);
 //$nivelpuesto=utf8_encode($row2['nivel_puesto']);
-$sql3 = "select Templeados.nombre,Templeados.apellidos,
-Tpuestos.puesto, Tnivelpuesto.nivel_puesto 
-from promedios_por_evaluado ppe
-left join empleados Templeados on
-Templeados.id=ppe.id_evaluador
-left join puestos Tpuestos on
-Tpuestos.id=Templeados.id_puesto
-left join niveles_puesto Tnivelpuesto on
-Tnivelpuesto.id=Tpuestos.id_nivel_puesto
-where ppe.id_evaluador = $idevaluador and ppe.id_evaluacion=$idevaluacion
-group by Templeados.nombre,Templeados.apellidos,
-Tpuestos.puesto, Tnivelpuesto.nivel_puesto;";
+$sql3 = "select Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto 
+from promedios_por_evaluado ppe 
+left join aplicaciones Tapp on 
+Tapp.id=ppe.id_aplicacion 
+left join empleados Temp on
+ppe.id_evaluador= Temp.id
+left join puestos Tpues on 
+Temp.id_puesto=Tpues.id
+left join roles Trol on 
+Trol.id=Tapp.id_rol_evaluador 
+where ppe.id_evaluador = $idevaluador and ppe.id_evaluacion=$idevaluacion group by Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto";
 $res3 = $conexion->query($sql3);
 $row3 = mysqli_fetch_array($res3, MYSQLI_ASSOC);
 $nombreevaluador = utf8_encode($row3['nombre']);
 $apellidosevaluador = utf8_encode($row3['apellidos']);
 $puestoevaluador = utf8_encode($row3['puesto']);
-$nivelpuestoevaluador = utf8_encode($row3['nivel_puesto']);
+$rolevaluador = utf8_encode($row3['rol']);
 ?>
 <html>
 <head>
@@ -82,8 +81,8 @@ $nivelpuestoevaluador = utf8_encode($row3['nivel_puesto']);
             <th class="th1">Puesto del evaluado</th>
         </tr>
         <tr>
-            <td class="td1"><?php echo utf8_encode($nombreevaluado . " " . $apellidosevaluado) ?></td>
-            <td class="td1"><?php echo utf8_encode($puestoevaluado) ?></td>
+            <td class="td1"><?php echo $nombreevaluado . " " . $apellidosevaluado ?></td>
+            <td class="td1"><?php echo $puestoevaluado ?></td>
         </tr>
     </table>
     <table class="tabla2">
@@ -92,14 +91,14 @@ $nivelpuestoevaluador = utf8_encode($row3['nivel_puesto']);
             <th class="th1">Puesto de quien eval<?php echo utf8_encode("ú") ?>a</th>
         </tr>
         <tr>
-            <td class="td1"><?php echo utf8_encode($nombreevaluador . " " . $apellidosevaluador) ?></td>
-            <td class="td1"><?php echo utf8_encode($puestoevaluador) ?></td>
+            <td class="td1"><?php echo $nombreevaluador . " " . $apellidosevaluador ?></td>
+            <td class="td1"><?php echo $puestoevaluador ?></td>
         </tr>
     </table>
     <table class="tabla2">
         <tr>
             <th class="th1">Fecha</th>
-            <th class="th1" rowspan="2"><u class="u1"><?php echo utf8_encode($nivelpuestoevaluador) ?></u></th>
+            <th class="th1" rowspan="2"><u class="u1"><?php echo $rolevaluador?></u></th>
         </tr>
         <tr>
             <td class="td1"><?php echo $periodo ?></td>
