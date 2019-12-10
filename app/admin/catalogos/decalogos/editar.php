@@ -73,7 +73,7 @@ if ($id_nom) {
                         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 
                             <div class="form-group">
-                                <label>Decálogo a editar:</label>
+                                <label>Decálogo a editar</label>
                                 <input type="hidden" value="<?php echo $id_elem ?>"
                                        name="idedit"><!--/*id del elemento a editar*/-->
                                 <input class="form-control" type="text" placeholder="<?php echo $nom_deca ?>"
