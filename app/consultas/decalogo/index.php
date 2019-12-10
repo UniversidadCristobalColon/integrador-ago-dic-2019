@@ -341,6 +341,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                         ";
 
 
+
                                 $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
                                 echo "
                                     <h5>$row2[nombre] $row2[apellidos] / $row2[rol]</h5>
