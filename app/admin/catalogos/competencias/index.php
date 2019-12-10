@@ -24,7 +24,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <body id="page-top">
 <?php 
     getModalLogout('../../../');
-    getNavbar();
 ?>
 <div id="wrapper">
 
@@ -69,7 +68,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <td>$row[creacion]</td>
                                         <td>$row[actualizacion]</td>
                                         <td>$estado</td>
-                                        <td class='text-center'><button class='btn btn-light' onclick='actualizar($row[id]);'><i class='fas fa-pencil-alt'></i></button>
+                                        <td><button class='btn btn-light' onclick='actualizar($row[id]);'><i class='fas fa-pencil-alt'></i></button>
                                         <button class='btn btn-light' onclick='eliminar($row[id]);'><i class='fas fa-exchange-alt'></i></button></td>
                                         </tr>";
                                     }
