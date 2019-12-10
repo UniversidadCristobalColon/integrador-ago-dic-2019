@@ -44,14 +44,12 @@ $puestoevaluado = utf8_encode($row2['puesto']);
 //$nivelpuesto=utf8_encode($row2['nivel_puesto']);
 $sql3 = "select Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto 
 from promedios_por_evaluado ppe 
-left join aplicaciones Tapp on 
-Tapp.id=ppe.id_aplicacion 
 left join empleados Temp on
 ppe.id_evaluador= Temp.id
 left join puestos Tpues on 
 Temp.id_puesto=Tpues.id
 left join roles Trol on 
-Trol.id=Tapp.id_rol_evaluador 
+Trol.id=ppe.id_rol_evaluador 
 where ppe.id_evaluador = $idevaluador and ppe.id_evaluacion=$idevaluacion group by Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto";
 $res3 = $conexion->query($sql3);
 $row3 = mysqli_fetch_array($res3, MYSQLI_ASSOC);
@@ -110,8 +108,6 @@ $rolevaluador = utf8_encode($row3['rol']);
 $sql4 = "select Tdecalogoaseveracion.aseveracion, 
 ppe.puntos 
 from promedios_por_evaluado ppe
-left join resultados res on
-res.id_aplicacion=ppe.id_aplicacion
 left join preguntas pre on 
 pre.id=ppe.id_pregunta
 left join decalogos_aseveraciones Tdecalogoaseveracion on
