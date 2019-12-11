@@ -425,16 +425,29 @@ $xAxisTickValues = [
     new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$B$2:$B$11', NULL, 12)
 ];
 
-$series = new PHPExcel_Chart_DataSeries(
-    PHPExcel_Chart_DataSeries::TYPE_RADARCHART,				// plotType
-    NULL,													// plotGrouping
-    range(0, count($dataSeriesValues)-1),					// plotOrder
-    $dataseriesLabels,										// plotLabel
-    $xAxisTickValues,										// plotCategory
-    $dataSeriesValues,										// plotValues
-    NULL,													// smooth line
-    PHPExcel_Chart_DataSeries::STYLE_MARKER					// plotStyle
+/*$series = new PHPExcel_Chart_DataSeries(
+    PHPExcel_Chart_DataSeries::TYPE_BARCHART,       // plotType
+    PHPExcel_Chart_DataSeries::GROUPING_CLUSTERED,  // plotGrouping
+    range(0, count($dataSeriesValues)-1),           // plotOrder
+    $dataSeriesLabels,                              // plotLabel
+    $xAxisTickValues,                               // plotCategory
+    $dataSeriesValues                               // plotValues
 );
+$series->setPlotDirection(PHPExcel_Chart_DataSeries::DIRECTION_VERTICAL);*/
+
+
+$series = new PHPExcel_Chart_DataSeries(
+    PHPExcel_Chart_DataSeries::TYPE_RADARCHART,   // plotType
+    NULL,                                           // plotGrouping (Scatter charts don't have any grouping)
+    range(0, count($dataSeriesValues)-1),           // plotOrder
+    $dataseriesLabels,                              // plotLabel
+    $xAxisTickValues,                               // plotCategory
+    $dataSeriesValues,                              // plotValues
+    NULL,                                           // plotDirection
+    NULL,                                           // smooth line
+    PHPExcel_Chart_DataSeries::STYLE_MARKER    // plotStyle
+);
+
 $layout = new PHPExcel_Chart_Layout();
 $plotarea = new PHPExcel_Chart_PlotArea($layout, array($series));
 $legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
@@ -456,18 +469,21 @@ $sheet->addChart($chart);
 $documento->removeSheetByIndex(0);
 $documento->removeSheetByIndex(1);
 
-
-// We'll be outputting an excel file
-
-
 // It will be called file.xls
 $filename='Eval360'.$nomeval.'.xlsx';
 $header = 'Content-Disposition: attachment; filename="'.$filename.'"';
+//header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Type: application/vnd.ms-excel');
 header($header);
+/*header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="test.xlsx"');
+header('Cache-Control: max-age=0');*/
 $objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel2007');
 $objWriter->setIncludeCharts(TRUE);
+
+
 //header('Cache-Control: max-age=0');
-header('Content-type: application/vnd.ms-excel');
+
 
 // Write file to the browser
 $objWriter->save('php://output');
