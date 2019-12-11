@@ -153,7 +153,15 @@ if(isset($_GET["error"])){
                                         let lastname = [];
                                         let employee = [];</script>
                     <label for="names">Seleccione el usuario</label>
+                    <?php
+                    if($idEdited){
+                    ?>
+                    <select disabled class="form-control" name="user" id="email" >
+                    <?php
+                    }else{
+                    ?>
                     <select class="form-control" name="user" id="email" >
+                    <?php } ?>
                     <!-- <option selected disabled value="">Selecciona un empleado</option> -->
                                 <?php
                                 if($email || $email != ""){
@@ -219,6 +227,22 @@ if(isset($_GET["error"])){
                         </div>           
                         <?php
                         }if($idEdited){
+                            $sql = "SELECT email, empleados.id, nombre, apellidos FROM `empleados` where empleados.id = $idEdited";
+                            $result = $conexion->query($sql);
+                                if ($result->num_rows > 0) {
+                                    while($row = $result->fetch_assoc()) {
+
+                                        ?>
+                                        <div class="form-group">
+                                        <label for="names">Nombre</label>
+                                        <label disabled class="form-control" type="text" name="name" id="nameSpace"><?php echo $row["nombre"]; ?></label>
+                                        <label for="lastnames">Apellido</label>
+                                        <label disabled class="form-control" type="text" name="lastname" id="lastnameSpace"><?php echo $row["apellidos"]; ?></label>
+                                        </div>   
+                                        <?php
+                                    }
+                                }
+
                         ?>
                              <div class="form-check">
                              <input type="checkbox" class="form-check-input" name="newpassword" id="newpassword" aria-describedby="newpasswordHelp">
