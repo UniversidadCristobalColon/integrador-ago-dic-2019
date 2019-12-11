@@ -210,12 +210,12 @@ if(isset($_GET["error"])){
                             if($submitted){
                         ?>
                         <button name="update" type="submit" class="btn btn-primary" value = "<?php echo $idEdited; ?>" >Actualizar</button>
-                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Cancelar</button>
                         <?php
                             }else{
                         ?>
                         <button name="insert" type="submit" class="btn btn-primary">Guardar</button>
-                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Cancelar</button>
                         <?php
                             }
                         ?>
@@ -354,7 +354,7 @@ if(isset($_GET["error"])){
             }
         }
 
-        $sqlRandom = "SELECT FLOOR(RAND()*(1000-100+1)+100) AS 'RANDOM'";
+        $sqlRandom = "SELECT FLOOR(RAND()*(1000-100000+1)+100000) AS 'RANDOM'";
         $result = $conexion->query($sqlRandom);
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
