@@ -74,7 +74,7 @@ $Iniciadas = 0;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <title><?php echo PAGE_TITLE ?></title>
 
 
@@ -93,35 +93,67 @@ $Iniciadas = 0;
             var fin = $('#Fin').val();
             var limite = $('#Limite').val();
             if (descripcion == "") {
-                alert("Escriba un nombre para la evaluación");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Escriba un nombre para la evaluación',
+                });
                 return false;
             }
             if (departamento == "") {
-                alert("Seleccione el departamento a evaluar");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione el departamento a evaluar',
+                });
                 return false;
             }
             if (cuestionario == "") {
-                alert("Seleccione el cuestionario de la evaluación");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione el cuestionario de la evaluación',
+                });
                 return false;
             }
             if (periodo == "") {
-                alert("Seleccione el periodo de la evaluación");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione el periodo de la evaluación',
+                });
                 return false;
             }
             if (inicio == "") {
-                alert("Seleccione el inicio de la evaluación");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione el inicio de la evaluación',
+                });
                 return false;
             }
             if (fin == "") {
-                alert("Seleccione el fin de la evaluación");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione el fin de la evaluación',
+                });
                 return false;
             }
             if (moment(fin).isAfter(limite)){
-                alert("La fecha de fin no puede ser mayor a la fecha de limite");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'La fecha de fin no puede ser mayor a la fecha de limite',
+                });
                 return false;
             }
             if (moment(inicio).isAfter(fin)){
-                alert("La fecha de inicio no puede ser mayor a la fecha de fin");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'La fecha de inicio no puede ser mayor a la fecha de fin',
+                });
                 return false;
             }
             return true;
