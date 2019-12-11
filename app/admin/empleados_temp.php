@@ -35,7 +35,7 @@ define('RUTA_INCLUDE', '../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Data Table Example
+                    Empleados a importar
                 </div>
                 <div class="card-body">
                     <form action="exportEmployees.php" method="post">
@@ -101,7 +101,14 @@ define('RUTA_INCLUDE', '../../'); //ajustar a necesidad
                     </div>
                 </form>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">
+                    Última actualización
+                    <?php
+                    foreach ($conexion->query('SELECT actualizacion from escalas order by actualizacion desc limit 1') as $fecha) {
+                        echo $fecha['actualizacion'];
+                    }
+                    ?>
+                </div>
             </div>
 
         </div>
