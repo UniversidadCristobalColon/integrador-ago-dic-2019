@@ -190,6 +190,7 @@ $anterior = null;
                                                     }
                                                 }
 
+
                                                 ?>
                                             </tr>
                                             </thead>
