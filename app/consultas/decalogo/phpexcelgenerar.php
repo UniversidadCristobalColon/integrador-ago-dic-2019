@@ -48,9 +48,6 @@ while($row = mysqli_fetch_array($resesacalas)){
     $escala[5]['descripcion']=$row['nivel5_descripcion'];
 }
 $documento = new PHPExcel ();
-
-$sheet=$documento->createSheet();
-
 $coordinadaA='A';
 $coordinadaB='B';
 $coordinadaC='C';
@@ -172,30 +169,13 @@ while($row2 = mysqli_fetch_array($resultado2)) {
     $sheet->getStyle('A13')->applyFromArray($letrablanca);
     $sheet->getStyle('A13')->getAlignment()->setHorizontal('center');
 
-    $sheet->getStyle('F3')->getFill()
-        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-        ->getStartColor()
-        ->setRGB('12, 14, 166');
+    $sheet->getStyle('F1')->applyFromArray($fondoazul2);
+    $sheet->getStyle('F3')->applyFromArray($fondoazul2);
+    $sheet->getStyle('F5')->applyFromArray($fondoazul2);
 
-    $sheet->getStyle('F5')->getFill()
-        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-        ->getStartColor()
-        ->setRGB('12, 14, 166');
-
-    $sheet->getStyle('J1')->getFill()
-        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-        ->getStartColor()
-        ->setRGB('12, 14, 166');
-
-    $sheet->getStyle('J3')->getFill()
-        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-        ->getStartColor()
-        ->setRGB('12, 14, 166');
-
-    $sheet->getStyle('J5')->getFill()
-        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
-        ->getStartColor()
-        ->setRGB('12, 14, 166');
+    $sheet->getStyle('J1')->applyFromArray($fondoazul2);
+    $sheet->getStyle('J3')->applyFromArray($fondoazul2);
+    $sheet->getStyle('J5')->applyFromArray($fondoazul2);
 
     $sheet->setCellValue('F1', 'Nombre del evaluado');
     $sheet->setCellValue('F2', $nomeval.' '.$apellidoeval);
@@ -289,13 +269,201 @@ while($row2 = mysqli_fetch_array($resultado2)) {
     $cont=2;
 }
 
+$dataseriesLabels=[];
+$dataSeriesValues =[];
+
+$sheet=$documento->createSheet();
+$sheet->setTitle('Tabulador');
+$sheet = $documento->getSheetByName('Tabulador');
+$documento->getSheetByName('Tabulador')->getColumnDimension('A')->setWidth(5);
+$documento->getSheetByName('Tabulador')->getColumnDimension('B')->setWidth(50);
+$documento->getSheetByName('Tabulador')->getColumnDimension('C')->setWidth(5);
+$documento->getSheetByName('Tabulador')->getColumnDimension('D')->setWidth(30);
+
+
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
+on e.id = pe.id_evaluador
+join roles r on pe.id_rol_evaluador = r.id
+where id_evaluado='$id_evaluado' and id_evaluacion ='$id_evaluacion'";
+
+$resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+
+while($row2 = mysqli_fetch_array($resultado2)){
+    $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
+                                        on p.id = pe.id_pregunta
+                                        join decalogos_aseveraciones da 
+                                        on da.id = p.id_decalogo_aseveracion
+                                        where pe.id_evaluador = $row2[id_evaluador] 
+                                        and pe.id_evaluado ='$id_evaluado' 
+                                        and pe.id_periodo ='$id_periodo'
+                                        and pe.id_evaluacion = $id_evaluacion
+                                        ";
+
+    $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+    $sheet->mergeCells('A1:B1');
+    $sheet->getStyle('A1:B1')->getAlignment()->setHorizontal('center');
+    $sheet->setCellValue('A1', 'DECALOGO LIDERAZGO ICAVE');
+
+    $sheet->getStyle("A1:B1")->applyFromArray($borderthin);
+    $sheet->getStyle("A1:B1")->applyFromArray($fondoazul);
+    $sheet->getStyle('A1:B1')->applyFromArray($letrablanca);
+
+    $sheet->getColumnDimension('C')->setAutoSize(true);
+    $sheet->getColumnDimension('D')->setAutoSize(true);
+    $sheet->getColumnDimension('E')->setAutoSize(true);
+    $sheet->getColumnDimension('F')->setAutoSize(true);
+    $sheet->getColumnDimension('G')->setAutoSize(true);
+    $coordinadaBusqueda='';
+    $coordinadaBusqueda2='';
+
+
+    if($contusuarios=='0'){
+        $sheet->setCellValue('C1', $row2['rol']);
+        $sheet->getStyle("C1")->applyFromArray($borderthin);
+        $sheet->getStyle("C1")->applyFromArray($fondoazul2);
+        $sheet->getStyle('C1')->applyFromArray($letrablanca);
+        $sheet->getStyle('C1')->getAlignment()->setHorizontal('center');
+        $new = array_push($dataseriesLabels,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$C$1', null, 1));
+        $new = array_push($dataSeriesValues,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$C$2:$C$11', null, 1));
+        $coordinadaBusqueda='C';
+        $coordinadaBusqueda2='C';
+    }elseif ($contusuarios=='1'){
+        $sheet->setCellValue('D1', $row2['rol']);
+        $sheet->getStyle("D1")->applyFromArray($borderthin);
+        $sheet->getStyle("D1")->applyFromArray($fondoazul2);
+        $sheet->getStyle('D1')->applyFromArray($letrablanca);
+        $sheet->getStyle('D1')->getAlignment()->setHorizontal('center');
+        $new = array_push($dataseriesLabels,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$D$1', null, 1));
+        $new = array_push($dataSeriesValues,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$D$2:$D$11', null, 1));
+        $coordinadaBusqueda='D';
+        $coordinadaBusqueda2='D';
+    }elseif ($contusuarios=='2'){
+        $sheet->setCellValue('E1', $row2['rol']);
+        $sheet->getStyle('E1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("E1")->applyFromArray($borderthin);
+        $sheet->getStyle("E1")->applyFromArray($fondoazul2);
+        $sheet->getStyle('E1')->applyFromArray($letrablanca);
+        $new = array_push($dataseriesLabels,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$E$1', null, 1));
+        $new = array_push($dataSeriesValues,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$E$2:$E$11', null, 1));
+        $coordinadaBusqueda='E';
+        $coordinadaBusqueda2='E';
+    }elseif ($contusuarios=='3'){
+        $sheet->setCellValue('F1', $row2['rol']);
+        $sheet->getStyle('F1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("F1")->applyFromArray($borderthin);
+        $sheet->getStyle("F1")->applyFromArray($fondoazul2);
+        $sheet->getStyle('F1')->applyFromArray($letrablanca);
+        $new = array_push($dataseriesLabels,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$F$1', null, 1));
+        $new = array_push($dataSeriesValues,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$F$2:$F$11', null, 1));
+        $coordinadaBusqueda='F';
+        $coordinadaBusqueda2='F';
+    }elseif ($contusuarios=='4'){
+        $sheet->setCellValue('G1', $row2['rol']);
+        $sheet->getStyle('G1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("G1")->applyFromArray($borderthin);
+        $sheet->getStyle("G1")->applyFromArray($fondoazul2);
+        $sheet->getStyle('G1')->applyFromArray($letrablanca);
+        $new = array_push($dataseriesLabels,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$G$1', null, 1));
+        $new = array_push($dataSeriesValues,new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$G$2:$G$11', null, 1));
+        $coordinadaBusqueda='G';
+        $coordinadaBusqueda2='G';
+    }
+    $contusuarios++;
+    $promedio=0;
+    while($row4 = mysqli_fetch_array($resultado3)){
+        $coordinadaA=$coordinadaA . strval($cont);
+        $coordinadaB=$coordinadaB . strval($cont);
+        $coordinadaBusqueda=$coordinadaBusqueda . strval($cont);
+
+        $sheet->setCellValue($coordinadaA, strval($cont-1));
+        $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
+        $sheet->setCellValue($coordinadaBusqueda, $row4['puntos']);
+        $sheet->getStyle($coordinadaBusqueda)->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('h1', $contusuarios);
+
+        $sheet->getStyle($coordinadaA)->getAlignment()->setHorizontal('center');
+        $sheet->getStyle($coordinadaA)->applyFromArray($borderthin);
+        $sheet->getStyle($coordinadaA)->applyFromArray($fondoazul);
+        $sheet->getStyle($coordinadaA)->applyFromArray($letrablanca);
+
+        $coordinadaA='A';
+        $coordinadaB='B';
+        $coordinadaC='C';
+        $coordinadaC='D';
+        $coordinadaC='E';
+        $coordinadaC='F';
+        $coordinadaC='G';
+        $coordinadaBusqueda=$coordinadaBusqueda2;
+        $cont++;
+        $promedio += (int)$row4['puntos'];
+    }
+    $promedio=$promedio /($cont -2);
+    $sheet->setCellValue($coordinadaB. strval($cont), 'Promedio');
+    $sheet->getStyle($coordinadaB. strval($cont))->getAlignment()->setHorizontal('center');
+    $sheet->getStyle($coordinadaB. strval($cont))->applyFromArray($borderthin);
+    $sheet->getStyle($coordinadaB. strval($cont))->applyFromArray($fondoazul2);
+    $sheet->getStyle($coordinadaB. strval($cont))->applyFromArray($letrablanca);
+
+
+    $sheet->setCellValue($coordinadaBusqueda.strval($cont), $promedio);
+    $sheet->getStyle($coordinadaBusqueda.strval($cont))->getAlignment()->setHorizontal('center');
+    $cont=2;
+}
+
+///GRAFICA
+$sheet = $documento->getSheetByName('Tabulador');
+
+$xAxisTickValues = [
+    new PHPExcel_Chart_DataSeriesValues('String', 'Tabulador!$B$2:$B$11', NULL, 12)
+];
+
+$series = new PHPExcel_Chart_DataSeries(
+    PHPExcel_Chart_DataSeries::TYPE_RADARCHART,				// plotType
+    NULL,													// plotGrouping
+    range(0, count($dataSeriesValues)-1),					// plotOrder
+    $dataseriesLabels,										// plotLabel
+    $xAxisTickValues,										// plotCategory
+    $dataSeriesValues,										// plotValues
+    NULL,													// smooth line
+    PHPExcel_Chart_DataSeries::STYLE_MARKER					// plotStyle
+);
+$layout = new PHPExcel_Chart_Layout();
+$plotarea = new PHPExcel_Chart_PlotArea($layout, array($series));
+$legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
+$titulo = 'Reporte de: '. $nomeval;
+$title = new PHPExcel_Chart_Title($titulo);
+$chart = new PHPExcel_Chart(
+    'chart1',		// name
+    $title,			// title
+    $legend,		// legend
+    $plotarea,		// plotArea
+    true,			// plotVisibleOnly
+    0,				// displayBlanksAs
+    NULL,			// xAxisLabel
+    NULL			// yAxisLabel		- Radar charts don't have a Y-Axis
+);
+$chart->setTopLeftPosition('A15');
+$chart->setBottomRightPosition('J29');
+$sheet->addChart($chart);
+$documento->removeSheetByIndex(0);
+$documento->removeSheetByIndex(1);
+
+
+
 // We'll be outputting an excel file
 header('Content-type: application/vnd.ms-excel');
 
 // It will be called file.xls
-header('Content-Disposition: attachment; filename="file.xlsx"');
-$objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel5');
+$filename=$nomeval.'.xlsx';
+$header = 'Content-Disposition: attachment; filename="'.$filename.'"';
+header($header);
+$objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel2007');
+$objWriter->setIncludeCharts(TRUE);
 // Write file to the browser
 $objWriter->save('php://output');
+
+
 
 ?>

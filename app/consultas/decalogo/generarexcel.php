@@ -597,6 +597,7 @@ header('Pragma: public'); // HTTP/1.0
 
 $writer = IOFactory::createWriter($documento, 'Xlsx');
 $writer->setIncludeCharts(true);
+
 $writer->save('php://output');
 exit;
 
