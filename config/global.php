@@ -1,6 +1,6 @@
 <?php
 
-define('PAGE_TITLE', 'Evaluación 360');
+define('PAGE_TITLE', 'Evaluación 360°');
 $php_self       = dirname($_SERVER['PHP_SELF']);
 $pos_inicial    = strpos($php_self,'app');
 $dir_base       = substr($php_self,0,$pos_inicial);
@@ -124,7 +124,7 @@ function getNavbar($ruta = ''){
     $html = <<<EOD
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">    
 
-    <a class="navbar-brand mr-1" href="{$dir_base}app/main.php">Evaluación 360</a>
+    <a class="navbar-brand mr-1" href="{$dir_base}app/main.php">Evaluación 360&deg;</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>

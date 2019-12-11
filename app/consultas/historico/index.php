@@ -105,11 +105,11 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                             </div>
 
                         </div>
-
                         <div class="col">
                             <div class="form-group">
                             <label>Departamento</label>
-                            <select class="browser-default custom-select" id="departamentos" name="departamento" required>
+
+                            <select class="form-control" id="departamentos" name="departamento" required>
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
                                 $sql="SELECT id, departamento FROM departamentos";
@@ -127,7 +127,8 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                            <label>Empleados</label>
-                            <select class="browser-default custom-select" id="empleados" name="empleado" required>
+
+                            <select class="form-control" id="empleados" name="empleado" required>
                             </select>
                             </div>
                         </div>
@@ -161,14 +162,13 @@ $anterior = null;
                                 (SELECT nombre FROM empleados WHERE id = p.id_evaluado) AS \"Nombre de Evaluado\", 
                                 (SELECT apellidos FROM empleados WHERE id = p.id_evaluado) AS \"Apellido de Evaluado\", 
                                 (SELECT rol FROM roles WHERE id = p.id_rol_evaluador) AS \"Nivel de Puesto\", 
-                                p.id_rol_evaluador AS \"ID Nivel de Puesto\",
                                 (SELECT aseveracion FROM decalogos_aseveraciones WHERE id = (SELECT id_decalogo_aseveracion FROM preguntas WHERE id = p.id_pregunta)) AS \"Aseveraciones\", 
                                 puntos AS \"Puntos\",
                                 (SELECT p.id_pregunta) AS \"Id Pregunta\"
                                 FROM promedios_por_evaluado AS p
                                 WHERE id_evaluado = " . $_GET["empleado"]."
-                                ORDER BY id_evaluacion desc, p.id_rol_evaluador asc";
-
+                                ORDER BY id_evaluacion desc, p.id_rol_evaluador asc
+                                ";
                                     $res = $conexion->query($sql);
 
                                     if ($res) {
@@ -226,7 +226,7 @@ $anterior = null;
                                                 <?php
                                             }
                                         } else{
-                                            echo "<div class=\"alert alert-danger\">No se encontraron resultados</div>";
+                                            echo '<div class="alert alert-danger">No hay resultados</div>';
                                         }//ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
 
                                 ?>
@@ -249,20 +249,12 @@ $anterior = null;
 
                             }//ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
                         } else{
-                            if(isset($_GET["submit"])){
-                                if (empty($_GET['empleado']) || empty($_GET['departamento'])){
-                                    echo '<script type="text/javascript">',
-                                    'msg(\'Selecciona los campos\');',
-                                    '</script>';
-                                }else{
-                                    echo '<script type="text/javascript">',
-                                    'msg(\'No se seleccionó periodo\');',
-                                    '</script>';
-                                }
+                            if(!empty($_GET['empleado'])){
+                                echo '<script type="text/javascript">',
+                                'msg(\'No se seleccionó periodo\');',
+                                '</script>'
+                                ;
                             }
-                    //if (!empty($_GET['empleado']) || !empty($_GET['departamento'])){
-                        //}
-
                         }//ESTE ES EL IF DE SELECCIONAR PERIODO
 
 

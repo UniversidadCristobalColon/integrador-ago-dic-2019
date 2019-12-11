@@ -6,10 +6,11 @@ include '../../../config/db.php';
 
 require __DIR__ . "../../../vendor/autoload.php";
 
-$id_evaluado = $_GET['id_evaluado'];
-$id_periodo =  $_GET['id_periodo'];
-
+$id_evaluado = $_GET['id_evaluado'];//78;
+$id_periodo =  $_GET['id_periodo'];;
+$id_evaluacion=$_GET['id_evaluacion'];
 $id_escala = 1; //calcular el id de la escuela correcta
+
 
 
 use PhpOffice\PhpSpreadsheet\Chart\Chart;
@@ -69,12 +70,6 @@ $documento
     ->setKeywords('etiquetas o palabras clave separadas por espacios')
     ->setCategory('La categoría');
 
-#$sheet = $documento->getActiveSheet();
-
-/*$sheet->setCellValue('A1', 'ID');
-$sheet->setCellValue('B1', 'Pregunta');
-$sheet->setCellValue('C1', 'Calificación');*/
-
 $coordinadaA='A';
 $coordinadaB='B';
 $coordinadaC='C';
@@ -83,11 +78,13 @@ $coordinadaE='E';
 $coordinadaF='F';
 $coordinadaG='G';
 $contusuarios=0;
-$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol,p.puesto,pe.creacion from promedios_por_evaluado pe join empleados e
-on e.id = pe.id_evaluador
-join roles r on pe.id_rol_evaluador = r.id
-join puestos p on e.id_puesto = p.id
-where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
+$sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol, pe.id_evaluacion, pe.id_rol_evaluador,pe.creacion,pu.puesto 
+            from promedios_por_evaluado pe join empleados e
+            on e.id = pe.id_evaluador
+            join roles r on r.id = pe.id_rol_evaluador 
+            join puestos pu on pu.id = e.id_puesto
+            where id_evaluado=$id_evaluado and id_evaluacion = $id_evaluacion
+            order by id_evaluacion desc, pe.id_rol_evaluador asc";
 
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
@@ -105,18 +102,19 @@ while($row2 = mysqli_fetch_array($evaluado)) {
     $apellidoeval=$row2['apellidos'];
     $puesto = $row2['puesto'];
 }
-
 $cont=2;
 
 while($row2 = mysqli_fetch_array($resultado2)){
-    $sql = "select da.aseveracion,pe.puntos,pe.id from promedios_por_evaluado pe join preguntas p 
-                                        on p.id = pe.id_pregunta
-                                        join decalogos_aseveraciones da 
-                                        on da.id = p.id_decalogo_aseveracion
-                                        where pe.id_evaluador = $row2[id_evaluador]
-                                        ";
+    $sql = "select da.aseveracion,pe.puntos 
+            from promedios_por_evaluado pe join preguntas p 
+            on p.id = pe.id_pregunta
+            join decalogos_aseveraciones da 
+            on da.id = p.id_decalogo_aseveracion
+            where pe.id_evaluador = $row2[id_evaluador] 
+            and pe.id_evaluado = '$id_evaluado' 
+            and pe.id_evaluacion = $id_evaluacion                                   
+            ";
     $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
-
     $sheet=$documento->createSheet();
     $sheet->setTitle($row2['rol']);
     $sheet = $documento->getSheetByName($row2['rol']);
@@ -129,7 +127,6 @@ while($row2 = mysqli_fetch_array($resultado2)){
             ),
         ),
     );
-
 
     #$sheet = $documento->getActiveSheet();
     $sheet->mergeCells('F1:I1');
@@ -214,6 +211,7 @@ while($row2 = mysqli_fetch_array($resultado2)){
     $sheet->getStyle('A13:H13')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0218a2');
     $sheet->setCellValue('A13', 'Escala de clasificación');
     foreach($escala as $e){
+
             $sheet ->getStyle('A'.$contescala)->applyFromArray($styleArray);
             $sheet ->getStyle('B'.$contescala)->applyFromArray($styleArray);
             $sheet ->getStyle('C'.strval($contescala).':H'.strval($contescala))->applyFromArray($styleArray);
@@ -223,6 +221,7 @@ while($row2 = mysqli_fetch_array($resultado2)){
             $sheet->setCellValue('B'.$contescala, $e['etiqueta']);
             $sheet->mergeCells('C'.strval($contescala).':H'.strval($contescala));
             $sheet->setCellValue('C'.$contescala, $e['descripcion']);
+
             $contescala++;
             $contescalasupp++;
     }
@@ -288,7 +287,7 @@ $documento->getSheetByName('Tabulador')->getColumnDimension('D')->setWidth(30);
 $sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol from promedios_por_evaluado pe join empleados e
 on e.id = pe.id_evaluador
 join roles r on pe.id_rol_evaluador = r.id
-where id_evaluado='$id_evaluado' and id_periodo ='$id_periodo'";
+where id_evaluado='$id_evaluado' and id_evaluacion ='$id_evaluacion'";
 
 $resultado2 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
@@ -298,8 +297,12 @@ while($row2 = mysqli_fetch_array($resultado2)){
                                         on p.id = pe.id_pregunta
                                         join decalogos_aseveraciones da 
                                         on da.id = p.id_decalogo_aseveracion
-                                        where pe.id_evaluador = $row2[id_evaluador] and pe.id_evaluado ='$id_evaluado' and pe.id_periodo ='$id_periodo';
+                                        where pe.id_evaluador = $row2[id_evaluador] 
+                                        and pe.id_evaluado ='$id_evaluado' 
+                                        and pe.id_periodo ='$id_periodo'
+                                        and pe.id_evaluacion = $id_evaluacion
                                         ";
+
     $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
     $documento->getSheetByName('Tabulador')->getColumnDimension('A')->setWidth(5);
@@ -422,6 +425,7 @@ $chart->setBottomRightPosition('F35');
 
 $worksheet->addChart($chart);
 $documento->removeSheetByIndex(0);
+
 
 $nombreDelDocumento = "ReporteDeCompetencias.xlsx";
 

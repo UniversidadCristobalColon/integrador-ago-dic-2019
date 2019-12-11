@@ -95,7 +95,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                 $datos[] = array($c["competencia"], (float)number_format($c["promedio"], 2));
             }*/
             ?>
-            var data = google.visualization.arrayToDataTable(<?php echo json_encode($datos) ?>);
+            //var data = google.visualization.arrayToDataTable(<?php //echo json_encode($datos) ?>);
             var options = {
                 title: 'Competencias',
                 hAxis: {
@@ -299,16 +299,23 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                             $id_evaluacion_aux = 0;
                             foreach($evaluadores as $row2){
                                 $id_evaluacion = $row2["id_evaluacion"];
-
+                                $tituloeval ='';
                                 if($id_evaluacion_aux != $id_evaluacion){
+                                    $sql = "select  descripcion from evaluaciones where id = $row2[id_evaluacion]";
+                                    $reeval = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
                                     ?>
                                     <hr>
                                     <div class="row mb-5">
                                         <div class="col-md-6">
-                                            <h4>Aqui va el titulo de la evaluacion</h4>
+                                            <h4><?php
+                                                    while($row = mysqli_fetch_array($reeval)){
+                                                        echo $row['descripcion'];
+                                                    }
+                                                ?></h4>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <a href="generarexcel.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>" class="btn btn-primary" target="_blank">
+                                            <a href="generarexcel.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
                                                 Exportar a Excel
                                             </a>
 
@@ -331,6 +338,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                         and pe.id_evaluado = '$id_evaluado' 
                                         and pe.id_evaluacion = $id_evaluacion;                                        
                                         ";
+
 
 
                                 $resultado3 = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
