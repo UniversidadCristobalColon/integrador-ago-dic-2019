@@ -36,7 +36,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <!-- Page Content -->
             <div class="card-header">
                 <i class="fas fa-table"></i>
-                Catálogo: Niveles de Puesto
+                Catálogo: niveles de puesto
             </div>
             <hr>
             <?php
@@ -49,7 +49,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             // If count == 1 that means the period is already on the database
             if ($count == 1) {
                 echo "<div class='alert alert-warning mt-4' role='alert'>
-                <h3>El Nivel de Puesto ya existe.</h3>
+                <h3>El nivel de puesto ya existe.</h3>
                 <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
             </div>";
             } else {
@@ -66,8 +66,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     /* header('location:index.php');
                       ob_flush();
                       */
-                    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido un nuevo Nivel de Puesto.</h3>
-    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver Periodos</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otra</a></div>";
+                    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido un nuevo nivel de puesto.</h3>
+    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver periodos</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otro nivel</a></div>";
                 } else {
                     echo "Error: " .$query. "<br>" .mysqli_error($conexion);
                 }

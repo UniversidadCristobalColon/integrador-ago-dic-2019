@@ -36,7 +36,7 @@ define('RUTA_INCLUDE', '../../../../');
             <!-- Page Content -->
             <div class="card-header">
                 <i class="fas fa-table"></i>
-                Catálogo: Niveles de Puesto
+                Catálogo: niveles de puesto
             </div>
             <hr>
             <?php
@@ -55,7 +55,7 @@ define('RUTA_INCLUDE', '../../../../');
                   ob_flush();
                   */
                 echo "<div class='alert alert-success mt-4' role='alert'><h3>El registro se modificó exitosamente.</h3>
-    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver Niveles</a> </div>";
+    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver niveles</a> </div>";
             } else {
                 echo "Error: " .$query. "<br>" .mysqli_error($conexion);
             }

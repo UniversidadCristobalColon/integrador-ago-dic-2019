@@ -37,7 +37,7 @@ define('RUTA_INCLUDE', '../../../../');
             <!-- Page Content -->
             <div class="card-header">
                 <i class="fas fa-table"></i>
-                Catálogo: Periodos
+                Catálogo: periodos
             </div>
             <hr>
             <?php
@@ -88,4 +88,3 @@ define('RUTA_INCLUDE', '../../../../');
 </body>
 
 </html>
-

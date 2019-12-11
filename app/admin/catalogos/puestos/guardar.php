@@ -36,7 +36,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <!-- Page Content -->
             <div class="card-header">
                 <i class="fas fa-table"></i>
-                Catálogo: Puestos
+                Catálogo puestos
             </div>
             <hr>
             <?php
@@ -52,7 +52,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 echo "<div class='alert alert-warning mt-4' role='alert'>
                 <h3>El puesto ya existe.</h3>
                 <a class='btn btn-outline-danger' href='nuevo.php' role='button'>Intentalo de nuevo</a>
-            </div>";
+                </div>";
             } else {
 
                 /*
@@ -69,8 +69,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     /* header('location:index.php');
                       ob_flush();
                       */
-                    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido un nuevo Puesto.</h3>
-    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver Puestos</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otra</a></div>";
+                    echo "<div class='alert alert-success mt-4' role='alert'><h3>Has añadido un nuevo puesto.</h3>
+    <a class='btn btn-outline-primary' href='index.php' role='button'>Ver puestos</a> <a class='btn btn-outline-primary' href='nuevo.php' role='button'>Agregar otro puesto</a></div>";
                 } else {
                     echo "Error: " .$query. "<br>" .mysqli_error($conexion);
                 }

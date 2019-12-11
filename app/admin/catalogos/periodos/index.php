@@ -42,10 +42,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Periodos
+                    Catálogo: periodos
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Agregar</button>
+                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Nuevo</button>
 
                     <div class="table-responsive">
                         <form id="tableform" action="editar.php" method="post">
@@ -53,10 +53,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                                 <thead>
                                 <tr>
-                                    <th class="text-center">Periodos</th>
-                                    <th class="text-center">Creación</th>
-                                    <th class="text-center">Actualización</th>
-                                    <th class="text-center">Estatus</th>
+                                    <th class="text-left">Periodos</th>
+                                    <th class="text-left">Creación</th>
+                                    <th class="text-left">Actualización</th>
+                                    <th class="text-left">Estado</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -66,10 +66,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <?php foreach ($conexion->query('SELECT * from periodos') as $row){ ?>
 
                                     <tr>
-                                        <td class="text-center"><?php echo @$row['periodo'] ?></td>
-                                        <td class="text-center"><?php echo $row['creacion'] ?></td>
-                                        <td class="text-center"><?php echo $row['actualizacion'] ?></td>
-                                        <td class="text-center"><?php echo @$row['estado'] ?></td>
+                                        <td class="text-left"><?php echo @$row['periodo'] ?></td>
+                                        <td class="text-left"><?php echo $row['creacion'] ?></td>
+                                        <td class="text-left"><?php echo $row['actualizacion'] ?></td>
+                                        <td class="text-left"><?php echo @$row['estado'] ?></td>
                                         <td class="text-center">
 
                                             <button type="submit" title="Editar registro"  name="editar" value="<?php  echo $row["id"]; ?>" id="<?php  echo $row["id"]; ?>"  class="btn btn-xs btn-light edit">
