@@ -47,7 +47,16 @@ require '../../../../config/db.php';
 
                             <div class="form-group">
                                 <label>Decálogo</label>
-                                <input type="text" class="form-control" name="nuevodeca">
+                                <input type="text" class="form-control" name="nuevodeca" required>
+                                <?php
+                                if (isset($_POST['bguard'])) {
+                                    if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != "") {
+                                        $n_deca = $_POST['nuevodeca'];
+                                    } else {
+                                        echo "<p style='color: red'>**Por favor llene este campo**</p>";
+                                    }
+                                }
+                                ?>
                             </div>
 
                             <div class="form-group">
@@ -68,6 +77,47 @@ require '../../../../config/db.php';
                                     }
                                     ?>
                                 </select>
+                                <?php
+                                if (isset($_POST['bguard'])) {
+                                    if (isset($_POST['select_e'])) {
+                                        $s_esc = $_POST['select_e'];
+                                        $porciones = explode(",", $s_esc);
+                                        $pn1 = $porciones[0];
+                                        $pn2 = $porciones[1];
+                                        $pn3 = $porciones[2];
+                                        $pn4 = $porciones[3];
+                                        $pn5 = $porciones[4];
+                                        $sql_id = "SELECT id FROM escalas WHERE nivel1_etiqueta='$pn1' AND nivel2_etiqueta='$pn2' AND nivel3_etiqueta='$pn3' AND nivel4_etiqueta='$pn4' AND nivel5_etiqueta='$pn5'";
+                                        $resultado = mysqli_query($conexion, $sql_id);
+                                        if ($resultado) {
+                                            $fila = mysqli_fetch_assoc($resultado);
+                                            $s_esc = $fila['id'];
+                                        } else {
+                                            echo("Error description: " . mysqli_error($conexion));
+                                        }
+                                    } else {
+                                        echo "<p style='color: red'>**Por favor seleccione una escala disponible**</p>";
+                                    }
+                                }
+                                ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="mb-0">Aseveraciones</label>
+                                <?php if ($resultado): ?>
+                                    <?php for ($i = 1; $i <= 10; $i++):
+                                        $fila = mysqli_fetch_assoc($resultado); ?>
+                                        <div class="input-group mt-2">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><?php echo $i; ?></span>
+                                            </div>
+                                            <input type="text" name="asv<?php echo $i; ?>"
+                                                   class="form-control" required>
+                                        </div>
+                                    <?php endfor; ?>
+                                <?php else:
+                                    echo("Error description: " . mysqli_error($conexion));
+                                endif; ?>
                             </div>
 
                             <div class="form-group">
@@ -80,47 +130,46 @@ require '../../../../config/db.php';
 
                         <?php
                         if (isset($_POST['bguard'])) {
-                            if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != '') {
-                                if (isset($_POST['select_e'])) {
 
-                                    $s_esc = $_POST['select_e'];
-                                    $porciones = explode(",", $s_esc);
-                                    $pn1 = $porciones[0];
-                                    $pn2 = $porciones[1];
-                                    $pn3 = $porciones[2];
-                                    $pn4 = $porciones[3];
-                                    $pn5 = $porciones[4];
-                                    $sql_id = "SELECT id FROM escalas WHERE nivel1_etiqueta='$pn1' AND nivel2_etiqueta='$pn2' AND nivel3_etiqueta='$pn3' AND nivel4_etiqueta='$pn4' AND nivel5_etiqueta='$pn5'";
-                                    $resultado = mysqli_query($conexion, $sql_id);
-                                    if ($resultado) {
-                                        $fila = mysqli_fetch_assoc($resultado);
-                                        $s_esc = $fila['id'];
-                                    } else {
-                                        echo("Error description: " . mysqli_error($conexion));
-                                    }
+                            if (isset($_POST['nuevodeca']) && isset($_POST['select_e'])) {
+                                $sql2 = "SELECT now()";
+                                $resultado = mysqli_query($conexion, $sql2);
+                                if ($resultado) {
+                                    $fila = mysqli_fetch_assoc($resultado);
+                                    $act = $fila["now()"];
+                                }
 
-                                    $n_deca = $_POST['nuevodeca'];
-                                    //$act = date("Y-m-d H:i:s");
-                                    $act = "";
-                                    $sql2 = "SELECT now()";
-                                    $resultado = mysqli_query($conexion, $sql2);
-                                    if ($resultado) {
-                                        $fila = mysqli_fetch_assoc($resultado);
-                                        $act = $fila["now()"];
-                                        $sql = "INSERT INTO decalogos (decalogo, actualizacion, id_escala) VALUES ('$n_deca','$act','$s_esc');";
-                                        if (mysqli_query($conexion, $sql)) {
-                                            header("location: index.php");
-                                        } else {
-                                            echo("Error description: " . mysqli_error($conexion));
+                                $sql = "INSERT INTO decalogos (decalogo, actualizacion, id_escala) VALUES ('$n_deca','$act','$s_esc')";
+
+                                if (mysqli_query($conexion, $sql)) {
+                                    $id_elem = mysqli_insert_id($conexion);
+                                    echo $id_elem;
+
+                                    if (isset($_POST['asv1']) && isset($_POST['asv2']) && isset($_POST['asv3']) && isset($_POST['asv4'])
+                                        && isset($_POST['asv5']) && isset($_POST['asv6']) && isset($_POST['asv7']) && isset($_POST['asv8'])
+                                        && isset($_POST['asv9']) && isset($_POST['asv10'])) {
+                                        for ($i = 1; $i <= 10; $i++) {
+                                            $asv = $_POST['asv' . $i];
+                                            $sql_ins = "INSERT INTO decalogos_aseveraciones (aseveracion, actualizacion, id_decalogo)
+                                                        VALUES ('$asv', '$act', '$id_elem')";
+                                            $resultado = mysqli_query($conexion, $sql_ins);
+                                            if ($resultado) {
+                                                header("location: index.php");
+                                            } else {
+                                                echo("Error description: " . mysqli_error($conexion));
+                                            }
                                         }
-
+                                    } else {
+                                        echo "<p style='color: red'>**Por favor llene todas las aseveraciones**</p>";
                                     }
+
                                 } else {
-                                    echo "<p style='color: red'>**Por favor seleccione una escala disponible**</p>";
+                                    echo("Error description: " . mysqli_error($conexion));
                                 }
                             } else {
-                                echo "<p style='color: red'>**Por favor llene los campos solicitados**</p>";
+                                echo "<p><i class=\"fas fa-exclamation-triangle\"></i> ADVERTENCIA: Por favor llene los campos solicitados.</p>";
                             }
+
                             ob_end_flush();
                         }
                         ?>
