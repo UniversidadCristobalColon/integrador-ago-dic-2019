@@ -65,6 +65,22 @@ if(isset($_POST['edit'])){
                     $password = $row["passwd"];
                 }
             }
+    ?>
+    <script>
+        email.push("<?php echo $row["email"] ;?>");
+        name.push("<?php echo $row["nombre"] ;?>");
+        lastname.push("<?php echo $row["apellidos"] ;?>");
+        employee.push(email);
+        employee.push(name);
+        employee.push(lastname);
+        employees.push(employee);
+        employee = [];
+        email = [];
+        name = [];
+        lastname = [];
+    </script>
+    <?php
+
 }else{
 
 }
@@ -117,7 +133,7 @@ if(isset($_GET["error"])){
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: Empleados
+                    Catálogo: Usuarios
                 </div>
                 <div class="card-body">
                     <?php
@@ -132,22 +148,37 @@ if(isset($_GET["error"])){
                         }
                     ?>
                     <div class="form-group">
-                    <label for="names">Seleccione el empleado</label>
+                    <script>let employees = [];let email = [];
+                                        let name = [];
+                                        let lastname = [];
+                                        let employee = [];</script>
+                    <label for="names">Seleccione el usuario</label>
+                    <?php
+                    if($idEdited){
+                    ?>
+                    <select disabled class="form-control" name="user" id="email" >
+                    <?php
+                    }else{
+                    ?>
                     <select class="form-control" name="user" id="email" >
+                    <?php } ?>
+                    <!-- <option selected disabled value="">Selecciona un empleado</option> -->
                                 <?php
                                 if($email || $email != ""){
                                 ?>
                                     <option value="<?php echo $idEdited; ?>"><?php echo $email; ?></option>
                                 <?php
                                 } 
-                                $sql = "SELECT email, empleados.id FROM `empleados` where empleados.id not in (SELECT usuarios.id from usuarios)";
+                                $sql = "SELECT email, empleados.id, nombre, apellidos FROM `empleados` where empleados.id not in (SELECT usuarios.id from usuarios)";
 
                                 $result = $conexion->query($sql);
                                 
                                 if ($result->num_rows > 0) {
                                     while($row = $result->fetch_assoc()) {
+                                        
                                         if($email){
                                 ?>
+
                                 <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
                                 <?php
                                         }else{
@@ -156,16 +187,62 @@ if(isset($_GET["error"])){
                                 <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
                                             <?php
                                         }
+                                        ?>
+                                        <script>
+                                        email.push("<?php echo $row["email"] ;?>");
+                                        name.push("<?php echo $row["nombre"] ;?>");
+                                        lastname.push("<?php echo $row["apellidos"] ;?>");
+                                        employee.push(email);
+                                        employee.push(name);
+                                        employee.push(lastname);
+                                        employees.push(employee);
+                                        employee = [];
+                                        email = [];
+                                        name = [];
+                                        lastname = [];
+
+                                        </script>
+                                        <?php
                                     }
+                                    ?>
+                                    <script>
+                                    </script>
+                                    <?php
                                 }else{
                                     echo "No hay resultados";
                                 }
                                 
                                 ?>
                         </select>
+                        </div>
+                        <?php
+                        if($idEdited == false){    
+                        
+                        ?>
+                        <div class="form-group">
+                        <label for="names">Nombre</label>
+                        <label disabled class="form-control" type="text" name="name" id="nameSpace"></label>
+                        <label for="lastnames">Apellido</label>
+                        <label disabled class="form-control" type="text" name="lastname" id="lastnameSpace"></label>
                         </div>           
                         <?php
-                            if($idEdited){    
+                        }if($idEdited){
+                            $sql = "SELECT email, empleados.id, nombre, apellidos FROM `empleados` where empleados.id = $idEdited";
+                            $result = $conexion->query($sql);
+                                if ($result->num_rows > 0) {
+                                    while($row = $result->fetch_assoc()) {
+
+                                        ?>
+                                        <div class="form-group">
+                                        <label for="names">Nombre</label>
+                                        <label disabled class="form-control" type="text" name="name" id="nameSpace"><?php echo $row["nombre"]; ?></label>
+                                        <label for="lastnames">Apellido</label>
+                                        <label disabled class="form-control" type="text" name="lastname" id="lastnameSpace"><?php echo $row["apellidos"]; ?></label>
+                                        </div>   
+                                        <?php
+                                    }
+                                }
+
                         ?>
                              <div class="form-check">
                              <input type="checkbox" class="form-check-input" name="newpassword" id="newpassword" aria-describedby="newpasswordHelp">
@@ -180,11 +257,11 @@ if(isset($_GET["error"])){
 
                         <div class="form-group">
                             <label for="names">Contraseña</label>
-                            <input type="password" class="form-control" name="password" id="password" aria-describedby="nameHelp" placeholder="Ingresa contraseña" value = <?php echo $name; ?>>
+                            <input type="password" class="form-control" name="password" id="password" aria-describedby="nameHelp" value = <?php echo $name; ?>>
                         </div>
                         <div class="form-group">
                             <label for="names">Repite Contraseña</label>
-                            <input type="password" class="form-control" name="rpassword" id="rpassword" aria-describedby="nameHelp" placeholder="Ingresa contraseña" value = <?php echo $name; ?>>
+                            <input type="password" class="form-control" name="rpassword" id="rpassword" aria-describedby="nameHelp" value = <?php echo $name; ?>>
                         </div>
                         <script src="check.js"></script>
                                 <?php
@@ -194,17 +271,22 @@ if(isset($_GET["error"])){
                         <div class="form-group">
                         <?php
                             if($submitted){
+                                ?>
+                                <input type="text" hidden name="idEdited" value = '<?php echo $idEdited ?>'>
+                                <?php
                         ?>
-                        <button name="update" type="submit" class="btn btn-primary btn-lg btn-block" value = "<?php echo $idEdited; ?>" >Actualizar</button>
-                        
+                        <button name="update" type="submit" class="btn btn-primary " value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
                         <?php
                             }else{
                         ?>
-                        <button name="insert" type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
+                        <button name="insert" type="submit" class="btn btn-primary ">Crear</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
                         <?php
                             }
                         ?>
                         </div>
+
                     </form>
                 </div>
 
@@ -239,8 +321,9 @@ if(isset($_GET["error"])){
 
 <?php
     if(isset($_POST["update"])){
-        $now = "";
 
+        $now = "";
+        $lastId = $_POST["idEdited"];
         $iduser = $_POST["user"];
 
         if($_POST["newpassword"] == "on"){
@@ -261,9 +344,16 @@ if(isset($_GET["error"])){
                 id=$iduser,
                 actualizacion= '$now',
                 passwd = '$hashed'
-                WHERE id = $iduser";
+                WHERE id = $lastId";
     
             if ($conexion->query($sqlUpdate) === TRUE) {
+                ?>
+                    <script>
+                        <form action="index.php" method="post" on >
+                        
+                        </form>
+                    </script>
+                <?php
                 header("location: index.php?confirm=2");
                 ob_flush();
             } else {
@@ -286,7 +376,7 @@ if(isset($_GET["error"])){
             WHERE id = $iduser";
 
         if ($conexion->query($sqlUpdate) === TRUE) {
-            header("location: index.php?confirm=1");
+            header("location: index.php?confirm=2");
             ob_flush();
         } else {
             echo "Error updating record: " . $conexion->error;
@@ -316,6 +406,7 @@ if(isset($_GET["error"])){
         VALUES ($id, '$passwordHashed',null,'A','$ahora',null)";
 
     if ($conexion->query($sql) === TRUE) {
+        
         header("location: index.php?confirm=1");
         ob_flush();
     } else {
@@ -330,6 +421,15 @@ if(isset($_GET["error"])){
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script>
+document.getElementById("back").addEventListener("click",goBack);
+
+function goBack(){
+    console.log("ls");
+    window.location.href = "index.php";
+}
+</script>
+<script src="users.js"></script>
 </body>
 
 </html>
