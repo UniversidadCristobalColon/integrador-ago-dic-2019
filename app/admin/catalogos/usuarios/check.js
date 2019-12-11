@@ -1,22 +1,4 @@
 
-let emailSelect = document.getElementById("email");
-document.getElementById("nameSpace").textContent = employees[0][1];
-document.getElementById("lastnameSpace").textContent = employees[0][2];
-emailSelect.addEventListener("change",addUserInfo);
-
-function addUserInfo(e){
-    let index = (e.target.options.selectedIndex);
-    for(let i = 0; i < employees.length; i ++){
-        // console.log(employees[i][0]);
-        if(i == index){
-            document.getElementById("nameSpace").textContent = employees[i][1];
-            document.getElementById("lastnameSpace").textContent = employees[i][2];
-        }
-
-
-    }
-}
-
 let password = (document.querySelector("#password"));
 let rpassword = (document.querySelector("#rpassword"));
 
@@ -31,12 +13,14 @@ function checked(){
     
     let inputs = document.querySelectorAll("input");
     for(let i = 0; i < inputs.length; i ++){
-        if(inputs[i].value == ""){
+        if(rpassword.value ==""||password.value =="" || password != rpassword || password.value.length <6){
             inputs[i].style.border = "solid 1px red";
+        }else{
+            inputs[i].style.border = "none";
         }
     }
-    console.log(inputs);
-    if(rpassword.value ==""||password.value =="" || password != rpassword){
+    console.log(password.value.length);
+    if(rpassword.value ==""||password.value =="" || password != rpassword || password.value.length <6){
         if(rpassword.value ==""||password.value ==""){
         Swal.fire({
             icon: 'error',
@@ -50,6 +34,14 @@ function checked(){
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Las contraseñas no coinciden',
+              })
+            return false;
+            }
+        if(rpassword.value.length < 6){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Contraseña muy corta (mínimo 6 caracteres)',
               })
             return false;
             }

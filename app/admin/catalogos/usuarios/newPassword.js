@@ -71,7 +71,7 @@ function checkedPassword(){
         }
     }
     console.log(inputs);
-    if(rpassword.value ==""||password.value =="" || password != rpassword){
+    if(rpassword.value ==""||password.value =="" || password != rpassword || password.value.length <6){
         if(rpassword.value ==""||password.value ==""){
         Swal.fire({
             icon: 'error',
@@ -88,6 +88,14 @@ function checkedPassword(){
               })
             return false;
             }
+            if(rpassword.value.length < 6){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Contraseña muy corta (mínimo 6 caracteres)',
+                  })
+                return false;
+                }
     }
     
     
