@@ -1,10 +1,153 @@
 <?php
 
-require_once '../../../config/global.php';
+//require_once '../../../config/global.php';
 define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/WriterPart.php';
+include_once '../../../vendor/psr/simple-cache/src/CacheInterface.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/IOFactory.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Calculation.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Logical.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Category.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Engine/CyclicReferenceStack.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Engine/Logger.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/IComparable.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Engine/CyclicReferenceStack.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/StringHelper.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Cells.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/CellsFactory.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Settings.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/PageSetup.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/PageMargins.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/HeaderFooter.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/SheetView.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Protection.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Dimension.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/RowDimension.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/ColumnDimension.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/AutoFilter.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Document/Properties.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Document/Security.php';
 
-require __DIR__ . "../../../vendor/autoload.php";
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Supervisor.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Font.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Style.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Color.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Fill.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Border.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Borders.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Alignment.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/NumberFormat.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Style/Protection.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/ReferenceHelper.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Iterator.php';
+
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Coordinate.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/DataType.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/IValueBinder.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/Cell.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Cell/DefaultValueBinder.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/IWriter.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/BaseWriter.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/BIFFwriter.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Escher.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Font.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Parser.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Workbook.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Worksheet.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Xf.php';
+
+
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Chart.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Comments.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/ContentTypes.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/DocProps.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Drawing.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Rels.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/RelsRibbon.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/RelsVBA.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/StringTable.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Style.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Theme.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Workbook.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/Worksheet.php';
+
+include_once'../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Chart.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet /src/PhpSpreadsheet/Chart/DataSeries.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet /src/PhpSpreadsheet/Chart/DataSeriesValues.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Layout.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Legend.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/PlotArea.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Title.php';
+
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/HashTable.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/File.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Functions.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Functions.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/XMLWriter.php';
+
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Date.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/CodePage.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Drawing.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Font.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/Escher.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/OLE.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xlsx/WriterPart.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Calculation/Token/Stack.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/RichText.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/ITextElement.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/TextElement.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/RichText/Run.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Properties.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Axis.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/GridLines.php';
+include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/Layout.php';
+//include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Chart/';
+
+
+
+//include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/';
+//include_once '../../../vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Shared/';
+
+
+
+//require __DIR__ . "../../../../vendor/autoload.php";
+
+/*$preloads = array(
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/Chart.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/DataSeries.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/DataSeriesValues.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/Layout.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/Legend.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/PlotArea.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Chart/Title.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/IOFactory.php',
+'../../../vendor/PhpOffice/PhpSpreadsheet/src/PhpSpreadsheet/Spreadsheet.php',
+);*/
+/*$preloads = array(
+    'argo/Functions.php',
+    'argo/Object.php',
+    'argo/Controller.php',
+    'argo/Widget.php',
+    'argo/WidgetTracker.php',
+    'view/ContactForm.php',
+    'view/CookieBanner.php',
+    'view/FollowButtons.php',
+    'view/RecentPosts.php',
+    'view/ShareButtons.php',
+    'view/LegalNotice.php',
+    'controller/CookieController.php',
+);
+*/
+/*foreach($preloads as $file) {
+    include_once(__DIR__ . '/' . $file);
+}*/
+
 
 $id_evaluado = $_GET['id_evaluado'];//78;
 $id_periodo =  $_GET['id_periodo'];;
@@ -22,6 +165,8 @@ use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+
 
 $sql = "select * from escalas where id= $id_escala";
 $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
