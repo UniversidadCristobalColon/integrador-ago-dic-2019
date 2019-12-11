@@ -2459,8 +2459,11 @@ class Calculation
         $language = 'en_us';
         
         if (strpos($locale, '_') !== false) {
-            [$language] = explode('_', $locale);
+            //[$language] = explode('_', $locale);
         }
+        
+        $language = array('en','us');
+        
         if (count(self::$validLocaleLanguages) == 1) {
             self::loadLocales();
         }
