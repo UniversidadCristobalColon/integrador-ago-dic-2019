@@ -14,15 +14,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="description" content="">
     <meta name="author" content="">
 
+
     <title><?php echo PAGE_TITLE ?></title>
-    <script>
-        function editar(id){
-            location.href="nuevaEvaluacion.php?id="+id;
-        }
-        function eliminar(id){
-            location.href="eliminarEvaluacion.php?id="+id;
-        }
-    </script>
+
+
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
 </head>
@@ -38,6 +33,24 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <div id="content-wrapper">
 
         <div class="container-fluid">
+            <?php
+            if(isset($_GET["error"])){
+                if($_GET["error"]='1'){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '¡Error...!',
+                        footer: '<a href>Le Evaluación tiene aplicantes registrados</a>'
+                    })
+                </script>
+                <?php
+            }}
+            ?>
 
             <!-- DataTables Example -->
             <div class="card mb-3">
@@ -50,7 +63,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <div class="table-responsive">
                         <?php
-                        $sql = "SELECT eval.id, p.periodo, d.departamento, eval.descripcion 
+                        $sql = "SELECT eval.id, p.periodo, d.departamento, eval.descripcion, eval.estado 
                                 from evaluaciones eval 
                                 left join periodos p 
                                 on eval.id_periodo= p.id 
@@ -69,6 +82,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Departamento</th>
                                 <th>Descripción</th>
                                 <th>Progreso</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -114,12 +128,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                                     </td>
                                     <td>
+                                        <?php $id = $row['id'] ?>
+                                        <?php if($row['estado']=='A'){
+                                            $estado="Activo";
+                                        }else if($row['estado']=='B'){
+                                            $estado="Inactivo";
+                                        } ?>
+                                        <?php echo $estado ?>
+                                    </td>
+                                    <td>
                                         <a title="Ver progreso de la evaluación" href="adminEvaluacion.php?id_evaluacion=<?php  echo $row["id"]; ?>" class="btn  btn-xs btn-light"><i class="fas fa-fw fa-eye"></i></a>
 
                                         <button title="Editar registro" type="button" onclick="editar(<?php  echo $row["id"]; ?>)" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-                                        <button title="Eliminar evaluación"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
+                                        <button title="Cambiar estado"  type="button" onclick="deshabilitar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
                                         <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -162,6 +185,19 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <?php getModalLogout() ?>
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
+<script>
+
+    function editar(id){
+        location.href="nuevaEvaluacion.php?id="+id;
+    }
+    function deshabilitar(id){
+        location.href="deshabilitar.php?id="+id;
+
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css">
 </body>
 
 </html>
