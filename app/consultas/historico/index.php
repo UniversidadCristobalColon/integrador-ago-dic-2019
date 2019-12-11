@@ -50,6 +50,15 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
             }, 3500);
         }
 
+        function validar(){
+            var peri = $('#peri').val();
+
+            if(peri == ""){
+                msg('No se seleccionó periodo');
+                return false
+            }
+            return true;
+        }
 
     </script>
 </head>
@@ -81,7 +90,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <label>Periodos</label>
                             <div class="dropdown">
-                                <button class="custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleccione periodos</button>
+                                <button class="custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="peri">Seleccione periodos</button>
                                 <ul class="dropdown-menu">
                                     <?php
                                     $sql="SELECT id, periodo FROM periodos";
@@ -99,6 +108,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                             <label>Departamento</label>
+
                             <select class="form-control" id="departamentos" name="departamento" required>
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
@@ -117,6 +127,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                            <label>Empleados</label>
+
                             <select class="form-control" id="empleados" name="empleado" required>
                             </select>
                             </div>
@@ -124,7 +135,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 
 
                         <div class="col">
-                            <input type="submit" class="btn btn-primary mt-4" value="Buscar">
+                            <input type="submit" class="btn btn-primary mt-4" value="Buscar" name="submit" onclick="return validar()">
                         </div>
 
                     </div>
@@ -136,11 +147,11 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                     <?php
 
                     $periodos = @$_GET['periodo'];
-                    //print_r($periodos);
+
                     $departamento = @$_GET['departamento'];
-                    //echo " ";
+
                     $empleado = @$_GET['empleado'];
-                    //echo "<br>";
+
 $anterior = null;
                         if (isset($_GET['periodo'])){
                             if (isset($_GET['departamento'])){
@@ -158,7 +169,6 @@ $anterior = null;
                                 WHERE id_evaluado = " . $_GET["empleado"]."
                                 ORDER BY id_evaluacion desc, p.id_rol_evaluador asc
                                 ";
-
                                     $res = $conexion->query($sql);
 
                                     if ($res) {
@@ -185,7 +195,6 @@ $anterior = null;
                                             </thead>
                                             <tbody>
 
-
                                             <?php
                                             $res = $conexion->query($sql);
                                             while ($row = $res->fetch_assoc()) {
@@ -199,7 +208,7 @@ $anterior = null;
                                                         foreach ($periodos as $periodo) {
                                                             $sql1 = "SELECT puntos FROM promedios_por_evaluado WHERE id_evaluado = \"" . $_GET["empleado"] . "\"
                                                                     AND id_periodo = (SELECT id FROM periodos WHERE periodo = \"" . $periodo . "\")
-                                                                    AND id_pregunta = " . $row["Id Pregunta"];
+                                                                    AND id_pregunta = " . $row["Id Pregunta"] . " AND id_rol_evaluador = " . $row['ID Nivel de Puesto'];
                                                             //echo "<br>";
                                                             $res1 = $conexion->query($sql1);
                                                             $row1 = $res1->fetch_assoc();
@@ -225,8 +234,6 @@ $anterior = null;
                                 </table>
                                 </div>
                                 <?php
-
-
                                     }
                                 } else {
                                     echo '<script type="text/javascript">',
@@ -236,10 +243,10 @@ $anterior = null;
 
                                 }//ESTE ES EL IF DE SELECCIONAR EMPLEADO
                             } else {
-                                echo '<script type="text/javascript">',
-                                'msg(\'No se seleccionó departamento\');',
-                                '</script>'
-                                ;
+                                    echo '<script type="text/javascript">',
+                                    'msg(\'No se seleccionó departamento\');',
+                                    '</script>';
+
                             }//ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
                         } else{
                             if(!empty($_GET['empleado'])){
@@ -248,41 +255,11 @@ $anterior = null;
                                 '</script>'
                                 ;
                             }
-
                         }//ESTE ES EL IF DE SELECCIONAR PERIODO
 
 
                     ?>
 
-
-
-
-                <!--
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>El empleado sabe negociar ante situaciones criticas</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>2</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>El empleado es empático y mentor con sus colaboradores</td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                -->
                 </div>
 
                 <div class="card-footer small text-muted">Actualizado en <?php
@@ -295,12 +272,9 @@ $anterior = null;
                     ?>
                 </div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
-
         <?php getFooter() ?>
-
     </div>
     <!-- /.content-wrapper -->
 
