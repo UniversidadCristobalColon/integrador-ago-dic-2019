@@ -117,7 +117,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
 
                 var chart = new google.charts.Bar(document.getElementById(id_grafico));
                 chart.draw(data, google.charts.Bar.convertOptions(options));
-                $('#c_'+id_grafico).collapse();
+                //$('#c_'+id_grafico).collapse();
             }
         }
         $('document').ready(function(){
@@ -178,6 +178,10 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             setTimeout(function(){
                 $('#msg').slideUp();
             }, 3500);
+        }
+
+        function cambiarTextoBoton(btn){
+            return $(btn).text() === 'Ver gráfico' ? $(btn).text('Ocultar gráfico') : $(btn).text('Ver gráfico')
         }
     </script>
 </head>
@@ -359,8 +363,8 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                                 ?></h4>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <a class="btn btn-primary" data-toggle="collapse" href="#c_grafico_<?php echo $id_evaluacion ?>" role="button" aria-expanded="true" aria-controls="c_grafico_<?php echo $id_evaluacion ?>">
-                                                Ver gráfico
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#c_grafico_<?php echo $id_evaluacion ?>" role="button" aria-expanded="true" aria-controls="c_grafico_<?php echo $id_evaluacion ?>" onclick="cambiarTextoBoton(this)">
+                                                Ocultar gráfico
                                             </a>
 
                                             <a href="phpexcelgenerar.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
