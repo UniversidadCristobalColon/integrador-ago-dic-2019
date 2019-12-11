@@ -354,7 +354,7 @@ if(isset($_GET["error"])){
             }
         }
 
-        $sqlRandom = "SELECT FLOOR(RAND()*(1000-100+1)+100) AS 'RANDOM'";
+        $sqlRandom = "SELECT FLOOR(RAND()*(1000-100000+1)+100000) AS 'RANDOM'";
         $result = $conexion->query($sqlRandom);
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
