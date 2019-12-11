@@ -23,7 +23,7 @@ if (!empty($respuestas)){
         if ($conexion->query($sql) === TRUE) {
             header("location: editar.php?=id_cuestionario=$idCuestionario");
         } else {
-            echo "Error updating record: " . $conexion->error;
+            header("location: editar.php?=id_cuestionario=$idCuestionario");
         }
 
 
@@ -37,7 +37,7 @@ if (!empty($respuestas)){
     if ($conexion->query($sql) === TRUE) {
         header("location: editar.php?=id_cuestionario=$idCuestionario");
     } else {
-        echo "Error updating record: " . $conexion->error;
+        header("location: editar.php?=id_cuestionario=$idCuestionario");
     }
 }
 

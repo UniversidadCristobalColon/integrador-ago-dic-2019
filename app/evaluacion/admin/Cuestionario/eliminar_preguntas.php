@@ -1,6 +1,7 @@
 <?php
 include '../../../../config/db.php';
 $id = ($_GET['id']);
+$idCuestionario = $_POST['idCuestionario'];
 
 
 $sql = "UPDATE preguntas set id_cuestionario = null where id =  $id";
