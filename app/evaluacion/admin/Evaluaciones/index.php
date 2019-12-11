@@ -19,6 +19,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
         function editar(id){
             location.href="nuevaEvaluacion.php?id="+id;
         }
+        function eliminar(id){
+            location.href="eliminarEvaluacion.php?id="+id;
+        }
     </script>
 
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
@@ -116,7 +119,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         <button title="Editar registro" type="button" onclick="editar(<?php  echo $row["id"]; ?>)" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
-
+                                        <button title="Eliminar evaluación"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
+                                        <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 <?php
