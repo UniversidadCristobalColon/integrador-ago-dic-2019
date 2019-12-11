@@ -525,7 +525,7 @@ function formatoFechaCorta($fecha){
                                     $resultado = mysqli_query($conexion,$sql);
                                     if($resultado){
                                         while($fila = mysqli_fetch_assoc($resultado)){
-                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto], $fila[puesto])</option>";
+                                            echo "<option value = '$fila[id]'>$fila[nombre] $fila[apellidos] ($fila[nivel_puesto])</option>";
                                         }
                                     }
                                     ?>
