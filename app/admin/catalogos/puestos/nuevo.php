@@ -92,7 +92,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: puestos
+                    Catálogo: Puestos
                 </div>
 
                 <div class="card-body">
@@ -125,7 +125,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Estado</label>
+                                    <label>Estatus</label>
                                     <select id="estado" name="estado" class="form-control">
                                         <option>Selecciona un estado</option>
                                         <option value="Activo">Activo</option>
