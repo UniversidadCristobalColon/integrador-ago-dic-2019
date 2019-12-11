@@ -1,6 +1,9 @@
 <?php
 require_once '../../../vendor/PHPExcel-1.8/Classes/PHPExcel.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 //require_once '../../../config/global.php';
 define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
@@ -455,7 +458,7 @@ $documento->removeSheetByIndex(1);
 
 
 // We'll be outputting an excel file
-header('Content-type: application/vnd.ms-excel');
+
 
 // It will be called file.xls
 $filename='Eval360'.$nomeval.'.xlsx';
@@ -463,6 +466,9 @@ $header = 'Content-Disposition: attachment; filename="'.$filename.'"';
 header($header);
 $objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel2007');
 $objWriter->setIncludeCharts(TRUE);
+//header('Cache-Control: max-age=0');
+header('Content-type: application/vnd.ms-excel');
+
 // Write file to the browser
 $objWriter->save('php://output');
 

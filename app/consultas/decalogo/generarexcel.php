@@ -575,7 +575,7 @@ $worksheet->addChart($chart);
 $documento->removeSheetByIndex(0);
 
 
-$nombreDelDocumento = "ReporteDeCompetencias.xlsx";
+$nombreDelDocumento = "ReporteDeCompetencias.xlx";
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="' . $nombreDelDocumento . '"');
@@ -584,7 +584,7 @@ header('Cache-Control: max-age=0');
 
 // Redirect output to a client’s web browser (Xlsx)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="ReportedeCompetencias.xlsx"');
+header('Content-Disposition: attachment;filename="ReportedeCompetencias.xls"');
 header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
 header('Cache-Control: max-age=1');
@@ -595,7 +595,7 @@ header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modifie
 header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
 header('Pragma: public'); // HTTP/1.0
 
-$writer = IOFactory::createWriter($documento, 'Xlsx');
+$writer = IOFactory::createWriter($documento, 'Xls');
 $writer->setIncludeCharts(true);
 
 $writer->save('php://output');
