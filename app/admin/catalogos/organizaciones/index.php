@@ -54,7 +54,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <th>Organización</th>
                                 <th>Creación</th>
                                 <th>Actualización</th>
-                                <th>Estatus</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                             </thead>
