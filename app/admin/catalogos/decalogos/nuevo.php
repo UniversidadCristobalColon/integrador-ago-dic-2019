@@ -53,7 +53,7 @@ require '../../../../config/db.php';
                                     if (isset($_POST['nuevodeca']) && $_POST['nuevodeca'] != "") {
                                         $n_deca = $_POST['nuevodeca'];
                                     } else {
-                                        echo "<p style='color: red'>**Por favor llene este campo**</p>";
+                                        echo "<p style='color: red'>**Por favor no deje este campo vacío**</p>";
                                     }
                                 }
                                 ?>
