@@ -144,22 +144,6 @@ if (isset($_POST['b-camb'])) {
                                                value="<?php echo $desn1 ?>" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Inferior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="in1" step="0.01" class="form-control"
-                                               value="<?php echo $infn1 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Superior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="sn1" step="0.01" class="form-control"
-                                               value="<?php echo $supn1 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -178,22 +162,6 @@ if (isset($_POST['b-camb'])) {
                                         <input required type="text" name="dn2" class="form-control"
                                                value="<?php echo $desn2 ?>"
                                                placeholder="ej. comportamiento inconsistente" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Inferior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="in2" step="0.01" class="form-control"
-                                               value="<?php echo $infn2 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Superior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="sn2" step="0.01" class="form-control"
-                                               value="<?php echo $supn2 ?>"
-                                               placeholder="ej. 0.00" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -216,22 +184,6 @@ if (isset($_POST['b-camb'])) {
                                                placeholder="ej. comportamiento esperado" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Inferior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="in3" step="0.01" class="form-control"
-                                               value="<?php echo $infn3 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Superior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="sn3" step="0.01" class="form-control"
-                                               value="<?php echo $supn3 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -252,22 +204,6 @@ if (isset($_POST['b-camb'])) {
                                                placeholder="ej. comportamiento superior a lo esperado" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Inferior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="in4" step="0.01" class="form-control"
-                                               value="<?php echo $infn4 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Superior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="sn4" step="0.01" class="form-control"
-                                               value="<?php echo $supn4 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="form-group">
@@ -286,22 +222,6 @@ if (isset($_POST['b-camb'])) {
                                         <input required type="text" name="dn5" class="form-control"
                                                value="<?php echo $desn5 ?>"
                                                placeholder="ej. comportamiento que trasciende su área..." readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Inferior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="in5" step="0.01" class="form-control"
-                                               value="<?php echo $infn5 ?>"
-                                               placeholder="ej. 0.00" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row mr-0">
-                                    <label class="col-sm-2 col-form-label">Superior</label>
-                                    <div class="col-sm-10">
-                                        <input required type="number" name="sn5" step="0.01" class="form-control"
-                                               value="<?php echo $supn5 ?>"
-                                               placeholder="ej. 0.00" readonly>
                                     </div>
                                 </div>
                             </div>
