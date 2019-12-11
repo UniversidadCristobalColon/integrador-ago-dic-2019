@@ -18,16 +18,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <title><?php echo PAGE_TITLE ?></title>
 
-    <?php getTopIncludes(RUTA_INCLUDE ) ?>
+    <?php getTopIncludes(RUTA_INCLUDE) ?>
 </head>
 
 <body id="page-top">
 
-
 <?php getNavbar() ?>
-<?php 
-    getModalLogout('../../../');
-?>
 <div id="wrapper">
 
     <?php getSidebar() ?>
