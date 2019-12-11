@@ -315,9 +315,11 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                                 ?></h4>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <a href="phpexcelgenerar.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
+
+                                            <a href="generarexcel2.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
                                                 Exportar a Excel
                                             </a>
+
 
                                             <a href="../../admin/catalogos/decalogos/crearPdf.php?idevaluado=<?php echo $id_evaluado ?>&idevaluacion=<?php echo $id_evaluacion ?>" class="btn btn-primary" target="_blank">
                                                 Exportar a PDF
