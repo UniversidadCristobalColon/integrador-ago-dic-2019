@@ -320,6 +320,7 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                                 Exportar a Excel
                                             </a>
 
+
                                             <a href="../../admin/catalogos/decalogos/crearPdf.php?idevaluado=<?php echo $id_evaluado ?>&idevaluacion=<?php echo $id_evaluacion ?>" class="btn btn-primary" target="_blank">
                                                 Exportar a PDF
                                             </a>

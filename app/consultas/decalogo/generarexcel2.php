@@ -5,6 +5,7 @@
     define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
     include '../../../config/db.php';
 
+
     $id_evaluado = $_GET['id_evaluado'];//78;
     $id_periodo =  $_GET['id_periodo'];;
     $id_evaluacion=$_GET['id_evaluacion'];
