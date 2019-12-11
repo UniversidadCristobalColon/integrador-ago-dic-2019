@@ -1,7 +1,7 @@
 <?php
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
-$cues = 2;
+$cues = 1;
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -86,6 +86,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                     <div class="form-group">
                         <form method="post" action="guardar_cuestionario.php">
+                            <input type="hidden" name="idCuestionario" id="idCuestionario" value="<?php echo $cues?>">
                         <label for="exampleInputEmail1">Nombre</label>
                             <input type="hidden" value="<?php echo $cues ?>" name="id">
                         <input name="Cuestionario" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="<?php
@@ -126,14 +127,19 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             </tr>
                             </thead>
                             <form action="eliminar_preguntas.php" method="post" id="form_preguntasEliminar">
+                                <input type="hidden" name="idCuestionario" id="idCuestionario" value="<?php echo $cues?>">
                                 <tbody>
 
                                 <tr>
                                     <?php
+                                    $idCuest = $cues;
+                                    $contador = 0;
+
 
                                     $sql2 = "select pregunta, id, orden from preguntas where id_cuestionario = $cues order by orden";
                                     $resultado2 = mysqli_query($conexion, $sql2);
-                                    $cont = 1;
+
+
                                     if ($resultado2){
                                         while ($filap = mysqli_fetch_assoc($resultado2)){
                                             $sql3 = "select b.respuesta, a.puntos 
@@ -143,15 +149,28 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         a.id_pregunta = $filap[id] 
                                                         order by a.orden_respuesta asc";
 
-                                            $resultado3 = mysqli_query($conexion, $sql3);
-                                            $html_respuesta = "<ul>";
-                                            if ($resultado3) {
-                                                while ($filar = mysqli_fetch_assoc($resultado3)) {
-                                                    $html_respuesta.="<li>$filar[respuesta] ($filar[puntos])</li>";
-
-                                                }
+                                            $sqll = "SELECT COUNT(id_pregunta) as contar from preguntas_respuestas WHERE id_pregunta = $filap[id] ";
+                                            $resultadol = mysqli_query($conexion, $sqll);
+                                            if ($resultadol){
+                                                $filal = mysqli_fetch_assoc($resultadol);
+                                                $contador = $filal['contar'];
                                             }
-                                            $html_respuesta.= "</ul>";
+
+                                            if ($contador > 0){
+                                                $resultado3 = mysqli_query($conexion, $sql3);
+
+                                                $html_respuesta = "<ul>";
+                                                if ($resultado3) {
+                                                    while ($filar = mysqli_fetch_assoc($resultado3)) {
+                                                        $html_respuesta.="<li>$filar[respuesta] ($filar[puntos])</li>";
+
+                                                    }
+                                                }
+                                                $html_respuesta.= "</ul>";
+                                            }else{
+
+                                                $html_respuesta = "No hay respuesta asociada a esta pregunta";
+                                            }
 
                                             echo "
                                         <tr>
@@ -167,7 +186,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         </td>
                                        
                                 <td>
-                                <button type=\"button\" class=\"btn btn-light\" onclick='abrirModalRespuestas($filap[id])'>
+                                <button  title='Editar respuestas' type=\"button\" class=\"btn btn-light\" onclick='abrirModalRespuestas($filap[id])'>
                                 <i class=\"fas fa-edit\"></i>
                                     </button>
                                    
@@ -183,7 +202,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 </td>
                                 </tr>
                                         ";
-                                            $cont++;
+
                                         }
 
                                     }
@@ -227,28 +246,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 <?php getBottomIncudes( RUTA_INCLUDE ) ?>
 
-<!-- Div para mi ventana MODAL de eliminar pregunta del cuestionario -->
-<div class="modal fade" id="modalEliminarPreguntaCuestionario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Eliminar Pregunta</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
 
-            <div class="modal-body">
-                ¿Está seguro de que desea eliminar esta pregunta?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="eliminarPreguntas()">Si, eliminar</button>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 <!-- ***********MODAL RESPUESTAS************* -->
@@ -359,6 +357,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <div class="container-fluid">
                     <form action="guardar_preguntas.php" method="post" id="form_preguntas">
                         <input type="hidden" name="idCuestionario" id="idCuestionario" value="<?php echo $cues?>">
+                        <div class="row">
+                            <div class="col">
                         <table>
 
                             <?php
@@ -387,7 +387,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                             </td>
                                                             <td> $fila[pregunta] </td>
                                                             <td>
-                                                            
+                                                            <td> <input name='ordenp_$fila[id]'' type='number' class='form-control mb-2 mr-sm-2 mb-sm-0' placeholder='orden'> </td>
                                                           </td>
                                                             </tr>
                                                            
@@ -407,6 +407,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
 
                 </div>
+            </div>
+        </div>
 
 
 
