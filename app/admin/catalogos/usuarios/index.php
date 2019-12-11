@@ -112,6 +112,20 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </script>
                 <?php
                 }
+            if($_GET["confirm"] == 7){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'No hubo cambios',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                </script>
+                <?php
+                }
 }
     ?>
 
@@ -129,7 +143,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <form action="users.php" method="POST" id="usersTable">
                     <button class="btn btn-primary mb-3">Nuevo</button>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-striped table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th class="text-center">Correo Electrónico</th>
@@ -164,7 +178,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 ?>
                                 <td >Inactivo</td>
                                 <td class="align-middle text-center">
-                                    <button class = "btn btn-xs btn-light" type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                    <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
                                 <?php
@@ -172,14 +186,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 ?>
                                 <td>Activo</td>
                                 <td class="align-middle text-center">
-                                    <button  class="btn btn-light"  type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                    <button  class="text-center" style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
 
                                 <?php
                                     }
                                 ?>
-                                    <button class="btn btn-light" type="submit" name = "delete" value="<?php echo $row['id']?>">
+                                    <button class="text-center" style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "delete" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-exchange-alt text-center mx-auto"></i>
                                     </button>
                                 </td>
