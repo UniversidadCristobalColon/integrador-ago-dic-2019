@@ -74,6 +74,20 @@
                                     Con la intención de proporcionar una retroalimentación que acompañada de alternativas permita ayudarle al evaluado a su desarrollo y éxito profesional.
                                 </p>
                                 <p>
+                                    Instrucciones
+                                    <ul>
+                                        <li>
+                                            De clic en Comenzar evaluación ó Continuar evaluación
+                                        </li>
+                                        <li>
+                                            Conteste de manera honesta las preguntas con respuestas basadas en su criterio
+                                        </li>
+                                        <li>
+                                            Asegurese de no dejar preguntas sin respuestas
+                                        </li>
+                                    </ul>
+                                </p>
+                                <p>
                                     <b>Evaluando a: </b>
                                     <?php echo $nombre_evaluado ?>
                                 </p>

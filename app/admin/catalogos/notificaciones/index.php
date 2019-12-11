@@ -43,6 +43,7 @@
                 $sql_update = '
                     UPDATE notificaciones
                     SET notificaciones.estado_visto = 1
+                        notificaciones.fecha_visto = NOW()
                     WHERE notificaciones.id_notificaciones = '.$row['id_notificaciones'].'';
                 $conexion->query( $sql_update );
             }
