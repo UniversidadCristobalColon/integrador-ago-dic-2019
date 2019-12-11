@@ -102,8 +102,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Periodo:</label>
-                                    <input type="text" name="periodo" class="form-control" placeholder="Introduce el Periodo">
+                                    <label>Periodo</label>
+                                    <input type="text" name="periodo" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Estatus:</label>
+                                    <label>Estatus</label>
                                     <select id="estado" name="estado" class="form-control">
                                         <option>Selecciona un estado</option>
                                         <option value="Activo">Activo</option>

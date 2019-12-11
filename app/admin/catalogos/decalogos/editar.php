@@ -16,7 +16,7 @@ if (isset($_POST['b-edit'])) {
     $resultado = mysqli_query($conexion, $sql_now);
     if ($resultado) {
         $fila = mysqli_fetch_assoc($resultado);
-        $datet = $fila['now()'];
+        $act = $fila['now()'];
     } else {
         echo("Error description: " . mysqli_error($conexion));
     }
@@ -84,7 +84,7 @@ if ($id_nom) {
                                         if ($_POST['e_deca'] != "") {
                                             $new_deca = $_POST['e_deca'];
                                         } else {
-                                            echo "<p style='color: red'>**Por favor no dejes el campo 'Decálogo a editar' vacío.**</p>";
+                                            echo "<p style='color: red'>**Por favor no deje este campo vacío**</p>";
                                         }
                                     }
                                 }
@@ -132,10 +132,33 @@ if ($id_nom) {
                                         }
 
                                     } else {
-                                        echo "<p style='color: red'>**Por favor seleccione una escala disponible.**</p>";
+                                        echo "<p style='color: red'>**Por favor seleccione una escala disponible**</p>";
                                     }
                                 }
                                 ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="mb-0">Aseveraciones</label>
+                                <?php
+                                $sql_sel = "SELECT aseveracion FROM decalogos_aseveraciones WHERE id_decalogo='$id_elem'";
+                                $resultado = mysqli_query($conexion, $sql_sel);
+                                ?>
+                                <?php if ($resultado): ?>
+                                    <?php for ($i = 1; $i <= 10; $i++):
+                                        $fila = mysqli_fetch_assoc($resultado); ?>
+                                        <div class="input-group mt-2">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><?php echo $i; ?></span>
+                                            </div>
+                                            <input type="text" name="asv<?php echo $i; ?>"
+                                                   value="<?php echo $fila['aseveracion']; ?>"
+                                                   class="form-control" required>
+                                        </div>
+                                    <?php endfor; ?>
+                                <?php else:
+                                    echo("Error description: " . mysqli_error($conexion));
+                                endif; ?>
                             </div>
 
                             <div class="form-group mt-4">
@@ -149,12 +172,41 @@ if ($id_nom) {
 
                         <?php
                         if (isset($_POST['bguard'])) {
-                            if (isset($_POST['e_deca']) && $_POST['e_deca']!="" && isset($_POST['select_e'])) {
+
+                            if (isset($_POST['e_deca']) && $_POST['e_deca'] != "" && isset($_POST['select_e'])) {
                                 $sql_upd = "UPDATE decalogos
-                                            SET decalogo='$new_deca', actualizacion='$datet', id_escala='$s_esc'
+                                            SET decalogo='$new_deca', actualizacion='$act', id_escala='$s_esc'
                                             WHERE id='$id_elem';";
                                 $resultado = mysqli_query($conexion, $sql_upd);
                                 if ($resultado) {
+
+                                    if (isset($_POST['asv1']) && isset($_POST['asv2']) && isset($_POST['asv3']) && isset($_POST['asv4'])
+                                        && isset($_POST['asv5']) && isset($_POST['asv6']) && isset($_POST['asv7']) && isset($_POST['asv8'])
+                                        && isset($_POST['asv9']) && isset($_POST['asv10'])) {
+
+                                        /*Primero eliminamos los registros con el mismo id_decalogo*/
+                                        $sql_del = "DELETE FROM decalogos_aseveraciones WHERE id_decalogo= '$id_elem'";
+                                        $resultado = mysqli_query($conexion, $sql_del);
+                                        if ($resultado) {
+                                            /*Luego insertamos los registros que acabamos de editar*/
+                                            for ($i = 1; $i <= 10; $i++) {
+                                                $asv = $_POST['asv' . $i];
+                                                $sql_ins = "INSERT INTO decalogos_aseveraciones (aseveracion, actualizacion, id_decalogo)
+                                                        VALUES ('$asv', '$act', '$id_elem')";
+                                                $resultado = mysqli_query($conexion, $sql_ins);
+                                                if ($resultado) {
+                                                } else {
+                                                    echo("Error description: " . mysqli_error($conexion));
+                                                }
+                                            }
+                                            header("location: index.php");
+                                        } else {
+                                            echo("Error description: " . mysqli_error($conexion));
+                                        }
+                                    } else {
+                                        echo "<p style='color: red'>**Por favor llene todas las aseveraciones**</p>";
+                                    }
+
                                     mysqli_close($conexion);
                                     header("location: index.php");
                                     ob_end_flush();
@@ -165,6 +217,7 @@ if ($id_nom) {
                             } else {
                                 echo "<p><i class=\"fas fa-exclamation-triangle\"></i> ADVERTENCIA: Por favor llene los campos solicitados.</p>";
                             }
+
                         }
                         ?>
 

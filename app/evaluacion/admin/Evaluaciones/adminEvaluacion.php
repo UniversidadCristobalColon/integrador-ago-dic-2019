@@ -36,7 +36,7 @@ function formatoFechaCorta($fecha){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <title><?php echo PAGE_TITLE ?></title>
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
     <script>
@@ -48,10 +48,15 @@ function formatoFechaCorta($fecha){
             $('#Envio').trigger("submit");
         }
         function eliminar(id, eval) {
-            //$('#Borrado').trigger("submit");
             var respuesta = confirm("¿Está seguro de que desea eliminar este evaluado?");
             if (respuesta===true){
                 window.self.location = "eliminar.php?id_eliminar="+id+"&id_evaluacion="+eval;
+            }
+        }
+        function enviar(id, eval) {
+            var respuesta = confirm("¿Está seguro de que desea enviar esta evaluación?");
+            if (respuesta===true){
+                window.self.location = "enviar.php?id_enviar="+id+"&id_evaluacion="+eval;
             }
         }
 
@@ -62,87 +67,155 @@ function formatoFechaCorta($fecha){
             var evaluadorP2 = $('#evaluadorP2').val();
             var evaluadorC = $('#evaluadorC').val();
             if (evaluado == "") {
-                alert("Seleccione al personal que desea evaluar");
-                return false;
-            }
-            if (evaluadorS == "") {
-                alert("Seleccione al personal jefe que será el evaluador");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione al personal que desea evaluar',
+                });
                 return false;
             }
             if (evaluadorP1 == "") {
-                alert("Seleccione al personal par que será el evaluador");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione al personal par que será el evaluador',
+                });
                 return false;
             }
             if (evaluadorP2 == "") {
-                alert("Seleccione al personal par que será el evaluador");
-                return false;
-            }
-            if (evaluadorC == "") {
-                alert("Seleccione al cliente que será el evaluador");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'Seleccione al personal par que será el evaluador',
+                });
                 return false;
             }
             if (evaluado == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador jefe");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador jefe',
+                });
                 return false;
             }
             if (evaluado == evaluadorP1){
-                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluado == evaluadorP2){
-                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluado == evaluadorC){
-                alert("No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador cliente");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluado como evaluador, verificar al evaluador cliente',
+                });
                 return false;
             }
             if (evaluadorS == evaluadorP1){
-                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluadorS == evaluadorP2){
-                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluadorS == evaluadorC){
-                alert("No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador cliente");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador jefe en otro campo de evaluador, verificar al evaluador cliente',
+                });
                 return false;
             }
             if (evaluadorP1 == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe',
+                });
                 return false;
             }
             if (evaluadorP1 == evaluadorP2){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluadorP1 == evaluadorC){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador cliente");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador cliente',
+                });
                 return false;
             }
             if (evaluadorP2 == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador jefe',
+                });
                 return false;
             }
             if (evaluadorP2 == evaluadorP1){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluadorP2 == evaluadorC){
-                alert("No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador cliente");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador par en otro campo de evaluador, verificar al evaluador cliente',
+                });
                 return false;
             }
             if (evaluadorC == evaluadorS){
-                alert("No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador jefe");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador jefe',
+                });
                 return false;
             }
             if (evaluadorC == evaluadorP1){
-                alert("No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             if (evaluadorC == evaluadorP2){
-                alert("No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador par");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error...',
+                    text: 'No se puede seleccionar el mismo evaluador cliente en otro campo de evaluador, verificar al evaluador par',
+                });
                 return false;
             }
             return true;
@@ -249,6 +322,7 @@ function formatoFechaCorta($fecha){
             }
             if (!empty($evaluados)) {
                 $columnas = 0;
+                $Enviado = 0;
                 foreach ($evaluados as $evaluado) {
                     if($columnas == 0){
                         echo '<div class="row">';
@@ -258,6 +332,17 @@ function formatoFechaCorta($fecha){
                     $id_evaluado        = $evaluado['id'];
                     $nombre_evaluado    = $evaluado['nombre'];
                     $apellido_evaluado  = $evaluado['apellidos'];
+
+
+                    $sqlVerde = "select COUNT(aplicaciones.email_enviado) as enviado from aplicaciones 
+                         WHERE aplicaciones.id_evaluado = $id_evaluado 
+                         AND aplicaciones.id_evaluacion = $Evaluacion
+                         AND aplicaciones.email_enviado = 'S'";
+                    $resultadoVerde = mysqli_query($conexion,$sqlVerde);
+                    if($resultadoVerde){
+                        $filaVerde = mysqli_fetch_assoc($resultadoVerde);
+                        $Enviado = $filaVerde['enviado'];
+                    }
 
 
                     $sql1="select emp.id, emp.nombre,emp.apellidos, puestos.puesto, roles.rol, app.estado, SUBSTRING(app.hash, 1, 7) as codigo, app.finalizado from aplicaciones app 
@@ -284,6 +369,15 @@ function formatoFechaCorta($fecha){
                                                             <i class=\"fa fa-trash\"></i>
                                                            </a>" : '';
 
+                        if($Enviado>0){
+                            $liga_enviar_registro = "<a title=\"Enviar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"enviar($id_evaluado, $Evaluacion)\">
+                                                            <i class=\"fas fa-paper-plane text-success\"></i>
+                                                           </a>";
+                        } else {
+                            $liga_enviar_registro = "<a title=\"Enviar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"enviar($id_evaluado, $Evaluacion)\">
+                                                            <i class=\"fas fa-paper-plane\"></i>
+                                                           </a>";
+                        }
                 ?>
 
 
@@ -296,10 +390,7 @@ function formatoFechaCorta($fecha){
                                 </div>
                                 <div class="col-md-2 text-right">
                                     <?php echo $liga_eliminar_registro ?>
-                                    <a class="btn btn-light">
-                                    <i class="fas fa-paper-plane"></i>
-                                    </a>
-
+                                    <?php echo $liga_enviar_registro ?>
                                 </div>
                             </div>
                         </div>

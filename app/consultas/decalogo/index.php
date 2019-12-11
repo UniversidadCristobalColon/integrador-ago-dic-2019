@@ -47,7 +47,6 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
         $evaluadores[] = $f;
     }
 
-
     $sql = "SELECT CONCAT(a.nombre, ' ', a.apellidos) as nombre, b.departamento
             FROM empleados a
             LEFT JOIN departamentos b
@@ -61,6 +60,8 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             $departamento = $f["departamento"];
         }
     }
+
+
 }
 ?>
 <!DOCTYPE html>
@@ -81,40 +82,48 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        // Load the Visualization API and the corechart package.
-        google.charts.load('current', {packages: ['corechart', 'bar']});
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
-        function drawChart() {
-            <?php
-            /*if(!empty($competencias)){ ///// si no hay datos no inicializar el grafico
-            $datos = array(array('Competencia', 'Promedio'));
-            foreach ($competencias as $c) {
-                $datos[] = array($c["competencia"], (float)number_format($c["promedio"], 2));
-            }*/
-            ?>
-            //var data = google.visualization.arrayToDataTable(<?php //echo json_encode($datos) ?>);
-            var options = {
-                title: 'Competencias',
-                hAxis: {
-                    title: 'Competencia'
-                },
-                vAxis: {
-                    title: 'Promedio'
-                },
-                legend: {position: 'none'},
-                width: '100%',
-                height: 400
-            };
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-            <?php
-//            }
-            ?>
+        google.charts.load('current', {'packages':['bar', 'corechart']});
+        //google.charts.setOnLoadCallback(drawChart);
+
+
+
+
+        function drawChart(id_grafico, str_datos) {
+            var datos = [];
+            if(str_datos !== '') {
+                datos = $.parseJSON(str_datos);
+
+                if(datos) {
+
+                    /*var data = google.visualization.arrayToDataTable([
+                        ['Decálogo', 'Jefe', 'Par 1', 'Par 2', 'Cliente', 'Autoevaluación'],
+                        ['2014', 1000, 400, 200, 400, 200],
+                        ['2015', 1170, 460, 250, 400, 200],
+                        ['2016', 660, 1120, 300, 400, 200],
+                        ['2017', 1030, 540, 350, 400, 200]
+                    ]);*/
+
+                    var data = google.visualization.arrayToDataTable(datos);
+
+                    var options = {
+                        chart: {
+                            title: null
+                        },
+                        bars: 'horizontal',
+                        hAxis: {
+                            minValue: 0
+                        },
+                        width: 950,
+                        height: 600
+                    };
+
+                    setTimeout(function(){
+                        var chart = new google.charts.Bar(document.getElementById(id_grafico));
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                    }, 1500);
+
+                }
+            }
         }
         $('document').ready(function(){
             $('#id_departamento, #id_periodo').on('change', function(){
@@ -174,6 +183,10 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             setTimeout(function(){
                 $('#msg').slideUp();
             }, 3500);
+        }
+
+        function cambiarTextoBoton(btn){
+            return $(btn).text() === 'Ver gráfico' ? $(btn).text('Ocultar gráfico') : $(btn).text('Ver gráfico')
         }
     </script>
 </head>
@@ -247,54 +260,36 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                     <?php
 
                         if(!empty($evaluadores)) {
-                            ?>
-
-
-
-                            <?php
                             $suma=0;
                             $cont=0;
 
+                            $escala = array();
+                            $index = 1;
 
+                            $sql = "SELECT c.*
+                                    from decalogos a, evaluaciones b, escalas c
+                                    where a.id = b.id_cuestionario
+                                    and a.id_escala = c.id
+                                    and b.id = $id_evaluacion";
 
-
-                            $sql = "select * from escalas where id='1' ";
                             $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
-                            $cont2=0;
+                            if(mysqli_num_rows($resesacalas)) {
+                                $row = mysqli_fetch_array($resesacalas);
+                                $keys = array_keys($row);
+                                foreach($keys as $key){
+                                    if (substr($key, -8) == 'etiqueta' && !empty($row[$key])){
+                                        $aux = explode('_', $key);
+                                        $indice = substr($aux[0], -1);
 
-                            $escala = array();
-                            $puntos = 1;
-
-
-                            $escala[5] = array();
-                            while($row = mysqli_fetch_array($resesacalas)){
-                                $escala[0]['etiqueta']=$row['nivel1_etiqueta'];
-                                $escala[0]['inferior']=$row['nivel1_inferior'];
-                                $escala[0]['superior']=$row['nivel1_superior'];
-
-
-                                $escala[1]['etiqueta']=$row['nivel2_etiqueta'];
-                                $escala[1]['inferior']=$row['nivel2_inferior'];
-                                $escala[1]['superior']=$row['nivel2_superior'];
-
-
-                                $escala[2]['etiqueta']=$row['nivel3_etiqueta'];
-                                $escala[2]['inferior']=$row['nivel3_inferior'];
-                                $escala[2]['superior']=$row['nivel3_superior'];
-
-
-                                $escala[3]['etiqueta']=$row['nivel3_etiqueta'];
-                                $escala[3]['inferior']=$row['nivel3_inferior'];
-                                $escala[3]['superior']=$row['nivel3_superior'];
-
-                                $escala[4]['etiqueta']=$row['nivel4_etiqueta'];
-                                $escala[4]['inferior']=$row['nivel4_inferior'];
-                                $escala[4]['superior']=$row['nivel4_superior'];
-
-                                $escala[5]['etiqueta']=$row['nivel5_etiqueta'];
-                                $escala[5]['inferior']=$row['nivel5_inferior'];
-                                $escala[5]['superior']=$row['nivel5_superior'];
+                                        if(!empty($row["nivel{$indice}_etiqueta"]) && !empty($row["nivel{$indice}_superior"])) {
+                                            $escala[$index - 1]['etiqueta'] = $row["nivel{$indice}_etiqueta"];
+                                            $escala[$index - 1]['inferior'] = $row["nivel{$indice}_inferior"];
+                                            $escala[$index - 1]['superior'] = $row["nivel{$indice}_superior"];
+                                            $index++;
+                                        }
+                                    }
+                                }
                             }
 
                             $id_evaluacion_aux = 0;
@@ -304,6 +299,63 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 if($id_evaluacion_aux != $id_evaluacion){
                                     $sql = "select  descripcion from evaluaciones where id = $row2[id_evaluacion]";
                                     $reeval = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+
+                                    $sql_aseveraciones = "select a.id, a.aseveracion 
+                                                        from decalogos_aseveraciones a, evaluaciones b, preguntas c
+                                                        where b.id = $id_evaluacion
+                                                        and b.id_cuestionario = c.id_cuestionario
+                                                        and c.id_decalogo_aseveracion = a.id
+                                                        GROUP by a.id, a.aseveracion
+                                                        order by a.id";
+
+                                    $res_aseveraciones = mysqli_query($conexion, $sql_aseveraciones);
+                                    $aseveraciones = array();
+                                    while($asev = mysqli_fetch_assoc($res_aseveraciones)){
+                                        array_push($aseveraciones, $asev);
+                                    }
+
+                                    $grafico = array();
+                                    $encabezado = array('Decálogo');
+                                    foreach($aseveraciones as $a){
+                                        $id_aseveracion = $a["id"];
+                                        $aseveracion = $a["aseveracion"];
+
+                                        $linea = array($aseveracion);
+
+                                        $sql_puntos = "select da.aseveracion,pe.puntos, r.rol 
+                                                from promedios_por_evaluado pe join preguntas p 
+                                                on p.id = pe.id_pregunta
+                                                join decalogos_aseveraciones da 
+                                                on da.id = p.id_decalogo_aseveracion
+                                                join roles r
+                                                on pe.id_rol_evaluador = r.id
+                                                where pe.id_evaluado = $id_evaluado
+                                                and pe.id_evaluacion = $id_evaluacion
+                                                and da.id = $id_aseveracion
+                                                order by pe.id_rol_evaluador asc";
+
+                                        $res_puntos = mysqli_query($conexion, $sql_puntos);
+
+                                        while($f_puntos = mysqli_fetch_assoc($res_puntos)){
+                                            if(in_array($f_puntos["rol"], $encabezado) === false){
+                                                array_push($encabezado, $f_puntos["rol"]);
+                                            }
+                                            array_push($linea, (float)$f_puntos['puntos']);
+                                        }
+
+                                        array_push($grafico, $linea);
+                                    }
+
+                                    array_unshift($grafico, $encabezado);
+
+                                    $json_grafico = json_encode($grafico);
+
+                                    echo "<script>
+                                            $(document).ready(function(){
+                                               drawChart('grafico_{$id_evaluacion}', '$json_grafico'); 
+                                            });
+                                            
+                                        </script>";
 
                                     ?>
                                     <hr>
@@ -316,15 +368,25 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                                 ?></h4>
                                         </div>
                                         <div class="col-md-6 text-right">
-                                            <a href="generarexcel.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
+                                            <a class="btn btn-primary" data-toggle="collapse" href="#c_grafico_<?php echo $id_evaluacion ?>" role="button" aria-expanded="true" aria-controls="c_grafico_<?php echo $id_evaluacion ?>" onclick="cambiarTextoBoton(this)">
+                                                Ocultar gráfico
+                                            </a>
+
+                                            <a href="phpexcelgenerar.php?id_evaluado=<?php echo $id_evaluado ?>&id_periodo=<?php echo $id_periodo?>&id_evaluacion=<?php echo $id_evaluacion?>"class="btn btn-primary" target="_blank">
                                                 Exportar a Excel
                                             </a>
+
 
                                             <a href="../../admin/catalogos/decalogos/crearPdf.php?idevaluado=<?php echo $id_evaluado ?>&idevaluacion=<?php echo $id_evaluacion ?>" class="btn btn-primary" target="_blank">
                                                 Exportar a PDF
                                             </a>
                                         </div>
                                     </div>
+
+                                    <div id="c_grafico_<?php echo $id_evaluacion ?>" class="collapse show">
+                                        <div id="grafico_<?php echo $id_evaluacion ?>" style="width: 950px; height: 600px;" class="mx-auto"></div>
+                                    </div>
+
                                     <?php
                                     $id_evaluacion_aux = $id_evaluacion;
                                 }
@@ -350,9 +412,9 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                         <thead>
                                         
                                         <tr>
-                                            <th>Decálogo</th>
-                                            <th>Calificación</th>
-                                            <th>Escala</th>
+                                            <th style='width: 70%'>Decálogo</th>
+                                            <th style='width: 15%'>Calificación</th>
+                                            <th style='width: 15%'>Escala</th>
                                         </tr>
                                         </thead> <tbody>
                                 ";
@@ -377,8 +439,8 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                                 }
                                 $promedio=$suma/$cont;
                                 echo "</tbody>
-                                        <tfoot>
-                                            <tr style='background-color:#d6e5fa'>
+                                        <tfoot class='bg-light'>
+                                            <tr>
                                                 <td><b>Promedio</b></td>
                                                 <td colspan='2'>$promedio</td>
                                            </tr>

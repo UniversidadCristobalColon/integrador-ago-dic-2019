@@ -100,8 +100,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Puesto:</label>
-                                    <input type="text" name="puesto" class="form-control" placeholder="Introduce el Puesto">
+                                    <label>Puesto</label>
+                                    <input type="text" name="puesto" class="form-control">
                                 </div>
                             </div>
 
@@ -110,7 +110,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label>Nivel de Puesto:</label>
+                                            <label>Nivel de puesto</label>
                                             <select name="idpuesto" class="form-control">
                                             <?php
                                             foreach ($conexion->query('SELECT id, nivel_puesto from niveles_puesto') as $row){
@@ -125,7 +125,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Estatus:</label>
+                                    <label>Estatus</label>
                                     <select id="estado" name="estado" class="form-control">
                                         <option>Selecciona un estado</option>
                                         <option value="Activo">Activo</option>

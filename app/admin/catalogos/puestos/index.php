@@ -44,7 +44,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catálogo: Puestos
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Agregar</button>
+                    <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Nuevo</button>
 
                     <div class="table-responsive">
                         <form id="tableform" action="editar.php" method="post" >
@@ -52,10 +52,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                                 <thead>
                                 <tr>
-                                    <th class="text-center">Puestos</th>
-                                    <th class="text-center">Creación</th>
-                                    <th class="text-center">Nivel de Puesto</th>
-                                    <th class="text-center">Estatus</th>
+                                    <th class="text-left">Puestos</th>
+                                    <th class="text-left">Creación</th>
+                                    <th class="text-leftr">Nivel de puesto</th>
+                                    <th class="text-leftr">Estatus</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -65,14 +65,14 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <?php foreach ($conexion->query('SELECT * from puestos') as $row){ ?>
 
                                     <tr>
-                                        <td class="text-center"><?php echo @$row['puesto'] ?></td>
-                                        <td class="text-center"><?php echo $row['creacion'] ?></td>
+                                        <td class="text-left"><?php echo @$row['puesto'] ?></td>
+                                        <td class="text-left"><?php echo $row['creacion'] ?></td>
                                         <?php foreach ($conexion->query('SELECT * from niveles_puesto where id = '.$row['id_nivel_puesto']) as $row1) { ?>
-                                            <td class="text-center"><?php echo $row1['nivel_puesto'] ?></td>
+                                            <td class="text-left"><?php echo $row1['nivel_puesto'] ?></td>
                                             <?php
                                         }
                                         ?>
-                                        <td class="text-center"><?php echo @$row['estado'] ?></td>
+                                        <td class="text-left"><?php echo @$row['estado'] ?></td>
                                         <td class="text-center">
 
                                             <button type="submit" title="Editar registro"  name="editar" value="<?php  echo $row["id"]; ?>" id="<?php  echo $row["id"]; ?>"  class="btn btn-xs btn-light edit">
@@ -96,25 +96,19 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     </div>
                 </div>
                 <div class="card-footer small text-muted">Última actualización
-
                     <?php
-
                     foreach ($conexion->query('SELECT creacion from puestos order by creacion desc limit 1') as $fecha){
                         echo $fecha['creacion'];
                     }
                     ?>
                 </div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
-
     </div>
     <!-- /.content-wrapper -->
-
 </div>
 <!-- /#wrapper -->
-
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
@@ -134,7 +128,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             $('#dataTable tbody').on( 'click', '.delete', function (e){
             e.preventDefault();
             var id = $(this).attr('id');
-
         Swal.fire({
                 title: 'Are you sure?',
                 text: "It will be deleted permanently!",
@@ -144,28 +137,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!',
                 showLoaderOnConfirm: true,
-
                 preConfirm: function() {
                   return new Promise(function(resolve) {
-
                      $.ajax({
                         url:"eliminar.php",
                         method:'POST',
                         data:{id:id}
-
                      })
-
                      .done(function(response){
                          Swal.fire('Deleted!', response.message, response.status);
-
                          tabla
                             .row( $(this).parents('tr') )
                             .remove()
                             .draw();
-
                             console.log(id);
                      })
-
                      .fail(function(){
                          Swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
                      });
@@ -173,8 +159,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 },
                 allowOutsideClick: true
             });
-
-
     });
     });
     }*/

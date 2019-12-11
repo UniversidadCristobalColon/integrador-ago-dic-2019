@@ -114,7 +114,7 @@ if(isset($_POST['editar'])){
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        Catálogo: Niveles de Puesto
+                        Catálogo: Niveles de puesto
                     </div>
 
                     <div class="card-body">
@@ -122,15 +122,8 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Nivel Actual (ID):</label>
-                                        <input type="text" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Nivel de Puesto:</label>
+                                        <input type="hidden" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
+                                        <label>Nivel de puesto</label>
                                         <input type="text" name="nivel_puesto" class="form-control" value="<?php echo $nivel; ?>">
                                     </div>
                                 </div>
@@ -139,7 +132,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Estado:</label>
+                                        <label>Estatus</label>
                                         <select id="estado" name="estado" class="form-control">
                                             <option>Selecciona el estado</option>
                                             <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>

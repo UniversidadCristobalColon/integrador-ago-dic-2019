@@ -50,6 +50,15 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
             }, 3500);
         }
 
+        function validar(){
+            var peri = $('#peri').val();
+
+            if(peri == ""){
+                msg('No se seleccionó periodo');
+                return false
+            }
+            return true;
+        }
 
     </script>
 </head>
@@ -81,7 +90,7 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <label>Periodos</label>
                             <div class="dropdown">
-                                <button class="custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Seleccione periodos</button>
+                                <button class="custom-select" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="peri">Seleccione periodos</button>
                                 <ul class="dropdown-menu">
                                     <?php
                                     $sql="SELECT id, periodo FROM periodos";
@@ -96,10 +105,11 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                             </div>
 
                         </div>
+
                         <div class="col">
                             <div class="form-group">
                             <label>Departamento</label>
-                            <select class="form-control" id="departamentos" name="departamento" required>
+                            <select class="browser-default custom-select" id="departamentos" name="departamento" required>
                                 <option selected disabled> Seleccione departamento </option>
                                 <?php
                                 $sql="SELECT id, departamento FROM departamentos";
@@ -117,14 +127,14 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                         <div class="col">
                             <div class="form-group">
                            <label>Empleados</label>
-                            <select class="form-control" id="empleados" name="empleado" required>
+                            <select class="browser-default custom-select" id="empleados" name="empleado" required>
                             </select>
                             </div>
                         </div>
 
 
                         <div class="col">
-                            <input type="submit" class="btn btn-primary mt-4" value="Buscar">
+                            <input type="submit" class="btn btn-primary mt-4" value="Buscar" name="submit" onclick="return validar()">
                         </div>
 
                     </div>
@@ -136,11 +146,11 @@ define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
                     <?php
 
                     $periodos = @$_GET['periodo'];
-                    //print_r($periodos);
+
                     $departamento = @$_GET['departamento'];
-                    //echo " ";
+
                     $empleado = @$_GET['empleado'];
-                    //echo "<br>";
+
 $anterior = null;
                         if (isset($_GET['periodo'])){
                             if (isset($_GET['departamento'])){
@@ -151,13 +161,13 @@ $anterior = null;
                                 (SELECT nombre FROM empleados WHERE id = p.id_evaluado) AS \"Nombre de Evaluado\", 
                                 (SELECT apellidos FROM empleados WHERE id = p.id_evaluado) AS \"Apellido de Evaluado\", 
                                 (SELECT rol FROM roles WHERE id = p.id_rol_evaluador) AS \"Nivel de Puesto\", 
+                                p.id_rol_evaluador AS \"ID Nivel de Puesto\",
                                 (SELECT aseveracion FROM decalogos_aseveraciones WHERE id = (SELECT id_decalogo_aseveracion FROM preguntas WHERE id = p.id_pregunta)) AS \"Aseveraciones\", 
                                 puntos AS \"Puntos\",
                                 (SELECT p.id_pregunta) AS \"Id Pregunta\"
                                 FROM promedios_por_evaluado AS p
                                 WHERE id_evaluado = " . $_GET["empleado"]."
-                                ORDER BY id_evaluacion desc, p.id_rol_evaluador asc
-                                ";
+                                ORDER BY id_evaluacion desc, p.id_rol_evaluador asc";
 
                                     $res = $conexion->query($sql);
 
@@ -180,11 +190,11 @@ $anterior = null;
                                                     }
                                                 }
 
+
                                                 ?>
                                             </tr>
                                             </thead>
                                             <tbody>
-
 
                                             <?php
                                             $res = $conexion->query($sql);
@@ -199,7 +209,7 @@ $anterior = null;
                                                         foreach ($periodos as $periodo) {
                                                             $sql1 = "SELECT puntos FROM promedios_por_evaluado WHERE id_evaluado = \"" . $_GET["empleado"] . "\"
                                                                     AND id_periodo = (SELECT id FROM periodos WHERE periodo = \"" . $periodo . "\")
-                                                                    AND id_pregunta = " . $row["Id Pregunta"];
+                                                                    AND id_pregunta = " . $row["Id Pregunta"] . " AND id_rol_evaluador = " . $row['ID Nivel de Puesto'];
                                                             //echo "<br>";
                                                             $res1 = $conexion->query($sql1);
                                                             $row1 = $res1->fetch_assoc();
@@ -217,7 +227,7 @@ $anterior = null;
                                                 <?php
                                             }
                                         } else{
-                                            echo '<div class="alert alert-danger">No hay resultados</div>';
+                                            echo "<div class=\"alert alert-danger\">No se encontraron resultados</div>";
                                         }//ESTE ES DEL IF DE SI NO HAY EMPLEADO, puedo poner un else para enviar mensaje
 
                                 ?>
@@ -225,8 +235,6 @@ $anterior = null;
                                 </table>
                                 </div>
                                 <?php
-
-
                                     }
                                 } else {
                                     echo '<script type="text/javascript">',
@@ -236,53 +244,31 @@ $anterior = null;
 
                                 }//ESTE ES EL IF DE SELECCIONAR EMPLEADO
                             } else {
-                                echo '<script type="text/javascript">',
-                                'msg(\'No se seleccionó departamento\');',
-                                '</script>'
-                                ;
+                                    echo '<script type="text/javascript">',
+                                    'msg(\'No se seleccionó departamento\');',
+                                    '</script>';
+
                             }//ESTE ES EL IF DE SELECCIONAR DEPARTAMENTO
                         } else{
-                            if(!empty($_GET['empleado'])){
-                                echo '<script type="text/javascript">',
-                                'msg(\'No se seleccionó periodo\');',
-                                '</script>'
-                                ;
+                            if(isset($_GET["submit"])){
+                                if (empty($_GET['empleado']) || empty($_GET['departamento'])){
+                                    echo '<script type="text/javascript">',
+                                    'msg(\'Selecciona los campos\');',
+                                    '</script>';
+                                }else{
+                                    echo '<script type="text/javascript">',
+                                    'msg(\'No se seleccionó periodo\');',
+                                    '</script>';
+                                }
                             }
+                    //if (!empty($_GET['empleado']) || !empty($_GET['departamento'])){
+                        //}
 
                         }//ESTE ES EL IF DE SELECCIONAR PERIODO
 
 
                     ?>
 
-
-
-
-                <!--
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>El empleado sabe negociar ante situaciones criticas</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>2</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>El empleado es empático y mentor con sus colaboradores</td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                -->
                 </div>
 
                 <div class="card-footer small text-muted">Actualizado en <?php
@@ -295,12 +281,9 @@ $anterior = null;
                     ?>
                 </div>
             </div>
-
         </div>
         <!-- /.container-fluid -->
-
         <?php getFooter() ?>
-
     </div>
     <!-- /.content-wrapper -->
 

@@ -6,31 +6,13 @@ $pos_inicial    = strpos($php_self,'app');
 $dir_base       = substr($php_self,0,$pos_inicial);
 
 /*
-
-require '../app/login.php';
+require_once '../app/login.php';
 
 if(!confirmar()) {
     header('location: '.$dir_base.'app/index.php');
     exit();
 }
-
 */
-
-function getUrl(){
-    require 'db.php';
-    $sql = 'SELECT url
-            FROM email_conf
-            WHERE id = 1';
-
-    $res = $conexion->query($sql);
-
-    if($res) { 
-        $assoc = $res->fetch_assoc();
-        return $assoc['url'];
-    } else {
-        return 'proyecto';
-    }
-}
 
 function getSidebar($ruta = ''){
     global $dir_base;
@@ -58,7 +40,7 @@ function getSidebar($ruta = ''){
             <h6 class="dropdown-header">Evaluación</h6>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/periodos/">Periodos</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/competencias/">Competencias</a>
-            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/decalogos/">Decálogo</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/decalogos/">Decálogos</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/escalas/">Escalas</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/preguntas/">Preguntas</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/respuestas/">Respuestas</a>
@@ -120,7 +102,7 @@ function getNavbar($ruta = ''){
         $clase_notificaciones = $cantidad > 0 ? 'text-danger' : '';
         $titulo_notificaciones = $cantidad == 1 ? "Tiene una notificación" : "Tiene $cantidad notificaciones";
     }
-
+    
     $html = <<<EOD
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">    
 

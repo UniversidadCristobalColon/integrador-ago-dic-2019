@@ -1,12 +1,14 @@
 <?php
+
+require '../config/dir.php';
+
 if(empty($_SESSION)) {
-            session_start();
+    session_start();
 }
 $email = empty($_POST['email']) ? $_SESSION['usuario']: $_POST['email'];
 $token = md5(uniqid($email.time(), true));
 
 require '../config/global.php';
-define('PROYECTO', getUrl('../'));
 require '../config/db.php';
 
 /*
@@ -48,23 +50,29 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
     $conexion->close();
     if($res) {
         require './mailgun.php';
+        $link = 'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
+                        .$email.'&token='.$token;
+        $msg = 
+"¡Hola!
+
+Se ha solicitado un cambio de contraseña de acceso a su cuenta. Da clic en la siguiente liga de Internet para realizar el cambio:
+
+{$link}
+
+Si no lo has solicitado tú, te recomendamos ingresar a la aplicación y cambiar tu contraseña para proteger tu cuenta.
+
+Saludos.";
         if(isset($_POST['email'])) {
-                    enviarCorreo(
-                        $email, 
-                        utf8_decode('Restablecer Contraseña'), 
-                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
-                        .$email.'&token='.$token,
-                        '/'.PROYECTO.'/app/recuperar.php?email='.$email
-                    );
+            $redirect = '/'.PROYECTO.'/app/recuperar.php?email='.$email;
         } else {
-                   enviarCorreo(
-                        $email, 
-                        utf8_decode('Restablecer Contraseña'), 
-                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
-                        .$email.'&token='.$token,
-                        'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/admin/configuracion/email/changeEmail.php'
-                    ); 
+            $redirect = '/'.PROYECTO.'/app/main.php?alert';
         }
+        enviarCorreo(
+            $email, 
+            utf8_decode('Restablecer Contraseña'), 
+            $msg,
+            $redirect
+        );
     } else {
         if(isset($_POST['email'])) {        
             header('location: /'.PROYECTO.'/app?error=1');
