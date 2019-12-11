@@ -47,7 +47,6 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
         $evaluadores[] = $f;
     }
 
-
     $sql = "SELECT CONCAT(a.nombre, ' ', a.apellidos) as nombre, b.departamento
             FROM empleados a
             LEFT JOIN departamentos b
