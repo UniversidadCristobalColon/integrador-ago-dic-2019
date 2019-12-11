@@ -123,7 +123,7 @@ if(isset($_POST['editar'])){
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        Catálogo: periodos
+                        Catálogo: Periodos
                     </div>
 
                     <div class="card-body">
@@ -142,7 +142,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Estado</label>
+                                        <label>Estatus</label>
                                         <select id="estado" name="estado" class="form-control">
                                             <option>Selecciona el estado</option>
                                             <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
