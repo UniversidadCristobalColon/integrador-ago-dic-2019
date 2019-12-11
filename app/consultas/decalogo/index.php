@@ -33,7 +33,6 @@ if($res){
 $evaluado       = "";
 $departamento   = "";
 
-$id_evaluacion = 1;
 $evaluadores = array();
 if(!empty($id_periodo) && !empty($id_evaluado)) {
     $sql = "select distinct pe.id_evaluador,e.nombre,e.apellidos,r.rol, pe.id_evaluacion, pe.id_rol_evaluador 
@@ -266,35 +265,41 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
                             $escala = array();
                             $index = 1;
 
-                            $sql = "SELECT c.*
+
+
+                            $id_evaluacion_aux = 0;
+                            foreach($evaluadores as $row2){
+                                $id_evaluacion = $row2["id_evaluacion"];
+
+                                $sql = "SELECT c.*
                                     from decalogos a, evaluaciones b, escalas c
                                     where a.id = b.id_cuestionario
                                     and a.id_escala = c.id
                                     and b.id = $id_evaluacion";
 
-                            $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
+                                $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
-                            if(mysqli_num_rows($resesacalas)) {
-                                $row = mysqli_fetch_array($resesacalas);
-                                $keys = array_keys($row);
-                                foreach($keys as $key){
-                                    if (substr($key, -8) == 'etiqueta' && !empty($row[$key])){
-                                        $aux = explode('_', $key);
-                                        $indice = substr($aux[0], -1);
+                                if(mysqli_num_rows($resesacalas)) {
+                                    $row = mysqli_fetch_array($resesacalas);
+                                    $keys = array_keys($row);
+                                    foreach($keys as $key){
+                                        if (substr($key, -8) == 'etiqueta' && !empty($row[$key])){
+                                            $aux = explode('_', $key);
+                                            $indice = substr($aux[0], -1);
 
-                                        if(!empty($row["nivel{$indice}_etiqueta"]) && !empty($row["nivel{$indice}_superior"])) {
-                                            $escala[$index - 1]['etiqueta'] = $row["nivel{$indice}_etiqueta"];
-                                            $escala[$index - 1]['inferior'] = $row["nivel{$indice}_inferior"];
-                                            $escala[$index - 1]['superior'] = $row["nivel{$indice}_superior"];
-                                            $index++;
+                                            if(!empty($row["nivel{$indice}_etiqueta"]) && !empty($row["nivel{$indice}_superior"])) {
+                                                $escala[$index - 1]['etiqueta'] = $row["nivel{$indice}_etiqueta"];
+                                                $escala[$index - 1]['inferior'] = $row["nivel{$indice}_inferior"];
+                                                $escala[$index - 1]['superior'] = $row["nivel{$indice}_superior"];
+                                                $index++;
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            $id_evaluacion_aux = 0;
-                            foreach($evaluadores as $row2){
-                                $id_evaluacion = $row2["id_evaluacion"];
+
+
+
                                 $tituloeval ='';
                                 if($id_evaluacion_aux != $id_evaluacion){
                                     $sql = "select  descripcion from evaluaciones where id = $row2[id_evaluacion]";

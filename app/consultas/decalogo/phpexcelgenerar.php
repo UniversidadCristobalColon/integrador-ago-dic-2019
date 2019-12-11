@@ -15,7 +15,13 @@ $id_periodo =  $_GET['id_periodo'];;
 $id_evaluacion=$_GET['id_evaluacion'];
 $id_escala = 1; //calcular el id de la escuela correcta
 
-$sql = "select * from escalas where id= $id_escala";
+$sql = "SELECT c.*
+        from decalogos a, evaluaciones b, escalas c
+        where a.id = b.id_cuestionario
+        and a.id_escala = c.id
+        and b.id = $id_evaluacion";
+
+//$sql = "select * from escalas where id= $id_escala";
 $resesacalas = mysqli_query($conexion, $sql) or exit(mysqli_error($conexion));
 
 $escala[5] = array();
@@ -218,6 +224,7 @@ while($row2 = mysqli_fetch_array($resultado2)) {
     $sheet->mergeCells('A13:H13');
     $sheet->setCellValue('A13', 'Escala de clasificación');
 
+
     foreach($escala as $e){
         $sheet->setCellValue('A'.$contescala, $contescalasupp);
         //$sheet->mergeCells('B'.strval($contescala).':D'.strval($contescala));
@@ -229,7 +236,7 @@ while($row2 = mysqli_fetch_array($resultado2)) {
         $sheet->getStyle('A'.$contescala)->applyFromArray($letrablanca);
         $sheet->getStyle('A'.$contescala)->applyFromArray($borderthin);
         $sheet->getStyle('B'.$contescala)->applyFromArray($borderthin);
-        $sheet->getStyle('C'.$contescala)->applyFromArray($borderthin);
+        $sheet->getStyle('C'.$contescala.':'.'H'.$contescala)->applyFromArray($borderthin);
 
         $contescala++;
         $contescalasupp++;
