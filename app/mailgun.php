@@ -13,7 +13,7 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
     $sql = 'SELECT host, port, username, password, email_name 
             FROM email_conf
-            WHERE id = 1';
+            WHERE id = 2';
 
     $res = $conexion->query($sql);
 
@@ -34,7 +34,7 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
         $mail->WordWrap = 50;                  // Set word wrap to 50 characters
         $mail->Subject = $asunto;
-        $mail->Body = $mensaje;
+        $mail->Body = utf8_decode($mensaje);
 
         if(!$mail->send()) {
             //echo 'Message could not be sent.';
