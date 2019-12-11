@@ -1,13 +1,3 @@
-<?php
-
-require 'login.php';
-
-if(confirmar()) {
-    header('location: /app/admin/catalogos/competencias/index.php');
-    exit();
-}
-
-?>
 <!DOCTYPE html>
 <html lang="es">
 

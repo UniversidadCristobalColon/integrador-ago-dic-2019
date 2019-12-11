@@ -3,10 +3,8 @@
 /*Lógica para autenticar usuarios e iniciar sesión*/
 /*Si contrasena esta vacia no deja iniciar sesion por el md5(str)*/
 
-require '../config/global.php';
-define('PROYECTO', getUrl());
-
-require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/config.php';
+require '../config/dir.php';
+require '../config/config.php';
 
 $email = @$_POST['email'];
 $password   = password_hash(@$_POST['pass'], 
@@ -151,12 +149,37 @@ if(isset($email)) {
             session_start();
         }
         $_SESSION['usuario'] = $email;
+        $sessionVariables = getSessionVariables($email);
+        $_SESSION['id'] = $sessionVariables['id'];
+        $_SESSION['nombre'] = $sessionVariables['nombre'];
+        $_SESSION['apellidos'] = $sessionVariables['apellidos'];
+
         //echo 'Bienvenido '.$email.'.';
-        header('location: http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/admin/catalogos/competencias/index.php');
+        header('location: main.php');
         exit();
     } else {
-        header('location: http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/index.php?error=2');
+        header('location: index.php?error=2');
         exit();
+    }
+}
+
+function getSessionVariables($email) {
+    require $_SERVER['DOCUMENT_ROOT'].'/'.PROYECTO.'/config/db.php';
+    if($stmt = $conexion->prepare('SELECT id, nombre, apellidos
+                                   FROM empleados
+                                   WHERE email = ?')) {
+        $stmt->bind_param('s', $email);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $stmt->close();
+        $conexion->close();
+        if($res) {
+            return $res->fetch_assoc();
+        } else {
+            return 1;
+        }
+    } else {
+        return 2;
     }
 }
 
