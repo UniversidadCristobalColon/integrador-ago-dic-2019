@@ -1,6 +1,7 @@
 <?php
 require_once '../../../vendor/PHPExcel-1.8/Classes/PHPExcel.php';
 
+
 //require_once '../../../config/global.php';
 define('RUTA_INCLUDE', '../../../'); //ajustar a necesidad
 include '../../../config/db.php';
@@ -111,11 +112,95 @@ while($row2 = mysqli_fetch_array($resultado2)) {
     $sheet->mergeCells('J4:M4');
     $sheet->mergeCells('J5:M6');
 
-    $sheet->getStyle('F1:M10')->getAlignment()->setHorizontal('center');
+    $borderthin= array(
+        'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+    );
+    $letrablanca = array(
+        'font'  => array(
+            'color' => array('rgb' => 'FFFFFF')
+        ));
+
+    $fondoazul=array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '009be0')
+            )
+        );
+    $fondoazul2=array(
+        'fill' => array(
+            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'color' => array('rgb' => '022169')
+        )
+    );
+    $sheet->getStyle("A1:B1")->applyFromArray($borderthin);
+    $sheet->getStyle("C1:D1")->applyFromArray($borderthin);
+    $sheet->getStyle("A13:H13")->applyFromArray($borderthin);
+    $sheet->getStyle("F1:M1")->applyFromArray($borderthin);
+    $sheet->getStyle("F2:M2")->applyFromArray($borderthin);
+    $sheet->getStyle("F3:M6")->applyFromArray($borderthin);
+    $sheet->getStyle("F4:M6")->applyFromArray($borderthin);
+    $sheet->getStyle("F5:M6")->applyFromArray($borderthin);
+    $sheet->getStyle("F6:M6")->applyFromArray($borderthin);
+
+    $sheet->getStyle('A1')->applyFromArray($letrablanca);
+    $sheet->getStyle('F1')->applyFromArray($letrablanca);
+    $sheet->getStyle('J1')->applyFromArray($letrablanca);
+
+    $sheet->getStyle('F3')->applyFromArray($letrablanca);
+    $sheet->getStyle('J3')->applyFromArray($letrablanca);
+
+    $sheet->getStyle('F5')->applyFromArray($letrablanca);
+    $sheet->getStyle('J5')->applyFromArray($letrablanca);
+
+
+    $sheet->getStyle('F1:M6')->getAlignment()->setHorizontal('center');
+
+    $sheet->getStyle('F1')->getFill()
+                            ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+                            ->getStartColor()
+                            ->setRGB('12, 14, 166');
+
+    $sheet->getStyle('A1')->applyFromArray($fondoazul);
+    $sheet->getStyle('C1')->applyFromArray($fondoazul2);
+    $sheet->getStyle('C1')->applyFromArray($letrablanca);
+
+    $sheet->getStyle('A13')->applyFromArray($fondoazul2);
+    $sheet->getStyle('A13')->applyFromArray($letrablanca);
+    $sheet->getStyle('A13')->getAlignment()->setHorizontal('center');
+
+    $sheet->getStyle('F3')->getFill()
+        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setRGB('12, 14, 166');
+
+    $sheet->getStyle('F5')->getFill()
+        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setRGB('12, 14, 166');
+
+    $sheet->getStyle('J1')->getFill()
+        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setRGB('12, 14, 166');
+
+    $sheet->getStyle('J3')->getFill()
+        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setRGB('12, 14, 166');
+
+    $sheet->getStyle('J5')->getFill()
+        ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+        ->getStartColor()
+        ->setRGB('12, 14, 166');
+
     $sheet->setCellValue('F1', 'Nombre del evaluado');
     $sheet->setCellValue('F2', $nomeval.' '.$apellidoeval);
     $sheet->setCellValue('F3', 'Nombre de quien evalua');
-    $sheet->setCellValue('F4', $row2['nombre']. '' .$row2['apellidos']);
+    $sheet->setCellValue('F4', $row2['nombre']. ' ' .$row2['apellidos']);
     $sheet->setCellValue('F5', 'Fecha');
     $sheet->setCellValue('F6', $row2['creacion']);
 
@@ -152,6 +237,13 @@ while($row2 = mysqli_fetch_array($resultado2)) {
         $sheet->setCellValue('B'.$contescala, $e['etiqueta']);
         $sheet->mergeCells('C'.strval($contescala).':H'.strval($contescala));
         $sheet->setCellValue('C'.$contescala, $e['descripcion']);
+
+        $sheet->getStyle('A'.$contescala)->applyFromArray($fondoazul2);
+        $sheet->getStyle('A'.$contescala)->applyFromArray($letrablanca);
+        $sheet->getStyle('A'.$contescala)->applyFromArray($borderthin);
+        $sheet->getStyle('B'.$contescala)->applyFromArray($borderthin);
+        $sheet->getStyle('C'.$contescala)->applyFromArray($borderthin);
+
         $contescala++;
         $contescalasupp++;
     }
@@ -168,6 +260,14 @@ while($row2 = mysqli_fetch_array($resultado2)) {
         $coordinadaB=$coordinadaB . strval($cont);
         $coordinadaC=$coordinadaC . strval($cont);
         $coordinadaD=$coordinadaD . strval($cont);
+
+        $sheet->getStyle($coordinadaA)->applyFromArray($fondoazul);
+        $sheet->getStyle($coordinadaA)->applyFromArray($borderthin);
+        $sheet->getStyle($coordinadaA)->applyFromArray($letrablanca);
+        $sheet->getStyle($coordinadaB)->applyFromArray($borderthin);
+        $sheet->getStyle($coordinadaC)->applyFromArray($borderthin);
+        $sheet->getStyle($coordinadaD)->applyFromArray($borderthin);
+
 
         $sheet->setCellValue($coordinadaA, strval($cont-1));
         $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
