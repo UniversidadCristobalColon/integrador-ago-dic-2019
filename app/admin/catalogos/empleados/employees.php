@@ -128,22 +128,22 @@ if(isset($_GET["error"])){
                     <form method="POST" action="" onsubmit= "return checked()">
                         <div class="form-group">
                             <label for="names">Nombre</label>
-                            <input type="text" class="form-control" name="nombre" id="name" aria-describedby="nameHelp" placeholder="Ingresa nombre" value = <?php echo $name; ?>>
+                            <input type="text" class="form-control" name="nombre" id="name" aria-describedby="nameHelp" value = '<?php echo $name; ?>'>
                         </div>
                         <div class="form-group">
                             <label for="lastnames">Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos" id="lastname" aria-describedby="lastnameHelp" placeholder="Ingresa apellidos" value = <?php echo $lastname; ?>>
+                            <input type="text" class="form-control" name="apellidos" id="lastname" aria-describedby="lastnameHelp" value = '<?php echo $lastname; ?>'>
                         </div>
                         <div class="form-group">
                             <label for="emails">Correo Electrónico</label>
                             <?php
                             if($enable == "disabled"){
                             ?>
-                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa correo electrónico" value = <?php echo $email; ?>>
+                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" value = '<?php echo $email; ?>'>
                             <?php
                             }else{ 
                             ?>
-                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Ingresa correo electrónico" value = <?php echo $email; ?>>
+                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" value = '<?php echo $email; ?>'>
                             <?php
                             }
                             ?>
@@ -209,11 +209,13 @@ if(isset($_GET["error"])){
                         <?php
                             if($submitted){
                         ?>
-                        <button name="update" type="submit" class="btn btn-primary btn-lg btn-block" value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        <button name="update" type="submit" class="btn btn-primary" value = "<?php echo $idEdited; ?>" >Actualizar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
                         <?php
                             }else{
                         ?>
-                        <button name="insert" type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
+                        <button name="insert" type="submit" class="btn btn-primary">Guardar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
                         <?php
                             }
                         ?>
@@ -300,6 +302,7 @@ if(isset($_GET["error"])){
             WHERE id = $idUpdated ";
 
         if ($conexion->query($sqlUpdate) === TRUE) {
+            
             header("location: index.php?confirm=2");
             ob_flush();
         } else {
@@ -376,7 +379,14 @@ if(isset($_GET["error"])){
 }
 ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script>
+document.getElementById("back").addEventListener("click",goBack);
 
+function goBack(){
+    console.log("ls");
+    window.location.href = "index.php";
+}
+</script>
 </body>
 
 </html>

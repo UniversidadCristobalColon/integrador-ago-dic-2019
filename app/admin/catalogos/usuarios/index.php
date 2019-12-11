@@ -26,6 +26,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
     <?php getSidebar() ?>
     <?php 
+    
     if(isset($_GET["confirm"])){
         if($_GET["confirm"] == 1){
         ?>
@@ -154,31 +155,31 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         //echo "id: " . $row["id"]. " - Name: " . $row["nombre"]. " " . $row["apellidos"]. "<br>";
                             ?>
                                 <tr>
-                                <td class="text-center"><?php  echo $row["email"] ?></td>
-                                <td class="text-center"><?php  echo $row["creacion"] ?></td>
-                                <td class="text-center"><?php  echo $row["actualizacion"] ?></td>
+                                <td><?php  echo $row["email"] ?></td>
+                                <td><?php  echo $row["creacion"] ?></td>
+                                <td><?php  echo $row["actualizacion"] ?></td>
                                 
                                 <?php
                                     if($row["usuarios"] == 'B'){
                                 ?>
-                                <td class="text-center">Inactivo</td>
-                                <td class="text-center align-middle">
+                                <td >Inactivo</td>
+                                <td class="align-middle text-center">
                                     <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
                                 <?php
                                     }else {
                                 ?>
-                                <td class="text-center">Activo</td>
-                                <td class="text-center align-middle">
-                                    <button  style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
+                                <td>Activo</td>
+                                <td class="align-middle text-center">
+                                    <button  class="text-center" style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "edit" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-pencil-alt text-center mx-auto"></i>
                                     </button>
 
                                 <?php
                                     }
                                 ?>
-                                    <button style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "delete" value="<?php echo $row['id']?>">
+                                    <button class="text-center" style="border:none; background-color: rgba(255, 0, 0, 0);" type="submit" name = "delete" value="<?php echo $row['id']?>">
                                         <i style="cursor:pointer" class="fas fa-exchange-alt text-center mx-auto"></i>
                                     </button>
                                 </td>
@@ -189,7 +190,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 } else {
                                     echo "0 results";
                                 }
-                                $conexion->close();
+                                // $conexion->close();
 
                             ?>
                             </form>
@@ -197,7 +198,18 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         </table>
                     </div>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <?php
+                $sqlLast = "SELECT actualizacion FROM `empleados` order by actualizacion desc limit 1";
+                $result = $conexion->query($sqlLast);
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $last = $row["actualizacion"];
+                ?>
+                <div class="card-footer small text-muted">Última actualización <?php echo $last;?></div>
+                <?php
+                    }
+                }
+                ?>
             </div>
 
         </div>
