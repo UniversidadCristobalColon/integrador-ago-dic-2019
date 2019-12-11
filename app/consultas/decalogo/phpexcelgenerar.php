@@ -454,12 +454,11 @@ $documento->removeSheetByIndex(0);
 $documento->removeSheetByIndex(1);
 
 
-
 // We'll be outputting an excel file
 header('Content-type: application/vnd.ms-excel');
 
 // It will be called file.xls
-$filename=$nomeval.'.xlsx';
+$filename='Eval360'.$nomeval.'.xlsx';
 $header = 'Content-Disposition: attachment; filename="'.$filename.'"';
 header($header);
 $objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel2007');
