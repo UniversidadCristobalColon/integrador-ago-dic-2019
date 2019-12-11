@@ -93,31 +93,36 @@ if(!empty($id_periodo) && !empty($id_evaluado)) {
             if(str_datos !== '') {
                 datos = $.parseJSON(str_datos);
 
-                /*var data = google.visualization.arrayToDataTable([
-                    ['Decálogo', 'Jefe', 'Par 1', 'Par 2', 'Cliente', 'Autoevaluación'],
-                    ['2014', 1000, 400, 200, 400, 200],
-                    ['2015', 1170, 460, 250, 400, 200],
-                    ['2016', 660, 1120, 300, 400, 200],
-                    ['2017', 1030, 540, 350, 400, 200]
-                ]);*/
+                if(datos) {
 
-                var data = google.visualization.arrayToDataTable(datos);
+                    /*var data = google.visualization.arrayToDataTable([
+                        ['Decálogo', 'Jefe', 'Par 1', 'Par 2', 'Cliente', 'Autoevaluación'],
+                        ['2014', 1000, 400, 200, 400, 200],
+                        ['2015', 1170, 460, 250, 400, 200],
+                        ['2016', 660, 1120, 300, 400, 200],
+                        ['2017', 1030, 540, 350, 400, 200]
+                    ]);*/
 
-                var options = {
-                    chart: {
-                        title: null
-                    },
-                    bars: 'horizontal',
-                    hAxis: {
-                        minValue: 0
-                    },
-                    width:950,
-                    height:600
-                };
+                    var data = google.visualization.arrayToDataTable(datos);
 
-                var chart = new google.charts.Bar(document.getElementById(id_grafico));
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-                //$('#c_'+id_grafico).collapse();
+                    var options = {
+                        chart: {
+                            title: null
+                        },
+                        bars: 'horizontal',
+                        hAxis: {
+                            minValue: 0
+                        },
+                        width: 950,
+                        height: 600
+                    };
+
+                    setTimeout(function(){
+                        var chart = new google.charts.Bar(document.getElementById(id_grafico));
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                    }, 1500);
+
+                }
             }
         }
         $('document').ready(function(){
