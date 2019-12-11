@@ -210,12 +210,12 @@ if(isset($_GET["error"])){
                             if($submitted){
                         ?>
                         <button name="update" type="submit" class="btn btn-primary" value = "<?php echo $idEdited; ?>" >Actualizar</button>
-                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Cancelar</button>
                         <?php
                             }else{
                         ?>
                         <button name="insert" type="submit" class="btn btn-primary">Guardar</button>
-                        <button name="back" id="back" type="button" class="btn btn-secondary">Regresar</button>
+                        <button name="back" id="back" type="button" class="btn btn-secondary">Cancelar</button>
                         <?php
                             }
                         ?>
