@@ -34,7 +34,7 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
         $mail->WordWrap = 50;                  // Set word wrap to 50 characters
         $mail->Subject = $asunto;
-        $mail->Body = utf8_decode($mensaje);
+        $mail->Body = $mensaje;
 
         if(!$mail->send()) {
             //echo 'Message could not be sent.';
@@ -43,10 +43,8 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
             exit();
         } else {
             //echo 'Message has been sent';
-            if(isset($redirect)) {
-                header('location: '.$redirect);
-                exit();
-            }
+            header('location: '.$redirect);
+            exit();
         }
     }
     
@@ -58,7 +56,7 @@ function enviarCorreo2($para, $asunto,$token){
     require '../vendor/PHPMailer/PHPMailer.php';
     require '../vendor/PHPMailer/SMTP.php';
 
-    $sql = 'SELECT host, port, username, password, email_name, content 
+    $sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
             WHERE id = 1';
     $res = $conexion->query($sql);
@@ -77,7 +75,8 @@ function enviarCorreo2($para, $asunto,$token){
         $mail->addAddress($para);              // Add a recipient
         $mail->WordWrap = 50;                  // Set word wrap to 50 characters
         $mail->Subject = $asunto;
-        $mail->Body = $assoc['content'];
+        $res2 = str_replace("{{url_encuesta}}", '<a href='.$assoc['url'].$token.'>Encuesta 360</a>', $content);
+        $mail->Body = $res2;
         $mail->IsHTML(true);
         if(!$mail->send()) {
             //echo 'Message could not be sent.';
