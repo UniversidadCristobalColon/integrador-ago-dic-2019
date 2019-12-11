@@ -2456,6 +2456,8 @@ class Calculation
     {
         //    Identify our locale and language
         $language = $locale = strtolower($locale);
+        $language = 'en_us';
+        
         if (strpos($locale, '_') !== false) {
             [$language] = explode('_', $locale);
         }
