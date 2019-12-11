@@ -116,7 +116,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                         <button type="input" class="btn btn-primary mb-3" >Guardar Cuestionario</button>
 
-                        <button onclick="" type="button" class="btn btn-primary mb-3 btn-danger">Borrar Cuestionario</button>
+                        <!--<button onclick="" type="button" class="btn btn-primary mb-3 btn-danger">Borrar Cuestionario</button> -->
                     </form>
 
 
