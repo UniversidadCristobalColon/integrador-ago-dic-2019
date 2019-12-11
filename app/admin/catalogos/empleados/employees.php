@@ -139,7 +139,7 @@ if(isset($_GET["error"])){
                             <?php
                             if($enable == "disabled"){
                             ?>
-                            <input type="email" name="correo" disabled class="form-control" id="email" aria-describedby="emailHelp" value = '<?php echo $email; ?>'>
+                            <input type="email" name="correo" class="form-control" id="email" aria-describedby="emailHelp" value = '<?php echo $email; ?>'>
                             <?php
                             }else{ 
                             ?>
@@ -295,7 +295,7 @@ if(isset($_GET["error"])){
             $sqlUpdate = "UPDATE empleados SET 
             nombre='$nombre',
             apellidos = '$apellidos',
-            -- email = '$correo',
+            email = '$correo',
             id_departamento = $id_departamento,
             id_puesto = $id_puesto,
             actualizacion = '$ahora'
