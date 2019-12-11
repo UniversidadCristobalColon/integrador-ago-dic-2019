@@ -39,13 +39,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 ?>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
                 <script>
-
-
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: '¡Error...!',
-                        footer: '<a href>Le Evaluación tiene aplicantes registrados</a>'
+                        text: '¡Error...Le Evaluación tiene aplicantes registrados!',
                     })
                 </script>
                 <?php
