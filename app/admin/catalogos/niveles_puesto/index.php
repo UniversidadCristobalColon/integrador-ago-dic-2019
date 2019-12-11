@@ -42,7 +42,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catálogo: niveles de puesto
+                    Catálogo: Niveles de puesto
                 </div>
                 <div class="card-body">
                     <button class="btn btn-primary mb-3" onclick="location.href ='nuevo.php'">Nuevo</button>
@@ -53,10 +53,10 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                                 <thead>
                                 <tr>
-                                    <th class="text-left">Niveles de Puesto</th>
+                                    <th class="text-left">Niveles de puesto</th>
                                     <th class="text-left">Creación</th>
                                     <th class="text-left">Actualización</th>
-                                    <th class="text-left">Estado</th>
+                                    <th class="text-left">Estatus</th>
                                     <th></th>
                                 </tr>
                                 </thead>
