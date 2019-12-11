@@ -112,6 +112,20 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 </script>
                 <?php
                 }
+            if($_GET["confirm"] == 7){
+                ?>
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                <script>
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'No hubo cambios',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                </script>
+                <?php
+                }
 }
     ?>
 

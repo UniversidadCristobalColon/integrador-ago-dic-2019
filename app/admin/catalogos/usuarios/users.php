@@ -54,31 +54,19 @@ if(isset($_POST['edit'])){
     $submitted = true;
     $enable = "disabled";
 
-    $sql = "SELECT usuarios.id, email, passwd, usuarios.estado ,usuarios.creacion, usuarios.actualizacion 
+    $sql = "SELECT usuarios.id, nombre, apellidos, email, passwd, usuarios.estado ,usuarios.creacion, usuarios.actualizacion 
     FROM `usuarios` left join empleados on usuarios.id = empleados.id 
     where usuarios.id = $idEdited";
             $result = $conexion->query($sql);
                                 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $email = $row["email"];
+                    $email = $row['nombre']." ".$row['apellidos']." (".$row['email'].")";
                     $password = $row["passwd"];
+                    $userId = $row["id"];
                 }
             }
     ?>
-    <script>
-        email.push("<?php echo $row["email"] ;?>");
-        name.push("<?php echo $row["nombre"] ;?>");
-        lastname.push("<?php echo $row["apellidos"] ;?>");
-        employee.push(email);
-        employee.push(name);
-        employee.push(lastname);
-        employees.push(employee);
-        employee = [];
-        email = [];
-        name = [];
-        lastname = [];
-    </script>
     <?php
 
 }else{
@@ -139,7 +127,7 @@ if(isset($_GET["error"])){
                     <?php
                         if($idEdited){
                     ?>
-                    <form method="POST" action="" onsubmit= "return checkedPassword()" class="formUser">
+                    <form method="POST" action="updated.php" onsubmit= "return checkedPassword()" class="formUser">
                     <?php 
                         }else{
                     ?>
@@ -148,25 +136,22 @@ if(isset($_GET["error"])){
                         }
                     ?>
                     <div class="form-group">
-                    <script>let employees = [];let email = [];
-                                        let name = [];
-                                        let lastname = [];
-                                        let employee = [];</script>
                     <label for="names">Seleccione el usuario</label>
                     <?php
                     if($idEdited){
                     ?>
-                    <select disabled class="form-control" name="user" id="email" >
+                    <select class="form-control" name="user" id="email" >
                     <?php
                     }else{
                     ?>
                     <select class="form-control" name="user" id="email" >
                     <?php } ?>
                     <!-- <option selected disabled value="">Selecciona un empleado</option> -->
-                                <?php
+                    <?php
                                 if($email || $email != ""){
                                 ?>
-                                    <option value="<?php echo $idEdited; ?>"><?php echo $email; ?></option>
+                                    <option value="<?php echo $userId; ?>"><?php echo $email; ?></option>
+                                    
                                 <?php
                                 } 
                                 $sql = "SELECT email, empleados.id, nombre, apellidos FROM `empleados` where empleados.id not in (SELECT usuarios.id from usuarios)";
@@ -179,29 +164,16 @@ if(isset($_GET["error"])){
                                         if($email){
                                 ?>
 
-                                <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
+                                <option value="<?php echo $row["id"]; ?>"><?php echo $row['nombre']." ".$row['apellidos']." (".$row['email'].")"; ?></option>
                                 <?php
                                         }else{
 
                                             ?>
-                                <option value="<?php echo $row["id"]; ?>"><?php echo $row["email"]; ?></option>
+                                <option value="<?php echo $row["id"]; ?>"><?php echo $row['nombre']." ".$row['apellidos']." (".$row['email'].")";?></option>
                                             <?php
                                         }
                                         ?>
-                                        <script>
-                                        email.push("<?php echo $row["email"] ;?>");
-                                        name.push("<?php echo $row["nombre"] ;?>");
-                                        lastname.push("<?php echo $row["apellidos"] ;?>");
-                                        employee.push(email);
-                                        employee.push(name);
-                                        employee.push(lastname);
-                                        employees.push(employee);
-                                        employee = [];
-                                        email = [];
-                                        name = [];
-                                        lastname = [];
-
-                                        </script>
+                                        
                                         <?php
                                     }
                                     ?>
@@ -214,18 +186,11 @@ if(isset($_GET["error"])){
                                 
                                 ?>
                         </select>
+                        <input hidden name="iduser" value="<?php echo $userId; ?>">
                         </div>
                         <?php
                         if($idEdited == false){    
                         
-                        ?>
-                        <div class="form-group">
-                        <label for="names">Nombre</label>
-                        <label disabled class="form-control" type="text" name="name" id="nameSpace"></label>
-                        <label for="lastnames">Apellido</label>
-                        <label disabled class="form-control" type="text" name="lastname" id="lastnameSpace"></label>
-                        </div>           
-                        <?php
                         }if($idEdited){
                             $sql = "SELECT email, empleados.id, nombre, apellidos FROM `empleados` where empleados.id = $idEdited";
                             $result = $conexion->query($sql);
@@ -233,12 +198,6 @@ if(isset($_GET["error"])){
                                     while($row = $result->fetch_assoc()) {
 
                                         ?>
-                                        <div class="form-group">
-                                        <label for="names">Nombre</label>
-                                        <label disabled class="form-control" type="text" name="name" id="nameSpace"><?php echo $row["nombre"]; ?></label>
-                                        <label for="lastnames">Apellido</label>
-                                        <label disabled class="form-control" type="text" name="lastname" id="lastnameSpace"><?php echo $row["apellidos"]; ?></label>
-                                        </div>   
                                         <?php
                                     }
                                 }
@@ -322,10 +281,10 @@ if(isset($_GET["error"])){
 <?php
     if(isset($_POST["update"])){
 
+        /*
         $now = "";
-        $lastId = $_POST["idEdited"];
-        $iduser = $_POST["user"];
-
+        if(isset($_POST["newpassword"])){
+            $iduser = $_POST["user"];
         if($_POST["newpassword"] == "on"){
             $password = $_POST["password"];
             $hashed  =  password_hash($password, 
@@ -341,21 +300,16 @@ if(isset($_GET["error"])){
             }
     
                 $sqlUpdate = "UPDATE usuarios SET 
-                id=$iduser,
+                id='$iduser',
                 actualizacion= '$now',
                 passwd = '$hashed'
-                WHERE id = $lastId";
+                WHERE id = '$iduser'";
     
             if ($conexion->query($sqlUpdate) === TRUE) {
-                ?>
-                    <script>
-                        <form action="index.php" method="post" on >
-                        
-                        </form>
-                    </script>
-                <?php
-                header("location: index.php?confirm=2");
-                ob_flush();
+                echo $now;
+                echo $user;
+                // header("location: index.php?confirm=2");
+                // ob_flush();
             } else {
                 echo "Error updating record: " . $conexion->error;
                 header("location: index.php?confirm=4");
@@ -380,10 +334,11 @@ if(isset($_GET["error"])){
             ob_flush();
         } else {
             echo "Error updating record: " . $conexion->error;
-            header("location: index.php?confirm=3");
+            // header("location: index.php?confirm=3");
             ob_flush();
         }
     }
+}*/
     }
     if(isset($_POST["insert"])){
 

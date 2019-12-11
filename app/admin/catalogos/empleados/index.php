@@ -243,7 +243,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 <script>
 function upload(e){
     edit = (e.children.edit);
-    console.log(edit);
     document.getElementById('employeeTable').submit();
     // window.location.href = "employees.php";
 }

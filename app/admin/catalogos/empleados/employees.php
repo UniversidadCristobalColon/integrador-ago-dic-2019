@@ -383,7 +383,6 @@ if(isset($_GET["error"])){
 document.getElementById("back").addEventListener("click",goBack);
 
 function goBack(){
-    console.log("ls");
     window.location.href = "index.php";
 }
 </script>
