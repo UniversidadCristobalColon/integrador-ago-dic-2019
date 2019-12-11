@@ -9,7 +9,7 @@ $sql = "UPDATE cuestionarios set cuestionario = '$nombre' where id =  $id";
 
 
 if ($conexion->query($sql) === TRUE) {
-    header("location: editar.php?=id=$idCuestionario");
+    header("location: editar.php?id=$idCuestionario");
 } else {
     echo "Error updating record: " . $conexion->error;
 }
