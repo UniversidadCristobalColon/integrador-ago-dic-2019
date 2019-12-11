@@ -11,25 +11,23 @@ $resultado = mysqli_query($conexion, $select);
 $ip =  $_SERVER['REMOTE_ADDR'];
 $row = mysqli_fetch_array($resultado);
 echo $estado=$row['estado'];
-
 if($resultado){
-
     if($estado == "A"){
-
         $sqlCambiar = "UPDATE evaluaciones SET estado = 'B', actualizacion = NOW(), actulizacion_ip = '$ip' WHERE id = '$id' ";
-    }else{
+        header('location: index.php');
+    }else if($estado == "B"){
         $sqlCambiar = "UPDATE evaluaciones SET estado = 'A', actualizacion = NOW(), actulizacion_ip = '$ip'   WHERE id = '$id' ";
+        header('location: index.php');
+    }else{
+        header('location: index.php?error=1');
     }
 
-    if ($conexion->query($sqlCambiar) === TRUE) {
-        header('location: index.php');
+    if ($conexion->query($sqlCambiar) == TRUE) {
         ob_flush();
     }else {
         echo "Error updating record: " . $conexion->error;
     }
 
-}else{
-    header('location: index.php?error=1');
 }
 
 
