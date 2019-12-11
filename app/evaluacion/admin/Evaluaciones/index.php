@@ -143,7 +143,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
                                         <button title="Cambiar estado"  type="button" onclick="deshabilitar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
-                                        <i class="fas fa-trash"></i>
+                                        <i class='fas fa-exchange-alt'></i>
                                         </button>
                                     </td>
                                 </tr>
