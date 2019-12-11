@@ -458,7 +458,7 @@ $series = new PHPExcel_Chart_DataSeries(
 $layout = new PHPExcel_Chart_Layout();
 $plotarea = new PHPExcel_Chart_PlotArea($layout, array($series));
 $legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
-$titulo = 'Reporte de: '. $nomeval;
+$titulo = 'Reporte de: '. $nomeval.' '.$apellidoeval;
 $title = new PHPExcel_Chart_Title($titulo);
 $chart = new PHPExcel_Chart(
     'chart1',		// name
