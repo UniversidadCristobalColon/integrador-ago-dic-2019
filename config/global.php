@@ -58,7 +58,7 @@ function getSidebar($ruta = ''){
             <h6 class="dropdown-header">Evaluación</h6>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/periodos/">Periodos</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/competencias/">Competencias</a>
-            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/decalogos/">Decálogo</a>
+            <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/decalogos/">Decálogos</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/escalas/">Escalas</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/preguntas/">Preguntas</a>
             <a class="dropdown-item" href="{$dir_base}app/admin/catalogos/respuestas/">Respuestas</a>
