@@ -179,10 +179,14 @@ while($row2 = mysqli_fetch_array($resultado2)) {
 
     $sheet->setCellValue('F1', 'Nombre del evaluado');
     $sheet->setCellValue('F2', $nomeval.' '.$apellidoeval);
-    $sheet->setCellValue('F3', 'Nombre de quien evalua');
+    $sheet->setCellValue('F3', 'Nombre de quien evalúa');
     $sheet->setCellValue('F4', $row2['nombre']. ' ' .$row2['apellidos']);
     $sheet->setCellValue('F5', 'Fecha');
-    $sheet->setCellValue('F6', $row2['creacion']);
+
+    $date = new DateTime($row2['creacion']);
+    $date->format('w');
+
+    $sheet->setCellValue('F6', $date);
 
 
     $sheet->getStyle('J1:M1')->getAlignment()->setHorizontal('center');
@@ -304,7 +308,7 @@ while($row2 = mysqli_fetch_array($resultado2)){
 
     $sheet->mergeCells('A1:B1');
     $sheet->getStyle('A1:B1')->getAlignment()->setHorizontal('center');
-    $sheet->setCellValue('A1', 'DECALOGO LIDERAZGO ICAVE');
+    $sheet->setCellValue('A1', 'DECÁLOGO LIDERAZGO ICAVE');
 
     $sheet->getStyle("A1:B1")->applyFromArray($borderthin);
     $sheet->getStyle("A1:B1")->applyFromArray($fondoazul);
@@ -450,12 +454,11 @@ $documento->removeSheetByIndex(0);
 $documento->removeSheetByIndex(1);
 
 
-
 // We'll be outputting an excel file
 header('Content-type: application/vnd.ms-excel');
 
 // It will be called file.xls
-$filename=$nomeval.'.xlsx';
+$filename='Eval360'.$nomeval.'.xlsx';
 $header = 'Content-Disposition: attachment; filename="'.$filename.'"';
 header($header);
 $objWriter = PHPExcel_IOFactory::createWriter($documento, 'Excel2007');
