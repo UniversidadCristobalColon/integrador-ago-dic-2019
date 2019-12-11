@@ -43,7 +43,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Catalogo: Cuestionarios
+                    Cuestionarios
                 </div>
                 <div class="card-body">
                     <a href="init.php" class="btn btn-primary mb-3">Nuevo</a>
