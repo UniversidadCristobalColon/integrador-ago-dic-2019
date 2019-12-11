@@ -11,7 +11,7 @@ $mostrar_msg_resultados = !empty($_GET['resultados']) && $_GET['resultados'] == 
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
-$sql = "select * from evaluaciones where id = $Evaluacion";
+$sql = "SELECT *, periodos.periodo FROM evaluaciones LEFT JOIN periodos ON periodos.id = evaluaciones.id_periodo WHERE evaluaciones.id = $Evaluacion";
 $res = mysqli_query($conexion, $sql);
 if($res){
     $f = mysqli_fetch_assoc($res);
@@ -20,6 +20,7 @@ if($res){
     }
     $Depa   = $f['id_departamento'];
     $Nombre = $f['descripcion'];
+    $Periodo = $f['periodo'];
 }
 
 function formatoFechaCorta($fecha){
@@ -138,7 +139,7 @@ function formatoFechaCorta($fecha){
                 });
                 return false;
             }
-            if (evaluadorS == evaluadorC){
+            if ((evaluadorS!="") && (evaluadorS == evaluadorC)){
                 Swal.fire({
                     icon: 'error',
                     title: 'Error...',
@@ -194,7 +195,7 @@ function formatoFechaCorta($fecha){
                 });
                 return false;
             }
-            if (evaluadorC == evaluadorS){
+            if ((evaluadorC!="") && (evaluadorC == evaluadorS)){
                 Swal.fire({
                     icon: 'error',
                     title: 'Error...',
@@ -249,6 +250,7 @@ function formatoFechaCorta($fecha){
 
             <!-- Page Content -->
             <h1><?php echo $Nombre?></h1>
+            <small><?php echo $Periodo?></small>
             <hr>
             <h6>Participación general</h6>
             <?php
@@ -286,6 +288,15 @@ function formatoFechaCorta($fecha){
             </div>
 
             <?php
+            $ultima = "";
+            $sqlultima = "select max(creacion) from promedios_por_evaluado where id_evaluacion = $Evaluacion";
+            $resultima = mysqli_query($conexion,$sqlultima);
+            if($resultima){
+                $filaultima = mysqli_fetch_assoc($resultima);
+                $ultima = $filaultima['max(creacion)'];
+            }
+
+
             $mostrar_boton = false;
             if($porcentaje >= 65){
                 $mostrar_boton = true;
@@ -293,9 +304,15 @@ function formatoFechaCorta($fecha){
 
             $elementos_boton = $mostrar_boton ?"<a href='calculoPromedio.php?id={$Evaluacion}' class=\"btn btn-primary\">
                                                 Calcular resultados
-                                               </a>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
+                                               </a>
+                                               <div class='float-right text-right'>
+                                               <small>Ultimo cálculo <br>$ultima</small>
+                                               </div>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
                                                 Calcular resultados
-                                               </button>";
+                                               </button>
+                                                <div class='text-right'>
+                                               <small>$ultima</small>
+                                               </div>";
             ?>
 
             <div class="row mb-3">

@@ -80,7 +80,7 @@
             $resultado = mysqli_query($conexion, $insert);
             if ($resultado) {
                 $id_evaluacion = mysqli_insert_id($conexion);
-                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$id_evaluacion");
+                header("location: adminEvaluacion.php?id_departamento=$Depa&id_nombre=$Descripcion&id_evaluacion=$id_evaluacion&periodo=$Periodo");
 
             } else {
                 echo 'No se guardo' . mysqli_error($conexion);
