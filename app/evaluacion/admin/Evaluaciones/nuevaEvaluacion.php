@@ -196,7 +196,7 @@ $Iniciadas = 0;
                     <select class="form-control mb-3" id="Departamento" name="Departamento" <?php echo $disable ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
-                        $sql = "select * from departamentos";
+                        $sql = "select * from departamentos WHERE departamentos.estatus=\"Activo\"";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
@@ -211,7 +211,7 @@ $Iniciadas = 0;
                     <select class="form-control mb-3" id="Cuestionario" name="Cuestionario" <?php echo $disable ?>>
                         <option selected value="">Seleccione una opción</option>
                         <?php
-                        $sql = "select * from cuestionarios";
+                        $sql = "select * from cuestionarios WHERE cuestionarios.estado='A'";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
@@ -226,7 +226,7 @@ $Iniciadas = 0;
                     <select class="form-control mb-3" id="Periodo" name="Periodo" <?php echo $disable ?>>
                         <option selected value="">Seleccione una opción</option>
                         <?php
-                        $sql = "select * from periodos";
+                        $sql = "select * from periodos WHERE periodos.estado=\"Activo\"";
                         $resultado = mysqli_query($conexion,$sql);
                         if($resultado){
                             while($fila = mysqli_fetch_assoc($resultado)){
