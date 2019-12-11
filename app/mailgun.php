@@ -35,6 +35,7 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
         $mail->WordWrap = 50;                  // Set word wrap to 50 characters
         $mail->Subject = $asunto;
         $mail->Body = $mensaje;
+        $mail->IsHTML(true);
 
         if(!$mail->send()) {
             //echo 'Message could not be sent.';
@@ -50,45 +51,46 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
     
 }
 
-function enviarCorreo2($para, $asunto,$token){
-    require '../config/db.php';
-    require '../vendor/PHPMailer/Exception.php';
-    require '../vendor/PHPMailer/PHPMailer.php';
-    require '../vendor/PHPMailer/SMTP.php';
+function enviarCorreo2($para, $asunto, $mensaje){
+    if(!empty($para) && !empty($asunto) && !empty($mensaje)) {
+        require '../config/db.php';
+        require '../vendor/PHPMailer/Exception.php';
+        require '../vendor/PHPMailer/PHPMailer.php';
+        require '../vendor/PHPMailer/SMTP.php';
 
-    $sql = 'SELECT host, port, username, password, email_name, content, url 
+        $sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
             WHERE id = 1';
-    $res = $conexion->query($sql);
-    if($res) {
-        $assoc = $res->fetch_assoc();
-        $mail = new PHPMailer;
-        $mail->isSMTP();                       // Set mailer to use SMTP
-        $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
-        $mail->Port = $assoc['port'];
-        $mail->SMTPAuth = true;                // Enable SMTP authentication
-        $mail->Username = $assoc['username'];  // SMTP username
-        $mail->Password = $assoc['password'];  // SMTP password
-        $mail->SMTPSecure = 'tls';             // Enable encryption, only 'tls' is accepted
-        $mail->From = $assoc['username'];
-        $mail->FromName = utf8_decode($assoc['email_name']);
-        $mail->addAddress($para);              // Add a recipient
-        $mail->WordWrap = 50;                  // Set word wrap to 50 characters
-        $mail->Subject = $asunto;
-        $res2 = str_replace("{{url_encuesta}}", '<a href='.$assoc['url'].$token.'>Encuesta 360</a>', $content);
-        $mail->Body = $res2;
-        $mail->IsHTML(true);
-        if(!$mail->send()) {
-            //echo 'Message could not be sent.';
-            //echo 'Mailer Error: ' . $mail->ErrorInfo;
-            echo "Not sent";
-            exit();
-        } else {
-            //echo 'Message has been sent';
-            echo "Sent";
-            exit();
+        $res = $conexion->query($sql);
+        if ($res) {
+            $assoc = $res->fetch_assoc();
+            $mail = new PHPMailer;
+            $mail->isSMTP();                       // Set mailer to use SMTP
+            $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
+            $mail->Port = $assoc['port'];
+            $mail->SMTPAuth = true;                // Enable SMTP authentication
+            $mail->Username = $assoc['username'];  // SMTP username
+            $mail->Password = $assoc['password'];  // SMTP password
+            $mail->SMTPSecure = 'tls';             // Enable encryption, only 'tls' is accepted
+            $mail->From = $assoc['username'];
+            $mail->FromName = utf8_decode($assoc['email_name']);
+            $mail->addAddress($para);              // Add a recipient
+            $mail->WordWrap = 50;                  // Set word wrap to 50 characters
+            $mail->Subject = $asunto;
+            $mail->Body = $mensaje;
+
+            $mail->IsHTML(true);
+            if (!$mail->send()) {
+                //echo 'Message could not be sent.';
+                //echo 'Mailer Error: ' . $mail->ErrorInfo;
+                echo "Not sent";
+                exit();
+            } else {
+                return true;
+            }
         }
     }
+    return false;
 
 }
 ?>

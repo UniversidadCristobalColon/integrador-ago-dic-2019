@@ -1,16 +1,58 @@
 <?php
 require_once '../../../../config/global.php';
-include '../../../../config/db.php';
+require_once '../../../../config/db.php';
+require_once '../../../mailgun.php';
 
 $Evaluacion = $_GET["id_evaluacion"];
 $Evaluado   = $_GET["id_enviar"];
 
-$update = "UPDATE aplicaciones set email_enviado = 'S'  where id_evaluacion = '$Evaluacion' and id_evaluado = $Evaluado";
-$resultado = mysqli_query($conexion, $update);
-if ($resultado) {
-    header("location: adminEvaluacion.php?id_evaluacion=$Evaluacion");
-} else {
-    echo 'No se guardo' . mysqli_error($conexion);
+if(!empty($Evaluacion)) {
+    $sql = "select distinct a.email, b.id, b.hash 
+        from empleados a, aplicaciones b
+        where a.id = b.id_evaluador
+        and a.email is not null
+        and b.id_evaluacion = $Evaluacion
+        and b.estado in ('A', 'B')";
+
+    $res = mysqli_query($conexion, $sql);
+    if ($res) {
+        while ($f = mysqli_fetch_assoc($res)) {
+            $email          = $f["email"];
+            $hash           = $f["hash"];
+            $id_aplicacion  = $f["id"];
+
+            if (!empty($email) && !empty($hash) && filter_var($email, FILTER_VALIDATE_EMAIL) !== true) {
+                $qry = "select content, url from email_conf where id = 1";
+                $r = mysqli_query($conexion, $qry);
+                if($r){
+                    $m = mysqli_fetch_assoc($r);
+                    $mensaje    = $m["content"];
+                    $url        = $m["url"];
+
+                    if(!empty($mensaje) && !empty($url)) {
+                        $url = $url . "app/evaluacion/cuestionario/index.php?id=$hash";
+
+                        $mensaje = str_replace('{{url_encuesta}}', $url, $mensaje);
+
+                        echo $mensaje;
+
+                        //enviarCorreo2($email, '¡Participa en la evaluación!', '', '');
+
+
+                        $update = "UPDATE aplicaciones set email_enviado = 'S'  where id = $id_aplicacion";
+                        //$resultado = mysqli_query($conexion, $update);
+                    }
+                }
+            }
+        }
+
+        exit;
+
+
+
+        header("location: adminEvaluacion.php?id_evaluacion=$Evaluacion&enviados=1");
+    }
+
 }
 
 ?>

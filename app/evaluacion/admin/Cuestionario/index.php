@@ -46,19 +46,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                     Catalogo: Cuestionarios
                 </div>
                 <div class="card-body">
-                    <a href="editar.php"><button class="btn btn-primary mb-3" ">Nuevo</button></a>
+                    <a href="init.php" class="btn btn-primary mb-3">Nuevo</a>
 
 
                     <div class="table-responsive">
                         <?php
-
-                        //Para llenar la tabla
                         $sql = "SELECT * FROM cuestionarios";
                         $resultado = $conexion -> query($sql);
                         if($resultado)    {
                         ?>
-                        <form action="editar.php" method="post">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                        <table class="table table-bordered" id="dataTable">
                             <thead>
                             <tr>
                                 <th>Cuestionario</th>
@@ -86,9 +84,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <td><?php echo $row['creacion'] ?></td>
                                     <td><?php echo $row['actualizacion'] ?></td>
                                     <td>
-                                        <button title="Editar registro"  onclick="deshabilitar(<?php echo $id ?>)" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
+                                        <a class="btn btn-xs btn-light" title="Editar registro" href="editar.php?id=<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
-                                        </button>
+                                        </a>
                                         <button title="Cambiar estado"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">
                                         <i class='fas fa-exchange-alt'></i>
                                         </button>
@@ -100,10 +98,6 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             ?>
                             </tbody>
                         </table>
-
-
-                        </form>
-
                     </div>
                 </div>
                 <div class="card-footer small text-muted">Última actualización

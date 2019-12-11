@@ -8,6 +8,7 @@ if(empty($_GET['id_evaluacion'])){
 }
 $Evaluacion = $_GET['id_evaluacion'];
 $mostrar_msg_resultados = !empty($_GET['resultados']) && $_GET['resultados'] == '1';
+$mostrar_msg_enviados = !empty($_GET['enviados']) && $_GET['enviados'] == '1';
 
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
@@ -246,11 +247,20 @@ function formatoFechaCorta($fecha){
                 </div>
                 <?php
             }
+
+            if($mostrar_msg_enviados) {
+                ?>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="fas fa-check-circle fa-1x"></i> Se han enviado los correos electrónicos
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+            }
             ?>
 
-            <!-- Page Content -->
-            <h1><?php echo $Nombre?></h1>
-            <small><?php echo $Periodo?></small>
+            <h1><?php echo $Nombre?><br><small class="text-muted"><?php echo $Periodo?></small></h1>
             <hr>
             <h6>Participación general</h6>
             <?php
@@ -306,7 +316,7 @@ function formatoFechaCorta($fecha){
                                                 Calcular resultados
                                                </a>
                                                <div class='float-right text-right'>
-                                               <small>Ultimo cálculo <br>$ultima</small>
+                                               <small>Último cálculo<br>$ultima</small>
                                                </div>" : "<button type=\"button\" class=\"btn btn-secondary disabled\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"La participación general debe ser de al menos un 65%\">
                                                 Calcular resultados
                                                </button>
@@ -387,7 +397,7 @@ function formatoFechaCorta($fecha){
                                                            </a>" : '';
 
                         if($Enviado>0){
-                            $liga_enviar_registro = "<a title=\"Enviar registro\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"enviar($id_evaluado, $Evaluacion)\">
+                            $liga_enviar_registro = "<a title=\"Correos enviados anteriormente\"  href=\"javascript:;\"  class=\"btn btn-light\" onclick=\"enviar($id_evaluado, $Evaluacion)\">
                                                             <i class=\"fas fa-paper-plane text-success\"></i>
                                                            </a>";
                         } else {

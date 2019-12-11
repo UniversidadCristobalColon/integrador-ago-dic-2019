@@ -52,16 +52,12 @@ if($stmt = $conexion->prepare('INSERT INTO password_resets
         require './mailgun.php';
         $link = 'http://'.$_SERVER['HTTP_HOST'].'/'.PROYECTO.'/app/cambiar.php?email='
                         .$email.'&token='.$token;
-        $msg = 
-"¡Hola!
-
-Se ha solicitado un cambio de contraseña de acceso a su cuenta. Da clic en la siguiente liga de Internet para realizar el cambio:
-
-{$link}
-
-Si no lo has solicitado tú, te recomendamos ingresar a la aplicación y cambiar tu contraseña para proteger tu cuenta.
-
-Saludos.";
+        $msg =
+"<p>¡Hola!</p>
+<p>Se ha solicitado un cambio de contraseña de acceso a su cuenta. Da clic en la siguiente liga de Internet para realizar el cambio:</p>
+<p>{$link}</p>
+<p>Si no lo has solicitado tú, te recomendamos ingresar a la aplicación y cambiar tu contraseña para proteger tu cuenta.</p>
+<p>Saludos.</p>";
         if(isset($_POST['email'])) {
             $redirect = '/'.PROYECTO.'/app/recuperar.php?email='.$email;
         } else {
@@ -69,7 +65,7 @@ Saludos.";
         }
         enviarCorreo(
             $email, 
-            utf8_decode('Restablecer Contraseña'), 
+            utf8_decode('Restablecer contraseña'),
             $msg,
             $redirect
         );
