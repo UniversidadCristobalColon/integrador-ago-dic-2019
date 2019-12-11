@@ -1,7 +1,7 @@
 <?php
 include '../../../../config/db.php';
 $id = ($_GET['id']);
-$idCuestionario = $_POST['idCuestionario'];
+$idCuestionario = $_GET['idcues'];
 
 
 $sql = "UPDATE preguntas set id_cuestionario = null where id =  $id";
@@ -10,16 +10,16 @@ $sql2 = "delete from preguntas_respuestas where id_pregunta = $id";
 $resultado2 = mysqli_query($conexion, $sql2);
 
 if ($conexion->query($sql) === TRUE) {
-    header("location: editar.php");
+    header("location: editar.php?=id=$idCuestionario");
 } else {
-    echo "Error updating record: " . $conexion->error;
+    header("location: editar.php?=id=$idCuestionario");
 }
 
 
 if ($conexion->query($sql2) === TRUE) {
-    header("location: editar.php");
+    header("location: editar.php?=id=$idCuestionario");
 } else {
-    echo "Error updating record: " . $conexion->error;
+    header("location: editar.php?=id=$idCuestionario");
 }
 
 
