@@ -117,26 +117,19 @@ if(isset($_POST['editar'])){
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        Catálogo: Puestos
+                        Catálogo: puestos
                     </div>
 
                     <div class="card-body">
                         <form id="agregar" action="guardar_editar.php" method="post">
-    <?php foreach ($conexion->query('SELECT * from puestos WHERE id ='.$id) as $row){  ?>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Puesto Actual:</label>
-                                        <input type="text" class="form-control" value="<?php echo $row['puesto']; ?> " readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Puesto Nuevo:</label>
-                                        <input type="text" name="puesto_nuevo" class="form-control">
-                                        <input type="hidden" name="id" value=<?php echo $id;?>>
+                                        <input type="hidden" name="id" class="form-control" value="<?php echo $id; ?>" readonly>
+                                        <label>Puesto</label>
+                                        <input type="text" name="puesto_nuevo" class="form-control" value="<?php echo $puesto; ?>">
+
 
                                     </div>
                                 </div>
@@ -145,7 +138,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Nivel de Puesto:</label>
+                                        <label>Nivel de puesto</label>
                                         <select name="nivel_puesto" class="form-control">
                                             <?php
                                             foreach ($conexion->query('SELECT id, nivel_puesto from niveles_puesto') as $row){
@@ -160,7 +153,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Estado:</label>
+                                        <label>Estado</label>
                                         <select id="estado" name="estado" class="form-control">
                                             <option>Selecciona el estado</option>
                                             <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
@@ -211,4 +204,3 @@ if(isset($_POST['editar'])){
     <?php getFooter() ?>
     </body>
     </html>
-<?php } ?>
