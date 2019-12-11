@@ -2,7 +2,7 @@
 require_once '../../../../config/global.php';
 require_once '../../../../config/db.php';
 
-$sql = "SELECT host, port, username, password, email_name, content FROM email_conf where id = 1";
+$sql = "SELECT host, port, username, password, email_name, content,url FROM email_conf where id = 1";
 $result = $conexion->query($sql);
 
 if ($result->num_rows > 0) {
@@ -13,6 +13,7 @@ if ($result->num_rows > 0) {
         $password = $row['password'];
         $mailName = $row['email_name'];
         $content = $row['content'];
+        $url = $row['url'];
     }
 }
 
@@ -56,30 +57,34 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <div class="card-body">
                     <form action="changeEmailParameters.php" method="post">
   <div class="form-group">
-       <h5>Host</h5>
+       <label>Host</label>
     <input name= "host" type="form-text" class="form-control" id="mailConfigHost" value ="<?php echo $host;?>" placeholder="Host" >
   </div>
   <div class="form-group">
-       <h5>Puerto</h5>
+       <label>Puerto</label>
     <input name ="port" type="form-text" class="form-control" id="mailConfigPort" value ="<?php echo $port;?>" placeholder="Port" >
   </div>  
   <div class="form-group">
-       <h5>Nombre</h5>
+       <label>Nombre</label>
     <input name="name" type="form-text" class="form-control" id="mailConfigName" value ="<?php echo $mailName;?>" placeholder="Nombre">
   </div>
   <div class="form-group">
-       <h5>User</h5>
+      <label>User</label>
     <input name= "user" type="form-text" class="form-control" id="mailConfigUser" value ="<?php echo $username;?>" placeholder="User" >
   </div>  
   <div class="form-group">
-    <h5>Pass</h5>
+    <label>Password</label>
     <input name="pass" type="form-text" class="form-control" id="mailConfigPass" value ="<?php echo $password;?>" placeholder="Pass">
   </div>
 
+   <div class="form-group">
+    <label>Url</label>
+    <input name="url" type="form-text" class="form-control" id="mailConfigUrl" value ="<?php echo $url;?>" placeholder="url">
+  </div>
 
 
   <div class="form-group">
-     <h3>Texto del correo para evaluadores</h3>
+     <label>Texto del correo electrónico para evaluadores</label>
 <div class="alert alert-warning" role="alert">
   Es importante incluir este token <strong>{{url_encuesta}}</strong> en la plantilla del correo electrónico para que sea reemplazado por el enlace de la encuesta de manera automática.
   </div>
