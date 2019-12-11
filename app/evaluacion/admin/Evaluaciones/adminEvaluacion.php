@@ -54,7 +54,7 @@ function formatoFechaCorta($fecha){
             }
         }
         function enviar(id, eval) {
-            var respuesta = confirm("¿Está seguro de que desea enviar este evaluado?");
+            var respuesta = confirm("¿Está seguro de que desea enviar esta evaluación?");
             if (respuesta===true){
                 window.self.location = "enviar.php?id_enviar="+id+"&id_evaluacion="+eval;
             }
@@ -74,14 +74,6 @@ function formatoFechaCorta($fecha){
                 });
                 return false;
             }
-            if (evaluadorS == "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error...',
-                    text: 'Seleccione al personal jefe que será el evaluador',
-                });
-                return false;
-            }
             if (evaluadorP1 == "") {
                 Swal.fire({
                     icon: 'error',
@@ -95,14 +87,6 @@ function formatoFechaCorta($fecha){
                     icon: 'error',
                     title: 'Error...',
                     text: 'Seleccione al personal par que será el evaluador',
-                });
-                return false;
-            }
-            if (evaluadorC == "") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error...',
-                    text: 'Seleccione al cliente que será el evaluador',
                 });
                 return false;
             }
