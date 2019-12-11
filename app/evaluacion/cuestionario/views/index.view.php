@@ -67,9 +67,12 @@
                             
                             <!-- DIV TEXT -->
                             <div class="px-1 text-justify">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eos rem quis incidunt voluptate fugiat molestias! Dolorem tenetur ducimus, vitae porro hic voluptatibus cupiditate libero quam facilis quisquam ea corporis.</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde aliquid, dolorum quod natus fugiat nostrum amet earum a velit ratione ab iure temporibus quibusdam hic mollitia excepturi. Magnam, distinctio vero.</p>
-                                
+                                <p>
+                                    El presente cuestionario tiene como objetivo evaluar el conjunto de competencias correspondientes al desarrollo profesional de los colaboradores en la empresa ICAVE. 
+                                </p>
+                                <p>
+                                    Con la intención de proporcionar una retroalimentación que acompañada de alternativas permita ayudarle al evaluado a su desarrollo y éxito profesional.
+                                </p>
                                 <p>
                                     <b>Evaluando a: </b>
                                     <?php echo $nombre_evaluado ?>
