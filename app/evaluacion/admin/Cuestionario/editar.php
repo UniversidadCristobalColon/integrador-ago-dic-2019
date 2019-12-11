@@ -164,6 +164,12 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         WHERE preguntas.id = $filap[id]";
                                             $resultadocom = mysqli_query($conexion, $sqlcom);
                                             $filacom = mysqli_fetch_assoc($resultadocom);
+                                            $competencia = "";
+                                            if(empty($filacom)){
+                                                $competencia = "No hay competencia asociada a esta pregunta";
+                                            }else{
+                                                $competencia= $filacom['competencia'];
+                                            }
 
                                             $sqll = "SELECT COUNT(id_pregunta) as contar from preguntas_respuestas WHERE id_pregunta = $filap[id] ";
                                             $resultadol = mysqli_query($conexion, $sqll);
@@ -193,7 +199,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         
                                         <td>
                                         <div>
-                                        <h6>$filacom[competencia]</h6>
+                                        <h6>$competencia</h6>
                                         $filap[orden] .-  $filap[pregunta]  
                                         
                                         </div>
