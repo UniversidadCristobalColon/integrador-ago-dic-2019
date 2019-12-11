@@ -381,7 +381,6 @@ while($row2 = mysqli_fetch_array($resultado2)){
         $sheet->setCellValue($coordinadaB, $row4['aseveracion']);
         $sheet->setCellValue($coordinadaBusqueda, $row4['puntos']);
         $sheet->getStyle($coordinadaBusqueda)->getAlignment()->setHorizontal('center');
-        $sheet->setCellValue('h1', $contusuarios);
 
         $sheet->getStyle($coordinadaA)->getAlignment()->setHorizontal('center');
         $sheet->getStyle($coordinadaA)->applyFromArray($borderthin);
