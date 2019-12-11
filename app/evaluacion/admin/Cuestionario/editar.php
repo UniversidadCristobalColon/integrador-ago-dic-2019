@@ -1,7 +1,11 @@
 <?php
 require_once '../../../../config/global.php';
 include '../../../../config/db.php';
-$cues = 1;
+$cues = $_GET['id'];
+if (empty($cues)){
+    header("location: index.php");
+}
+
 define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 ?>
 <!DOCTYPE html>
@@ -40,19 +44,21 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
         }
 
-        function dell(id) {
+        function dell(id,idcues) {
             var respuesta = confirm("¿Está seguro de que desea eliminar esta pregunta del cuestionario?");
             if (respuesta===true) {
-                window.self.location = "eliminar_preguntas.php?id=" + id;
+                window.self.location = "eliminar_preguntas.php?id="+id+"&idcues="+idcues;
             }
 
         }
 
-        function dellResp(id) {
+        function dellResp(id,idcues) {
             var respuesta = confirm("¿Está seguro de que desea eliminar estas respuestas de la pregunta?");
             if (respuesta===true) {
-                window.self.location = "eliminar_respuestas.php?id=" + id;
+                window.self.location = "eliminar_respuestas.php?id="+id+"&idcues="+idcues;
             }
+
+
 
         }
 
@@ -89,17 +95,17 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                             <input type="hidden" name="idCuestionario" id="idCuestionario" value="<?php echo $cues?>">
                         <label for="exampleInputEmail1">Nombre</label>
                             <input type="hidden" value="<?php echo $cues ?>" name="id">
-                        <input name="Cuestionario" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="<?php
+                        <input name="Cuestionario" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="<?php
                         $sqlc = "select cuestionario, id from cuestionarios where id=$cues";
                         $resultadoc = mysqli_query($conexion, $sqlc);
                         if ($resultadoc){
                             while ($filac = mysqli_fetch_assoc($resultadoc)){
                                 echo $filac["cuestionario"];
                             }
-                        }
-                        ?> ">
+                        }?>">
 
                     </div>
+
 
 
                     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModalLong">
@@ -110,8 +116,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
 
                         <button type="input" class="btn btn-primary mb-3" >Guardar Cuestionario</button>
 
-                        <button type="button" class="btn btn-primary mb-3 btn-danger">Borrar Cuestionario</button>
+                        <!--<button onclick="" type="button" class="btn btn-primary mb-3 btn-danger">Borrar Cuestionario</button> -->
                     </form>
+
 
 
 
@@ -140,6 +147,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     $resultado2 = mysqli_query($conexion, $sql2);
 
 
+
+
                                     if ($resultado2){
                                         while ($filap = mysqli_fetch_assoc($resultado2)){
                                             $sql3 = "select b.respuesta, a.puntos 
@@ -148,6 +157,13 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                                         a.id_respuesta = b.id and
                                                         a.id_pregunta = $filap[id] 
                                                         order by a.orden_respuesta asc";
+
+                                            $sqlcom = "SELECT competencias.competencia 
+                                                        from competencias 
+                                                        LEFT JOIN preguntas on preguntas.id_competencia = competencias.id 
+                                                        WHERE preguntas.id = $filap[id]";
+                                            $resultadocom = mysqli_query($conexion, $sqlcom);
+                                            $filacom = mysqli_fetch_assoc($resultadocom);
 
                                             $sqll = "SELECT COUNT(id_pregunta) as contar from preguntas_respuestas WHERE id_pregunta = $filap[id] ";
                                             $resultadol = mysqli_query($conexion, $sqll);
@@ -177,6 +193,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         
                                         <td>
                                         <div>
+                                        <h6>$filacom[competencia]</h6>
                                         $filap[orden] .-  $filap[pregunta]  
                                         
                                         </div>
@@ -190,11 +207,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                 <i class=\"fas fa-edit\"></i>
                                     </button>
                                    
-                                    <a onclick='dell($filap[id])' class=\"btn btn-light\" title='Eliminar pregunta' >
+                                    <a onclick='dell($filap[id],$idCuest)' class=\"btn btn-light\" title='Eliminar pregunta' >
                                         <i class=\"fa fa-trash\"></i>
                                     </a>
                                     
-                                    <a onclick='dellResp($filap[id])' class=\"btn btn-light\" title='Eliminar respuestas' >
+                                    <a onclick='dellResp($filap[id],$idCuest)' class=\"btn btn-light\" title='Eliminar respuestas' >
                                         <i class=\"fas fa-times-circle\"></i>
                                     </a>
                                   

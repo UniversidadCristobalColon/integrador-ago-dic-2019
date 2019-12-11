@@ -11,7 +11,7 @@ if (!empty($id)){
         $resultado = mysqli_query($conexion, $sql);
 
         if ($conexion->query($sql) === TRUE) {
-            header("location: editar.php?=id_cuestionario=$idCuestionario");
+            header("location: editar.php?=id=$idCuestionario");
         } else {
             echo "Error updating record: " . $conexion->error;
         }
@@ -21,7 +21,7 @@ if (!empty($id)){
 
 
 }else{
-    header("location: editar.php?=id_cuestionario=$idCuestionario");
+    header("location: editar.php?=id=$idCuestionario");
 }
 
 ?>
