@@ -105,8 +105,6 @@ if(isset($_POST['editar'])){
     $fila=mysqli_fetch_array($buscar);
     $periodo=$fila['periodo'];
     $estatus=$fila['estado'];
-
-
     ?>
 
     <body id="page-top">
@@ -130,19 +128,12 @@ if(isset($_POST['editar'])){
 
                     <div class="card-body">
                         <form id="agregar" action="guardar_Editar.php" method="post">
-    <?php foreach ($conexion->query('SELECT * from periodos WHERE id ='.$id) as $row){  ?>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Periodo Actual:</label>
-                                        <input type="text" name="id" class="form-control" value="<?php echo $row['id']; ?> " readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Periodo:</label>
+                                        <input type="hidden" name="id" class="form-control" value="<?php echo $id; ?> " readonly>
+                                        <label>Periodo</label>
                                         <input type="text" name="periodo" class="form-control" value="<?php echo $periodo; ?>">
                                     </div>
                                 </div>
@@ -151,7 +142,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Estado:</label>
+                                        <label>Estatus</label>
                                         <select id="estado" name="estado" class="form-control">
                                             <option>Selecciona el estado</option>
                                             <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
@@ -202,4 +193,3 @@ if(isset($_POST['editar'])){
     <?php getFooter() ?>
     </body>
     </html>
-<?php } ?>

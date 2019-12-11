@@ -42,8 +42,10 @@
                 // Cambiar estado a visto para que puedan contar solo las que el usuario no ha visto
                 $sql_update = '
                     UPDATE notificaciones
-                    SET notificaciones.estado_visto = 1
-                    WHERE notificaciones.id_notificaciones = '.$row['id_notificaciones'].'';
+                    SET notificaciones.estado_visto = 1,
+                        notificaciones.fecha_visto = NOW()
+                    WHERE notificaciones.id_notificaciones = '.$row['id_notificaciones'].'
+                    AND notificaciones.fecha_visto IS NULL';
                 $conexion->query( $sql_update );
             }
             $html_notificaciones .= '

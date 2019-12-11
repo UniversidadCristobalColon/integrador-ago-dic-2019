@@ -16,8 +16,11 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <title><?php echo PAGE_TITLE ?></title>
 
     <script>
-        function eliminar(id){
+        function deshabilitar(id){
             location.href="deshabilitar.php?id="+id;
+        }
+        function editar(id){
+            location.href="editar.php?id="+id;
         }
     </script>
 
@@ -83,7 +86,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <td><?php echo $row['creacion'] ?></td>
                                     <td><?php echo $row['actualizacion'] ?></td>
                                     <td>
-                                        <button title="Editar registro" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
+                                        <button title="Editar registro"  onclick="deshabilitar(<?php echo $id ?>)" id="<?php  echo $row["id"]; ?>" type="submit" class="btn btn-xs btn-light" value="<?php  echo $row["id"]; ?>">
                                             <i class="fas fa-pencil-alt"></i>
                                         </button>
                                         <button title="Cambiar estado"  type="button" onclick="eliminar(<?php echo $id ?>)" class="btn btn-xs btn-light" ">

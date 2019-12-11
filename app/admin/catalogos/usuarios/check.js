@@ -1,4 +1,22 @@
 
+let emailSelect = document.getElementById("email");
+document.getElementById("nameSpace").textContent = employees[0][1];
+document.getElementById("lastnameSpace").textContent = employees[0][2];
+emailSelect.addEventListener("change",addUserInfo);
+
+function addUserInfo(e){
+    let index = (e.target.options.selectedIndex);
+    for(let i = 0; i < employees.length; i ++){
+        // console.log(employees[i][0]);
+        if(i == index){
+            document.getElementById("nameSpace").textContent = employees[i][1];
+            document.getElementById("lastnameSpace").textContent = employees[i][2];
+        }
+
+
+    }
+}
+
 let password = (document.querySelector("#password"));
 let rpassword = (document.querySelector("#rpassword"));
 

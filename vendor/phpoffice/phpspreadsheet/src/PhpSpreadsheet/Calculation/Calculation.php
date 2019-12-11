@@ -2455,10 +2455,15 @@ class Calculation
     public function setLocale($locale)
     {
         //    Identify our locale and language
+        $locale = 'en_us';
         $language = $locale = strtolower($locale);
+        
         if (strpos($locale, '_') !== false) {
-            [$language] = explode('_', $locale);
+            //[$language] = explode('_', $locale);
         }
+        
+        $language = array('en','us');
+        
         if (count(self::$validLocaleLanguages) == 1) {
             self::loadLocales();
         }

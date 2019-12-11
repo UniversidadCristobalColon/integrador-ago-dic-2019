@@ -4,8 +4,12 @@ include('../../../../config/db.php');
 $idevaluacion = $_GET['idevaluacion'];
 $idevaluado = $_GET['idevaluado'];
 
-$sql1 = "Select id_evaluador,id_periodo,id_cuestionario, id_aplicacion 
-from promedios_por_evaluado where id_evaluacion=$idevaluacion and id_evaluado=$idevaluado group by id_evaluador,id_periodo,id_cuestionario, id_aplicacion;";
+$sql1 = "Select id_evaluador,id_periodo,id_cuestionario,
+        id_aplicacion, id_rol_evaluador 
+        from promedios_por_evaluado where id_evaluacion=$idevaluacion
+        and id_evaluado=$idevaluado group by id_evaluador,id_periodo,
+        id_cuestionario, id_aplicacion, id_rol_evaluador
+        order by id_rol_evaluador ;";
 $res1 = $conexion->query($sql1);
 while ($row1 = $res1->fetch_assoc()) {
 $idcuestionario = $row1['id_cuestionario'];
@@ -41,7 +45,6 @@ $periodo = $row2['periodo'];
 $nombreevaluado = utf8_encode($row2['nombre']);
 $apellidosevaluado = utf8_encode($row2['apellidos']);
 $puestoevaluado = utf8_encode($row2['puesto']);
-//$nivelpuesto=utf8_encode($row2['nivel_puesto']);
 $sql3 = "select Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto 
 from promedios_por_evaluado ppe 
 left join empleados Temp on
@@ -50,7 +53,8 @@ left join puestos Tpues on
 Temp.id_puesto=Tpues.id
 left join roles Trol on 
 Trol.id=ppe.id_rol_evaluador 
-where ppe.id_evaluador = $idevaluador and ppe.id_evaluacion=$idevaluacion group by Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto";
+where ppe.id_evaluador = $idevaluador and ppe.id_evaluacion=$idevaluacion 
+and ppe.id_evaluado=$idevaluado group by Trol.rol, Temp.nombre, Temp.apellidos,Tpues.puesto";
 $res3 = $conexion->query($sql3);
 $row3 = mysqli_fetch_array($res3, MYSQLI_ASSOC);
 $nombreevaluador = utf8_encode($row3['nombre']);
@@ -105,7 +109,7 @@ $rolevaluador = utf8_encode($row3['rol']);
 </div>
 
 <?php
-$sql4 = "select Tdecalogoaseveracion.aseveracion, 
+$sql4 = "select Tdecalogoaseveracion.aseveracion,Tdecalogoaseveracion.id, 
 ppe.puntos 
 from promedios_por_evaluado ppe
 left join preguntas pre on 
@@ -113,9 +117,9 @@ pre.id=ppe.id_pregunta
 left join decalogos_aseveraciones Tdecalogoaseveracion on
 Tdecalogoaseveracion.id=pre.id_decalogo_aseveracion
 where ppe.id_evaluacion=$idevaluacion and ppe.id_evaluado=$idevaluado
-and ppe.id_evaluador=$idevaluador and ppe.id_aplicacion=$idaplicacion
-group by Tdecalogoaseveracion.aseveracion, 
-ppe.puntos";
+and ppe.id_evaluador=$idevaluador and ppe.id_aplicacion=$idaplicacion 
+group by Tdecalogoaseveracion.aseveracion,Tdecalogoaseveracion.id,
+ppe.puntos order by Tdecalogoaseveracion.id; ";
 $res4 = $conexion->query($sql4);
 if ($res4) {
     ?>
