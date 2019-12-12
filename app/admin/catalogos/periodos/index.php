@@ -13,7 +13,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 
@@ -54,7 +56,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                     <th class="text-left">Periodos</th>
                                     <th class="text-left">Creación</th>
                                     <th class="text-left">Actualización</th>
-                                    <th class="text-left">Estatus</th>
+                                    <th class="text-left">Estado</th>
                                     <th></th>
                                 </tr>
                                 </thead>
