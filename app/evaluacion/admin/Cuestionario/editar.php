@@ -199,7 +199,9 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                                         
                                         <td>
                                         <div>
-                                        <h6>$competencia</h6>
+                                        <di>
+                                        <em><b>$competencia</b></em><br>
+                                        </di>
                                         $filap[orden] .-  $filap[pregunta]  
                                         
                                         </div>

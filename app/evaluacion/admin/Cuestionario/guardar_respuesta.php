@@ -21,9 +21,9 @@ if (!empty($respuestas)){
         $resultado = mysqli_query($conexion, $sql);
 
         if ($conexion->query($sql) === TRUE) {
-            header("location: editar.php?=id=$idCuestionario");
+            header("location: editar.php?id=$idCuestionario");
         } else {
-            header("location: editar.php?=id=$idCuestionario");
+            header("location: editar.php?id=$idCuestionario");
         }
 
 
@@ -35,9 +35,9 @@ if (!empty($respuestas)){
     $resultado = mysqli_query($conexion, $sql);
 
     if ($conexion->query($sql) === TRUE) {
-        header("location: editar.php?=id=$idCuestionario");
+        header("location: editar.php?id=$idCuestionario");
     } else {
-        header("location: editar.php?=id=$idCuestionario");
+        header("location: editar.php?id=$idCuestionario");
     }
 }
 

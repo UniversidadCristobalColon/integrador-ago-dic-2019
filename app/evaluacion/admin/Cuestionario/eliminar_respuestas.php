@@ -11,7 +11,7 @@ $resultado2 = mysqli_query($conexion, $sql2);
 
 
 if ($conexion->query($sql2) === TRUE) {
-    header("location: editar.php?=id=$idCuestionario");
+    header("location: editar.php?id=$idCuestionario");
 } else {
     echo "Error updating record: " . $conexion->error;
 }
