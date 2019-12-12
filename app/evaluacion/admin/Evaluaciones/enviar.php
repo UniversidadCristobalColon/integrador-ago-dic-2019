@@ -34,13 +34,13 @@ if(!empty($Evaluacion)) {
 
                         $mensaje = str_replace('{{url_encuesta}}', $url, $mensaje);
 
-                        echo $mensaje;
+                        //echo $mensaje;
 
-                        //enviarCorreo2($email, '¡Participa en la evaluación!', '', '');
+                        enviarCorreo2($email, '¡Participa en la evaluación!', $mensaje);
 
 
                         $update = "UPDATE aplicaciones set email_enviado = 'S'  where id = $id_aplicacion";
-                        //$resultado = mysqli_query($conexion, $update);
+                        $resultado = mysqli_query($conexion, $update);
                     }
                 }
             }
