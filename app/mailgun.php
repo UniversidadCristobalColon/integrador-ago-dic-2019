@@ -11,15 +11,13 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
     require '../vendor/PHPMailer/PHPMailer.php';
     require '../vendor/PHPMailer/SMTP.php';
 
-    $sql = 'SELECT host, port, username, password, email_name 
-            FROM email_conf
-            WHERE id = 3';
     
-    /*
+    
+    
      $sql = 'SELECT host, port, username, password, email_name 
             FROM email_conf
             WHERE id = 2';
-    */
+    
 
     $res = $conexion->query($sql);
 
