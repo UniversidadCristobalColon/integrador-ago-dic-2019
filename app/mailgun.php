@@ -13,7 +13,13 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 
     $sql = 'SELECT host, port, username, password, email_name 
             FROM email_conf
+            WHERE id = 3';
+    
+    /*
+     $sql = 'SELECT host, port, username, password, email_name 
+            FROM email_conf
             WHERE id = 2';
+    */
 
     $res = $conexion->query($sql);
 
@@ -60,7 +66,13 @@ function enviarCorreo2($para, $asunto, $mensaje){
 
         $sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
-            WHERE id = 1';
+            WHERE id = 3';
+        
+        /*$sql = 'SELECT host, port, username, password, email_name, content, url 
+            FROM email_conf
+            WHERE id = 1';*/
+        
+        
         $res = $conexion->query($sql);
         if ($res) {
             $assoc = $res->fetch_assoc();
