@@ -153,7 +153,7 @@ if(isset($_POST['editar'])){
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Estatus</label>
+                                        <label>Estado</label>
                                         <select id="estado" name="estado" class="form-control">
                                             <option>Selecciona el estado</option>
                                             <option value="Activo" <?php if ($estatus=="Activo"){echo 'selected';} ?>>Activo</option>
