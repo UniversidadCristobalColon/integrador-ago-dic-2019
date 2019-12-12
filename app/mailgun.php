@@ -58,11 +58,12 @@ function enviarCorreo($para, $asunto, $mensaje, $redirect){
 }
 
 function enviarCorreo2($para, $asunto, $mensaje){
+    global $conexion, $dir_base;
+
     if(!empty($para) && !empty($asunto) && !empty($mensaje)) {
-        require '../config/db.php';
-        require '../vendor/PHPMailer/Exception.php';
-        require '../vendor/PHPMailer/PHPMailer.php';
-        require '../vendor/PHPMailer/SMTP.php';
+        require "$_SERVER[DOCUMENT_ROOT]/{$dir_base}vendor/PHPMailer/Exception.php";
+        require "$_SERVER[DOCUMENT_ROOT]/{$dir_base}vendor/PHPMailer/PHPMailer.php";
+        require "$_SERVER[DOCUMENT_ROOT]/{$dir_base}vendor/PHPMailer/SMTP.php";
 
         $sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
