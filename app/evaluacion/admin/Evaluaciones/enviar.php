@@ -44,9 +44,7 @@ if(!empty($Evaluacion)) {
                     }
                 }
             }
-        }
-
-        exit;
+        }     
 
 
 
