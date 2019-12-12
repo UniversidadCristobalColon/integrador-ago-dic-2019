@@ -73,8 +73,9 @@ function enviarCorreo2($para, $asunto, $mensaje){
         
         
         $res = $conexion->query($sql);
-        if ($res) {
+        if($res) {
             $assoc = $res->fetch_assoc();
+
             $mail = new PHPMailer;
             $mail->isSMTP();                       // Set mailer to use SMTP
             $mail->Host = $assoc['host'];          // Specify main and backup SMTP servers
@@ -86,18 +87,21 @@ function enviarCorreo2($para, $asunto, $mensaje){
             $mail->From = $assoc['username'];
             $mail->FromName = utf8_decode($assoc['email_name']);
             $mail->addAddress($para);              // Add a recipient
+
             $mail->WordWrap = 50;                  // Set word wrap to 50 characters
             $mail->Subject = $asunto;
             $mail->Body = $mensaje;
-
             $mail->IsHTML(true);
-            if (!$mail->send()) {
+
+            if(!$mail->send()) {
                 //echo 'Message could not be sent.';
                 //echo 'Mailer Error: ' . $mail->ErrorInfo;
-                echo "Not sent";
+                header('location: index.php?error=6');
                 exit();
             } else {
-                return true;
+                //echo 'Message has been sent';
+                header('location: '.$redirect);
+                exit();
             }
         }
     }
