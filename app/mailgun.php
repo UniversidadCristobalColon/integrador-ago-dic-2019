@@ -65,7 +65,7 @@ function enviarCorreo2($para, $asunto, $mensaje){
 
         $sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
-            WHERE id = 3';
+            WHERE id = 2';
         
         /*$sql = 'SELECT host, port, username, password, email_name, content, url 
             FROM email_conf
