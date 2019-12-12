@@ -21,6 +21,8 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
     <?php getTopIncludes(RUTA_INCLUDE ) ?>
 </head>
 
+<?php getNavbar() ?>
+
 <body id="page-top">
 <?php 
     getModalLogout('../../../');
