@@ -109,7 +109,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Estatus</label>
+                                    <label>Estado</label>
                                     <select id="estado" name="estado" class="form-control">
                                         <option>Selecciona un estado</option>
                                         <option value="Activo">Activo</option>
