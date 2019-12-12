@@ -126,6 +126,7 @@ define('RUTA_INCLUDE', '../../../../'); //ajustar a necesidad
                 <div class="card-body">
                 <form action="employees.php" method="POST" id="employeeTable">
                     <button class="btn btn-primary mb-3" onclick="create()">Nuevo</button>
+                    <a class="btn btn-secondary mb-3 mx-1" href="../../import.php">Importar empleados</a>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
